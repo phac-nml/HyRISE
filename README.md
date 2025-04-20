@@ -1,7 +1,7 @@
 # HyRISE - HIV Resistance Interpretation & Scoring Engine
 
 <p align="center">
-  <img src="extra/HyRISE_Plain.svg" alt="HyRISE Logo" width="300" height="auto"/>
+  <img src="extra/HyRISE.svg" alt="HyRISE Logo" width="300" height="auto"/>
 </p>
 
 
