@@ -1,0 +1,147 @@
+# General Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environment
+venv/
+.env/
+.envrc
+
+# Byte-compiled / cached files
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+*.DS_Store
+
+# Build artifacts
+build/
+dist/
+*.o
+*.lo
+*.la
+*.a
+*.so
+*.dll
+*.dylib
+*.pyc
+*.pyo
+
+# C extensions
+*.c
+*.cpp
+
+# Distribution / packaging
+MANIFEST.in
+tmp/
+*.tar.gz
+*.zip
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+*.db
+*.pid
+
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+.coverage
+coverage.xml
+htmlcov/
+
+# Tox
+.tox/
+.tox/**
+
+# Sphinx documentation
+docs/_build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.backup
+*.~*
+
+# Compiled files and caches
+*.class
+*.war
+*.jar
+*.iml
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Generated files
+*.generated
+*.out
+*.bak
+*.orig
+*.rej
+
+# Egg distribution
+.eggs/
+
+debian/
+*.deb
+*.rpm
+*.snap
+
+# Ignore package manager lock files
+Pipfile.lock
+yarn.lock
+npm-debug.log
+pnpm-lock.yaml
+
+# Node.js
+node_modules/
+
+# CI/CD
+/.github/workflows/
+
+# Docker
+.dockerignore
+Dockerfile*
+*.dockerignore
+
+# Security
+*.pem
+*.key
+*.crt
+*.cert
+*.p12
+*.pfx
+
+# Custom repository-specific ignores
+tests/__pycache__/
+tests/**/*.pyc
+tests/**/*.pyo
+
+# misc
+.mypy_cache
+.gitlab-ci-local
+code_quality.sh
+coverage.sh
+example_data
+docs
+site
+Makefile
+mkdocs.yml
+github_deploy_key*
+src/sierralocal
+*.sif

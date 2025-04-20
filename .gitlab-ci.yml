@@ -1,0 +1,146 @@
+image: python:3.10
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+  PYTHONPATH: "$CI_PROJECT_DIR/src"
+  PIP_DOWNLOAD_CACHE: ".pip-cache"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .pip-cache/
+    - venv/
+  policy: pull-push
+  when: always
+
+stages:
+  - "🚧 Setup"
+  - "🔍 Lint"
+  - "🧪 Test"
+  - "📦 Build"
+  - "🚀 Deploy"
+
+.setup_template: &setup_definition
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip wheel setuptools
+    - pip install pytest pytest-cov black flake8 mypy coverage
+    - pip install -e .
+    - python setup.py install
+
+🚧 Setup:
+  stage: 🚧 Setup
+  <<: *setup_definition
+  script:
+    - echo "Setup complete"
+  rules:
+    - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
+      when: always
+
+🔍 Lint:
+  stage: 🔍 Lint
+  <<: *setup_definition
+  script:
+    - black --check --extend-exclude "gcl-builds|venv" .
+    - flake8 --max-line-length=100 --ignore=W291,E501,W503,W504,F401,F402,F403,E731,F841,F541,E203 src/ tests/
+    # - mypy --explicit-package-bases --ignore-missing-imports src/ tests/
+  rules:
+    - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
+      when: always
+
+🧪 Test:
+  stage: 🧪 Test
+  <<: *setup_definition
+  script:
+    - coverage erase
+    - PYTHONPATH=$PWD pytest -v tests/ || ./coverage.sh
+    - coverage report -m
+    - coverage xml
+  coverage: /TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    expire_in: 1 week
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - if: $CI_MERGE_REQUEST_ID
+      when: always
+
+# 📦 Build Package:
+#   <<: *setup_definition
+#   stage: 📦 Build
+#   script:
+#     - pip install build twine
+#     - |
+#       # For development versions, add .devN suffix to version
+#       if [[ "$CI_COMMIT_BRANCH" != "$CI_DEFAULT_BRANCH" && -z "$CI_COMMIT_TAG" ]]; then
+#         if [ -f "pyproject.toml" ]; then
+#           BASE_VERSION=$(grep -oP '(?<=version = ")[^"]+' pyproject.toml)
+#           DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
+#           NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
+#           sed -i "s/version = \"$BASE_VERSION\"/version = \"$NEW_VERSION\"/" pyproject.toml
+#           echo "Updated version to $NEW_VERSION in pyproject.toml"
+#         else
+#           BASE_VERSION=$(grep -oP '(?<=version=")[^"]+' setup.py)
+#           DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
+#           NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
+#           sed -i "s/version=\"$BASE_VERSION\"/version=\"$NEW_VERSION\"/" setup.py
+#           echo "Updated version to $NEW_VERSION in setup.py"
+#         fi
+#       fi
+#     - rm -rf dist/*
+#     - python -m build
+#     - twine check dist/*
+#   artifacts:
+#     paths:
+#       - dist/
+#     expire_in: 1 week
+#   rules:
+#     - if: $CI_COMMIT_TAG
+#       when: always
+#     - if: $CI_COMMIT_BRANCH
+#       when: manual
+
+# "🚀 Deploy to Dev":
+#   stage: 🚀 Deploy
+#   needs:
+#     - 📦 Build Package
+#   before_script:
+#     - python -m venv venv
+#     - source venv/bin/activate
+#     - pip install twine
+#   script:
+#     - echo "Deploying development version to PyPI"
+#     - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
+#   rules:
+#     - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH
+#       when: manual
+
+# "🚀 Deploy to Production":
+#   stage: 🚀 Deploy
+#   needs:
+#     - 📦 Build Package
+#   before_script:
+#     - python -m venv venv
+#     - source venv/bin/activate
+#     - pip install twine
+#   script:
+#     - echo "Deploying production version to PyPI"
+#     - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
+#   rules:
+#     - if: $CI_COMMIT_TAG
+#       when: manual
+#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#       when: manual
+
+# workflow:
+#   rules:
+#     - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
+#       when: always
+#     - when: never
