@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/coverage-74.7%25-brightgreen?style=for-the-badge&logo=codecov&logoColor=white&logoWidth=40&color=green" alt="Build Status">
+  <img src="https://img.shields.io/badge/coverage-68.0%25-orange?style=for-the-badge&logo=codecov&logoColor=white&logoWidth=40&color=orange" alt="Build Status">
   <img src="https://img.shields.io/badge/python-3.8+-blue?style=for-the-badge&logo=python&logoColor=white&logoWidth=40&color=blue" alt="Python Versions">
   <img src="https://img.shields.io/badge/license-GNU%20GPL%20v3-blue?style=for-the-badge&logo=gnu&logoColor=white&logoWidth=40&color=blue" alt="License">
 </p>

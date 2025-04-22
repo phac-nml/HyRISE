@@ -15,13 +15,13 @@ import tempfile
 import shutil
 from pathlib import Path
 
-from ..utils.container_utils import (
+from hyrise.utils.container_utils import (
     ensure_dependencies,
     run_with_singularity,
     check_command_available,
     find_singularity_container,
 )
-from ..utils.common_args import (
+from hyrise.utils.common_args import (
     add_container_arguments,
     add_report_arguments,
     add_visualization_arguments,
@@ -389,7 +389,7 @@ def run_sierra_command(args):
 
     # Process the generated JSON file if requested
     if args.process:
-        from ..core.processor import process_files
+        from hyrise.core.processor import process_files
 
         # Determine output directory for processing
         if args.process_dir:

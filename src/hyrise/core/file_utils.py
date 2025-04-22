@@ -23,13 +23,14 @@ def extract_sample_id(filename):
         return basename.split(".json")[0]
 
 
-def load_json_file(json_file, preserve_list=False):
+def load_json_file(json_file, preserve_list=True):
     """
     Load and parse a JSON file
 
     Args:
         json_file (str): Path to the JSON file
-        preserve_list (bool): If True, preserve list structure if the JSON is a list
+        preserve_list (bool): If True, preserve list structure if the JSON is a list.
+                            Default changed to True to handle multiple sequences.
 
     Returns:
         dict or list: The parsed JSON data
@@ -40,7 +41,7 @@ def load_json_file(json_file, preserve_list=False):
     with open(json_file, "r") as f:
         data = json.load(f)
 
-    # Handle list format (Sierra sometimes returns a list with a single item)
+    # Handle list format (Sierra sometimes returns a list with multiple items)
     if not preserve_list and isinstance(data, list) and len(data) > 0:
         data = data[0]
 

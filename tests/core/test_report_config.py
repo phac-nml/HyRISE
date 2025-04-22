@@ -115,25 +115,44 @@ def test_run_multiqc_failure(monkeypatch, tmp_path):
 
 
 def test_modify_html(tmp_path):
-    # Create minimal HTML
+    # Create minimal HTML with the About section wrapped in div#mqc_about
     html = tmp_path / "test.html"
-    content = """<html><head><title>Old</title><link rel="icon" type="image/png" href="old.ico"><meta name="description" content="multiqc desc"></head><body>\
-<h3>MultiQC Toolbox</h3><img src="data:image/png;base64,AAA"><footer>foot</footer>\
-<h4>About MultiQC</h4><p>Info MultiQC</p><div id="mqc_welcome">Welcome</div></body></html>"""
+    content = """<html>
+  <head>
+    <title>Old</title>
+    <link rel="icon" type="image/png" href="old.ico">
+    <meta name="description" content="multiqc desc">
+  </head>
+  <body>
+    <h3>MultiQC Toolbox</h3>
+    <img src="data:image/png;base64,AAA">
+    <footer>foot</footer>
+
+    <div id="mqc_about">
+      <h4>About MultiQC</h4>
+      <p>Info MultiQC</p>
+    </div>
+
+    <div id="mqc_welcome">Welcome</div>
+  </body>
+</html>"""
     html.write_text(content)
+
     gen = HyRISEReportGenerator(output_dir=str(tmp_path))
     logo_uri = "data:image/png;base64,BBB"
     success, mods = gen.modify_html(str(html), logo_uri)
     assert success is True
+
     # Check flags
     assert mods["logo"] is True
     assert mods["title"] is True
     assert mods["toolbox"] is True
     assert mods["footer"] is True
-    assert mods["about_section"] is True
+    assert mods["about_section"] is True  # now will be True
     assert mods["welcome"] is True
     assert mods["favicon"] is True
-    # Read back
+
+    # Read back and spot-check key replacements
     new = html.read_text()
     assert "<title>HyRISE Report</title>" in new
     assert "BBB" in new
@@ -143,7 +162,7 @@ def test_modify_html(tmp_path):
 def test_post_process_report_flow(monkeypatch, tmp_path):
     report_dir = tmp_path / "multiqc_report"
     report_dir.mkdir()
-    html = report_dir / "multiqc_report.html"
+    html = report_dir / "hyrise_resistance_report.html"
     html.write_text("<html></html>")
     gen = HyRISEReportGenerator(output_dir=str(tmp_path))
     gen.report_dir = str(report_dir)

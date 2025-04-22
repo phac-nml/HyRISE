@@ -12,6 +12,8 @@ attrs==25.3.0
     # via
     #   jsonschema
     #   referencing
+beautifulsoup4==4.13.4
+    # via hyrise (setup.py)
 bio==1.7.1
     # via hyrise (setup.py)
 biopython==1.85
@@ -42,6 +44,10 @@ colormath2==3.0.3
     # via spectra
 contourpy==1.3.2
     # via matplotlib
+coverage[toml]==7.8.0
+    # via
+    #   hyrise (setup.py)
+    #   pytest-cov
 cycler==0.12.1
     # via matplotlib
 fonttools==4.57.0
@@ -65,6 +71,8 @@ idna==3.10
     #   requests
 importlib-metadata==8.6.1
     # via multiqc
+iniconfig==2.1.0
+    # via pytest
 jinja2==3.1.6
     # via multiqc
 jsonschema==4.23.0
@@ -112,6 +120,7 @@ packaging==25.0
     #   multiqc
     #   plotly
     #   pooch
+    #   pytest
 pandas==2.2.3
     # via bio
 pillow==11.2.1
@@ -124,6 +133,8 @@ platformdirs==4.3.7
     # via pooch
 plotly==6.0.1
     # via multiqc
+pluggy==1.5.0
+    # via pytest
 poetry-core==2.1.2
     # via hyrise (setup.py)
 pooch==1.8.2
@@ -141,6 +152,12 @@ pyproject-hooks==1.2.0
     #   build
     #   hyrise (setup.py)
     #   pip-tools
+pytest==8.3.5
+    # via
+    #   hyrise (setup.py)
+    #   pytest-cov
+pytest-cov==6.1.1
+    # via hyrise (setup.py)
 python-dateutil==2.9.0.post0
     # via
     #   matplotlib
@@ -181,6 +198,8 @@ six==1.17.0
     # via python-dateutil
 sniffio==1.3.1
     # via anyio
+soupsieve==2.7
+    # via beautifulsoup4
 spectra==0.1.0
     # via multiqc
 tiktoken==0.9.0
@@ -194,6 +213,7 @@ typeguard==4.4.2
 typing-extensions==4.13.2
     # via
     #   anyio
+    #   beautifulsoup4
     #   pydantic
     #   pydantic-core
     #   referencing

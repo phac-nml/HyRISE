@@ -10,7 +10,7 @@ import os
 import sys
 import argparse
 import logging
-from ..utils.container_builder import (
+from hyrise.utils.container_builder import (
     find_singularity_binary,
     get_def_file_path,
     copy_def_file_to_directory,

@@ -31,6 +31,10 @@ setuptools.setup(
         "multiqc>=1.28",
         "requests>=2.32.3",
         "pip-tools>=7.4.1",
+        "beautifulsoup4>=4.13.4",
+        "coverage>=7.8.0",
+        "pytest-cov>=6.1.1",
+        "pytest>=8.3.5",
     ],
     entry_points={
         "console_scripts": [

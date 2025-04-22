@@ -10,8 +10,8 @@ unified section of the MultiQC report.
 import os
 import json
 from collections import defaultdict
-from .. import __version__
-from ..utils.html_utils import (
+from hyrise import __version__
+from hyrise.utils.html_utils import (
     create_html_header,
     create_html_footer,
     create_styled_table,
