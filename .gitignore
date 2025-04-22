@@ -145,3 +145,4 @@ mkdocs.yml
 github_deploy_key*
 src/sierralocal
 *.sif
+.tox/

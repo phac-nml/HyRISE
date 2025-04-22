@@ -1,0 +1,19 @@
+[run]
+source = src/hyrise
+branch = True
+
+[paths]
+source =
+    src/hyrise
+    */site-packages/hyrise
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pass
+    raise ImportError
+
+ignore_errors = True

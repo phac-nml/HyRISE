@@ -9,8 +9,13 @@ import os
 import logging
 from hyrise import __version__
 from hyrise.core.processor import process_files
-from hyrise.utils.container_utils import ensure_dependencies, find_singularity_container
+from hyrise.utils.container_utils import ensure_dependencies
 from hyrise.commands import container, sierra
+from hyrise.utils.common_args import (
+    add_container_arguments,
+    add_report_arguments,
+    add_visualization_arguments,
+)
 
 # Set up logging
 logging.basicConfig(
@@ -56,39 +61,10 @@ def main():
         help="Sample name to use in the report (default: extracted from filename)",
     )
 
-    process_parser.add_argument(
-        "-r",
-        "--report",
-        action="store_true",
-        help="Generate MultiQC config file for report creation",
-    )
-
-    process_parser.add_argument(
-        "--run-multiqc",
-        action="store_true",
-        help="Run MultiQC to generate the final report (requires MultiQC to be installed)",
-    )
-
-    # Container-related options for process command
-    container_group = process_parser.add_argument_group("Container options")
-    container_exclusive = container_group.add_mutually_exclusive_group()
-
-    container_exclusive.add_argument(
-        "--container",
-        action="store_true",
-        help="Force using Singularity container for execution",
-    )
-
-    container_exclusive.add_argument(
-        "--no-container",
-        action="store_true",
-        help="Force native execution, do not use container even if dependencies are missing",
-    )
-
-    process_parser.add_argument(
-        "--container-path",
-        help="Custom path to Singularity container (default: auto-detect)",
-    )
+    # Add common argument groups
+    add_report_arguments(process_parser)
+    add_visualization_arguments(process_parser)
+    add_container_arguments(process_parser)
 
     # Add check-deps command
     check_parser = subparsers.add_parser(
@@ -169,10 +145,15 @@ def run_process_command(args):
         results = process_files(
             args.input,
             args.output_dir,
-            args.sample_name,
+            sample_name=args.sample_name,
             generate_report=args.report,
             run_multiqc=args.run_multiqc,
+            guide=args.guide,
+            sample_info=args.sample_info,
+            contact_email=args.contact_email,
+            logo_path=args.logo,
             use_container=use_container,
+            container_path=args.container_path,
         )
 
         # Print summary

@@ -3,26 +3,31 @@
 Main processing logic for HyRISE package
 """
 import os
-import subprocess
 import tempfile
 import shutil
+import subprocess
 from datetime import datetime
 
 from hyrise.core.file_utils import extract_sample_id, load_json_file
-from hyrise.core.report_config import generate_multiqc_config, generate_multiqc_command
-from hyrise.utils.container_utils import ensure_dependencies, run_with_singularity
-from hyrise.visualizers.resistance import (
-    create_resistance_table,
-    create_relevant_drug_commentary,
-    create_resistance_level_distribution,
-    create_partial_score_analysis,
+from hyrise.core.report_config import HyRISEReportGenerator
+from hyrise.utils.container_utils import ensure_dependencies
+from hyrise.visualizers.hiv_visualizations import (
+    # Mutation visualizations
+    create_mutation_details_table,
+    create_mutation_position_visualization,
+    create_mutation_type_summary,
+    # Resistance visualizations
+    create_drug_resistance_profile,
+    create_drug_class_resistance_summary,
+    # Mutation-resistance impact visualizations
+    create_mutation_resistance_contribution,
+    create_mutation_clinical_commentary,
 )
-from hyrise.visualizers.mutations import (
-    create_mutation_table,
-    create_mutation_position_map,
+from hyrise.visualizers.info_and_guides import (
+    create_unified_report_section,
+    create_sample_analysis_info,
 )
-from hyrise.visualizers.metadata import create_version_information
-from hyrise.visualizers.interpretation import create_interpretation_guide
+from hyrise import __version__
 
 
 def process_files(
@@ -31,7 +36,12 @@ def process_files(
     sample_name=None,
     generate_report=False,
     run_multiqc=False,
+    guide=False,
+    sample_info=False,
+    contact_email=None,
+    logo_path=None,
     use_container=None,
+    container_path=None,
 ):
     """
     Process Sierra JSON file to create MultiQC visualizations
@@ -43,9 +53,14 @@ def process_files(
             If not provided, it will be extracted from the filename.
         generate_report (bool): Whether to generate a MultiQC config file
         run_multiqc (bool): Whether to run MultiQC to generate the report
+        guide (bool): Whether to include interpretation guides
+        sample_info (bool): Whether to include sample information
+        contact_email (str, optional): Contact email to include in the report
+        logo_path (str, optional): Path to custom logo file
         use_container (bool, optional): Whether to use Singularity container.
             If None, auto-detect based on dependencies. If True, force container.
             If False, force native execution.
+        container_path (str, optional): Path to the Singularity container
 
     Returns:
         dict: Summary of the processing results including paths to the generated files
@@ -70,6 +85,11 @@ def process_files(
 
     # Check dependencies and container availability
     deps = ensure_dependencies(use_container)
+
+    # Override container path if specified
+    if container_path and os.path.exists(container_path):
+        deps["container_path"] = container_path
+
     results.update({"dependencies": deps, "container_used": deps["use_container"]})
 
     try:
@@ -86,21 +106,24 @@ def process_files(
         # Get formatted date for the report
         formatted_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # Process drug resistance data
-        if "drugResistance" in data:
-            create_resistance_table(data, sample_name, output_dir)
-            create_relevant_drug_commentary(data, sample_name, output_dir)
-            create_resistance_level_distribution(data, sample_name, output_dir)
-            create_partial_score_analysis(data, sample_name, output_dir)
-            create_version_information(data, sample_name, formatted_date, output_dir)
+        # Generate all the standard visualizations
+        create_drug_resistance_profile(data, sample_name, output_dir)
+        create_drug_class_resistance_summary(data, sample_name, output_dir)
 
-        # Process mutation data
-        if "alignedGeneSequences" in data:
-            create_mutation_table(data, sample_name, output_dir)
-            create_mutation_position_map(data, sample_name, output_dir)
+        # Generate mutation-resistance impact visualizations
+        create_mutation_resistance_contribution(data, sample_name, output_dir)
+        create_mutation_clinical_commentary(data, sample_name, output_dir)
+        create_mutation_details_table(data, sample_name, output_dir)
+        create_mutation_position_visualization(data, sample_name, output_dir)
+        create_mutation_type_summary(data, sample_name, output_dir)
 
-        # Create interpretation guide
-        create_interpretation_guide(output_dir)
+        # Generate metadata information
+        if guide:
+            create_unified_report_section(data, sample_name, formatted_date, output_dir)
+
+        # Process sample information
+        if sample_info:
+            create_sample_analysis_info(data, sample_name, formatted_date, output_dir)
 
         # Get list of generated files
         for root, _, files in os.walk(output_dir):
@@ -108,116 +131,135 @@ def process_files(
                 if file.endswith("_mqc.json") or file.endswith("_mqc.html"):
                     results["files_generated"].append(os.path.join(root, file))
 
-        # Generate MultiQC config if requested
+        # Generate MultiQC report if requested
         if generate_report:
-            config_file = generate_multiqc_config(output_dir, sample_name)
-            results["config_file"] = config_file
+            # Initialize our report generator class
+            report_generator = HyRISEReportGenerator(
+                output_dir=output_dir,
+                version=__version__,
+                sample_name=sample_name,
+                contact_email=contact_email,
+            )
 
-            # Generate the MultiQC command
+            # Extract metadata from the Sierra JSON data
+            metadata_info = report_generator.create_metadata_summary(data)
+            report_generator.metadata_info = metadata_info
+            print(f"Metadata summary created: {metadata_info}")
+
+            # Store these for use in the results
             report_dir = os.path.join(output_dir, "multiqc_report")
             results["report_dir"] = report_dir
 
-            # If we're running MultiQC and container is needed
             if run_multiqc:
+                # Generate report and handle different execution modes
                 if deps["use_container"] and deps["container_path"]:
-                    try:
-                        print(
-                            f"Using Singularity container for MultiQC: {deps['container_path']}"
-                        )
+                    print(
+                        f"Using Singularity container for MultiQC: {deps['container_path']}"
+                    )
 
-                        # Create a temporary directory for the MultiQC operation
-                        with tempfile.TemporaryDirectory() as temp_dir:
-                            # Copy all necessary files to temp directory
-                            for file_path in results["files_generated"]:
-                                rel_path = os.path.relpath(file_path, output_dir_abs)
-                                temp_file_path = os.path.join(temp_dir, rel_path)
+                    # Create a temporary directory for container operation
+                    with tempfile.TemporaryDirectory() as temp_dir:
+                        # Copy visualization files to temp directory
+                        for file_path in results["files_generated"]:
+                            rel_path = os.path.relpath(file_path, output_dir_abs)
+                            temp_file_path = os.path.join(temp_dir, rel_path)
+                            os.makedirs(os.path.dirname(temp_file_path), exist_ok=True)
+                            shutil.copy2(file_path, temp_file_path)
 
-                                # Create any necessary subdirectories
-                                os.makedirs(
-                                    os.path.dirname(temp_file_path), exist_ok=True
-                                )
-
-                                # Copy the file
-                                shutil.copy2(file_path, temp_file_path)
-
-                            # Copy the config file
+                        try:
+                            # Generate config in the temp directory
+                            config_file = report_generator.generate_config()
                             temp_config = os.path.join(
                                 temp_dir, os.path.basename(config_file)
                             )
                             shutil.copy2(config_file, temp_config)
+                            results["config_file"] = config_file
 
-                            # Create output directory in temp dir
-                            temp_report_dir = os.path.join(temp_dir, "multiqc_report")
-                            os.makedirs(temp_report_dir, exist_ok=True)
-
-                            # Build command for inside the container
-                            # Use shell command to ensure we can change directory
+                            # Use shell -c to run commands inside container
+                            shell_command = f"cd {temp_dir} && multiqc . -o multiqc_report --config {os.path.basename(temp_config)}"
                             container_cmd = [
                                 "singularity",
                                 "exec",
                                 "--bind",
                                 temp_dir,
                                 deps["container_path"],
-                                "sh",
+                                "sh",  # Use shell to interpret commands
                                 "-c",
-                                f"cd {temp_dir} && multiqc . -o multiqc_report --config {os.path.basename(temp_config)}",
+                                shell_command,
                             ]
 
+                            # Store the command for reference
+                            results["multiqc_command"] = " ".join(container_cmd)
+
                             # Run the command
-                            subprocess.run(container_cmd, check=True)
+                            result = subprocess.run(container_cmd, check=True)
+                            success = result.returncode == 0
 
-                            # If successful, copy the report back to the original directory
-                            if os.path.exists(temp_report_dir):
-                                # Create the report directory in the output dir if it doesn't exist
+                            # Copy report back if successful
+                            if success and os.path.exists(
+                                os.path.join(temp_dir, "multiqc_report")
+                            ):
+                                # Create report dir and copy everything
                                 os.makedirs(report_dir, exist_ok=True)
-
-                                # Copy all report files
-                                for root, dirs, files in os.walk(temp_report_dir):
+                                for root, dirs, files in os.walk(
+                                    os.path.join(temp_dir, "multiqc_report")
+                                ):
                                     for dir_name in dirs:
                                         os.makedirs(
                                             os.path.join(report_dir, dir_name),
                                             exist_ok=True,
                                         )
-
                                     for file_name in files:
                                         src_file = os.path.join(root, file_name)
                                         rel_path = os.path.relpath(
-                                            src_file, temp_report_dir
+                                            src_file,
+                                            os.path.join(temp_dir, "multiqc_report"),
                                         )
                                         dest_file = os.path.join(report_dir, rel_path)
                                         shutil.copy2(src_file, dest_file)
 
-                        print(f"MultiQC report generated in {report_dir}")
-                        results["multiqc_command"] = (
-                            f"singularity exec --bind {output_dir_abs} {deps['container_path']} sh -c 'cd {output_dir_abs} && multiqc . -o multiqc_report --config {os.path.basename(config_file)}'"
+                                # Modify HTML if report was generated
+                                if os.path.exists(
+                                    os.path.join(report_dir, "multiqc_report.html")
+                                ):
+                                    report_generator.post_process_report(logo_path)
+                                    print(
+                                        f"MultiQC report generated and customized in {report_dir}"
+                                    )
+                            else:
+                                print(f"Error running MultiQC via container")
+
+                        except subprocess.CalledProcessError as e:
+                            print(f"Error in container-based report generation: {e}")
+                        except Exception as e:
+                            print(
+                                f"Error in container-based report generation: {str(e)}"
+                            )
+
+                # Use native MultiQC if available
+                elif deps["multiqc_available"]:
+                    try:
+                        # Generate the report using the report generator class
+                        report_results = report_generator.generate_report(
+                            input_data_path=json_file,
+                            logo_path=logo_path,
+                            run_multiqc=True,
+                            skip_html_mod=False,
                         )
+                        # Update results with information from report generation
+                        results["config_file"] = report_generator.config_path
+                        if report_results["report_path"]:
+                            print(f"MultiQC report generated in {report_dir}")
+                        else:
+                            print(
+                                "Error generating MultiQC report. Check the logs for details."
+                            )
+                            if report_results["errors"]:
+                                for error in report_results["errors"]:
+                                    print(f"  - {error}")
 
                     except Exception as e:
-                        print(f"Error running MultiQC with container: {str(e)}")
-                        print(
-                            "Missing dependencies: "
-                            + ", ".join(deps["missing_dependencies"])
-                        )
-                        print(
-                            "Please install the missing dependencies or ensure the Singularity container is available."
-                        )
-
-                # Use local MultiQC if available
-                elif deps["multiqc_available"]:
-                    multiqc_command = generate_multiqc_command(
-                        config_file, output_dir, report_dir
-                    )
-                    results["multiqc_command"] = multiqc_command
-
-                    try:
-                        subprocess.run(multiqc_command, shell=True, check=True)
-                        print(f"MultiQC report generated in {report_dir}")
-                    except subprocess.CalledProcessError as e:
                         print(f"Error running MultiQC: {str(e)}")
-                        print(
-                            "You can run MultiQC manually with the following command:"
-                        )
-                        print(multiqc_command)
 
                 # Cannot run MultiQC - dependencies missing and no container
                 else:
@@ -230,24 +272,24 @@ def process_files(
 
             # Just generate the config, not running MultiQC
             else:
+                # Generate the config file
+                config_file = report_generator.generate_config()
+                results["config_file"] = config_file
                 print(f"MultiQC config file created at {config_file}")
 
+                # Provide command information
                 if deps["multiqc_available"]:
-                    # Generate standard command
-                    multiqc_command = generate_multiqc_command(
-                        config_file, output_dir, report_dir
-                    )
-                    results["multiqc_command"] = multiqc_command
+                    cmd = f"multiqc {output_dir} -o {report_dir} --config {config_file}"
+                    results["multiqc_command"] = cmd
                     print(
                         "You can generate the report by running the following command:"
                     )
-                    print(multiqc_command)
+                    print(cmd)
                 elif deps["use_container"] and deps["container_path"]:
-                    # Generate container command
-                    container_cmd = f"singularity exec --bind {output_dir_abs} {deps['container_path']} sh -c 'cd {output_dir_abs} && multiqc . -o multiqc_report --config {os.path.basename(config_file)}'"
-                    results["multiqc_command"] = container_cmd
+                    cmd = f"singularity exec --bind {output_dir_abs} {deps['container_path']} sh -c 'cd {output_dir_abs} && multiqc . -o multiqc_report --config {os.path.basename(config_file)}'"
+                    results["multiqc_command"] = cmd
                     print("You can generate the report using the container with:")
-                    print(results["multiqc_command"])
+                    print(cmd)
                 else:
                     print(
                         "MultiQC is not available locally and Singularity container not found."
@@ -255,7 +297,6 @@ def process_files(
                     print("Please install MultiQC to generate the report.")
 
         print(f"MultiQC custom content files created in {output_dir}")
-
         return results
 
     except Exception as e:

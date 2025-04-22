@@ -14,8 +14,8 @@ setuptools.setup(
     url="https://github.com/phac-nml/HyRISE",
     package_dir={"": "src"},
     include_package_data=True,
-    package_data={"hyrise": ["hyrise.def", "HIVDB_9.8.xml"]},
     packages=setuptools.find_packages(where="src"),
+    package_data={"hyrise": ["hyrise.def", "HIVDB_9.8.xml", "core/assets/*"]},
     python_requires="<=3.11",
     install_requires=[
         "build>=1.2.2.post1",

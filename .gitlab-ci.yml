@@ -72,75 +72,75 @@ stages:
     - if: $CI_MERGE_REQUEST_ID
       when: always
 
-# 📦 Build Package:
-#   <<: *setup_definition
-#   stage: 📦 Build
-#   script:
-#     - pip install build twine
-#     - |
-#       # For development versions, add .devN suffix to version
-#       if [[ "$CI_COMMIT_BRANCH" != "$CI_DEFAULT_BRANCH" && -z "$CI_COMMIT_TAG" ]]; then
-#         if [ -f "pyproject.toml" ]; then
-#           BASE_VERSION=$(grep -oP '(?<=version = ")[^"]+' pyproject.toml)
-#           DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
-#           NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
-#           sed -i "s/version = \"$BASE_VERSION\"/version = \"$NEW_VERSION\"/" pyproject.toml
-#           echo "Updated version to $NEW_VERSION in pyproject.toml"
-#         else
-#           BASE_VERSION=$(grep -oP '(?<=version=")[^"]+' setup.py)
-#           DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
-#           NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
-#           sed -i "s/version=\"$BASE_VERSION\"/version=\"$NEW_VERSION\"/" setup.py
-#           echo "Updated version to $NEW_VERSION in setup.py"
-#         fi
-#       fi
-#     - rm -rf dist/*
-#     - python -m build
-#     - twine check dist/*
-#   artifacts:
-#     paths:
-#       - dist/
-#     expire_in: 1 week
-#   rules:
-#     - if: $CI_COMMIT_TAG
-#       when: always
-#     - if: $CI_COMMIT_BRANCH
-#       when: manual
+📦 Build Package:
+  <<: *setup_definition
+  stage: 📦 Build
+  script:
+    - pip install build twine
+    - |
+      # For development versions, add .devN suffix to version
+      if [[ "$CI_COMMIT_BRANCH" != "$CI_DEFAULT_BRANCH" && -z "$CI_COMMIT_TAG" ]]; then
+        if [ -f "pyproject.toml" ]; then
+          BASE_VERSION=$(grep -oP '(?<=version = ")[^"]+' pyproject.toml)
+          DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
+          NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
+          sed -i "s/version = \"$BASE_VERSION\"/version = \"$NEW_VERSION\"/" pyproject.toml
+          echo "Updated version to $NEW_VERSION in pyproject.toml"
+        else
+          BASE_VERSION=$(grep -oP '(?<=version=")[^"]+' setup.py)
+          DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
+          NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
+          sed -i "s/version=\"$BASE_VERSION\"/version=\"$NEW_VERSION\"/" setup.py
+          echo "Updated version to $NEW_VERSION in setup.py"
+        fi
+      fi
+    - rm -rf dist/*
+    - python -m build
+    - twine check dist/*
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: always
+    - if: $CI_COMMIT_BRANCH
+      when: manual
 
-# "🚀 Deploy to Dev":
-#   stage: 🚀 Deploy
-#   needs:
-#     - 📦 Build Package
-#   before_script:
-#     - python -m venv venv
-#     - source venv/bin/activate
-#     - pip install twine
-#   script:
-#     - echo "Deploying development version to PyPI"
-#     - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
-#   rules:
-#     - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH
-#       when: manual
+"🚀 Deploy to Dev":
+  stage: 🚀 Deploy
+  needs:
+    - 📦 Build Package
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install twine
+  script:
+    - echo "Deploying development version to PyPI"
+    - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
+  rules:
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH
+      when: manual
 
-# "🚀 Deploy to Production":
-#   stage: 🚀 Deploy
-#   needs:
-#     - 📦 Build Package
-#   before_script:
-#     - python -m venv venv
-#     - source venv/bin/activate
-#     - pip install twine
-#   script:
-#     - echo "Deploying production version to PyPI"
-#     - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
-#   rules:
-#     - if: $CI_COMMIT_TAG
-#       when: manual
-#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#       when: manual
+"🚀 Deploy to Production":
+  stage: 🚀 Deploy
+  needs:
+    - 📦 Build Package
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install twine
+  script:
+    - echo "Deploying production version to PyPI"
+    - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
 
-# workflow:
-#   rules:
-#     - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
-#       when: always
-#     - when: never
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
+      when: always
+    - when: never

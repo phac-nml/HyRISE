@@ -23,19 +23,16 @@ def extract_sample_id(filename):
         return basename.split(".json")[0]
 
 
-def load_json_file(json_file):
+def load_json_file(json_file, preserve_list=False):
     """
     Load and parse a JSON file
 
     Args:
         json_file (str): Path to the JSON file
+        preserve_list (bool): If True, preserve list structure if the JSON is a list
 
     Returns:
-        dict: The parsed JSON data
-
-    Raises:
-        FileNotFoundError: If the file does not exist
-        json.JSONDecodeError: If the file is not valid JSON
+        dict or list: The parsed JSON data
     """
     if not os.path.exists(json_file):
         raise FileNotFoundError(f"File {json_file} not found")
@@ -44,7 +41,7 @@ def load_json_file(json_file):
         data = json.load(f)
 
     # Handle list format (Sierra sometimes returns a list with a single item)
-    if isinstance(data, list) and len(data) > 0:
+    if not preserve_list and isinstance(data, list) and len(data) > 0:
         data = data[0]
 
     return data

@@ -21,6 +21,11 @@ from ..utils.container_utils import (
     check_command_available,
     find_singularity_container,
 )
+from ..utils.common_args import (
+    add_container_arguments,
+    add_report_arguments,
+    add_visualization_arguments,
+)
 
 # Set up logging
 logger = logging.getLogger("hyrise-sierra")
@@ -40,7 +45,7 @@ def add_sierra_subparser(subparsers):
         description="Process FASTA files with SierraLocal to generate JSON files for analysis.",
     )
 
-    # Add options
+    # Add Sierra-specific options
     sierra_parser.add_argument(
         "fasta", nargs="+", help="Input FASTA file(s) to process"
     )
@@ -74,50 +79,29 @@ def add_sierra_subparser(subparsers):
         help="Alignment program to use: 'post' for post align, 'nuc' for nucamino (default: post)",
     )
 
-    # Container-related options
-    container_group = sierra_parser.add_argument_group("Container options")
-    container_exclusive = container_group.add_mutually_exclusive_group()
+    # Add common container arguments
+    add_container_arguments(sierra_parser)
 
-    container_exclusive.add_argument(
-        "--container",
-        action="store_true",
-        help="Force using Singularity container for execution",
-    )
+    # Add processing options with a separate group
+    process_group = sierra_parser.add_argument_group("Processing options")
 
-    container_exclusive.add_argument(
-        "--no-container",
-        action="store_true",
-        help="Force native execution, do not use container even if dependencies are missing",
-    )
-
-    sierra_parser.add_argument(
-        "--container-path",
-        help="Custom path to Singularity container (default: auto-detect)",
-    )
-
-    sierra_parser.add_argument(
+    process_group.add_argument(
         "--process",
         action="store_true",
         help="Process the generated JSON file with HyRISE after generation",
     )
 
-    sierra_parser.add_argument(
+    process_group.add_argument(
         "--process-dir",
         help='Output directory for HyRISE processing (default: current directory + "_output")',
     )
 
-    sierra_parser.add_argument(
-        "--report",
-        action="store_true",
-        help="Generate MultiQC report after processing (implies --process)",
-    )
+    # Add common report and visualization arguments
+    # These are only relevant if --process is used
+    add_report_arguments(process_group)
+    add_visualization_arguments(process_group)
 
-    sierra_parser.add_argument(
-        "--run-multiqc",
-        action="store_true",
-        help="Run MultiQC after processing (implies --report and --process)",
-    )
-
+    # Add verbose option
     sierra_parser.add_argument(
         "-v", "--verbose", action="store_true", help="Enable verbose logging"
     )
@@ -418,13 +402,20 @@ def run_sierra_command(args):
         logger.info(f"Processing generated JSON with HyRISE, output to: {process_dir}")
 
         try:
-            # Process the JSON file
+            # Process the JSON file - pass all relevant arguments
             process_results = process_files(
                 sierra_results["output_path"],
                 process_dir,
                 generate_report=args.report,
                 run_multiqc=args.run_multiqc,
+                guide=args.guide,
+                sample_info=args.sample_info,
+                contact_email=args.contact_email,
+                logo_path=args.logo if hasattr(args, "logo") else None,
                 use_container=use_container,
+                container_path=(
+                    args.container_path if hasattr(args, "container_path") else None
+                ),
             )
 
             # Print summary
@@ -461,6 +452,7 @@ def main():
     """
     parser = argparse.ArgumentParser(description="HyRISE SierraLocal Integration")
 
+    # Add arguments - using the same structure as the subparser for consistency
     parser.add_argument("fasta", nargs="+", help="Input FASTA file(s) to process")
 
     parser.add_argument(
@@ -470,21 +462,17 @@ def main():
     )
 
     parser.add_argument("--xml", help="Path to HIVdb ASI2 XML file")
-
     parser.add_argument("--json", help="Path to JSON HIVdb APOBEC DRM file")
-
     parser.add_argument(
         "--cleanup",
         action="store_true",
         help="Delete NucAmino alignment file after processing",
     )
-
     parser.add_argument(
         "--forceupdate",
         action="store_true",
         help="Force update of HIVdb algorithm (requires network connection)",
     )
-
     parser.add_argument(
         "--alignment",
         choices=["post", "nuc"],
@@ -492,45 +480,23 @@ def main():
         help="Alignment program to use: 'post' for post align, 'nuc' for nucamino (default: post)",
     )
 
-    parser.add_argument(
-        "--container",
-        action="store_true",
-        help="Force using Singularity container for execution",
-    )
+    # Add common arguments using our utility functions
+    add_container_arguments(parser)
 
-    parser.add_argument(
-        "--no-container",
-        action="store_true",
-        help="Force native execution, do not use container even if dependencies are missing",
-    )
-
-    parser.add_argument(
-        "--container-path",
-        help="Custom path to Singularity container (default: auto-detect)",
-    )
-
+    # Processing options
     parser.add_argument(
         "--process",
         action="store_true",
         help="Process the generated JSON file with HyRISE after generation",
     )
-
     parser.add_argument(
         "--process-dir",
         help='Output directory for HyRISE processing (default: current directory + "_output")',
     )
 
-    parser.add_argument(
-        "--report",
-        action="store_true",
-        help="Generate MultiQC report after processing (implies --process)",
-    )
-
-    parser.add_argument(
-        "--run-multiqc",
-        action="store_true",
-        help="Run MultiQC after processing (implies --report and --process)",
-    )
+    # Add reporting and visualization options
+    add_report_arguments(parser)
+    add_visualization_arguments(parser)
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Enable verbose logging"

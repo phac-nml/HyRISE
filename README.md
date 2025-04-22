@@ -1,7 +1,7 @@
 # HyRISE - HIV Resistance Interpretation & Scoring Engine
 
 <p align="center">
-  <img src="extra/HyRISE.svg" alt="HyRISE Logo" width="300" height="auto"/>
+  <img src="src/hyrise/core/assets/hyrise_logo.svg" alt="HyRISE Logo" width="300" height="auto"/>
 </p>
 
 
@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge&logo=gitlab&logoColor=white&logoWidth=40&color=green" alt="Build Status">
+  <img src="https://img.shields.io/badge/coverage-74.7%25-brightgreen?style=for-the-badge&logo=codecov&logoColor=white&logoWidth=40&color=green" alt="Build Status">
   <img src="https://img.shields.io/badge/python-3.8+-blue?style=for-the-badge&logo=python&logoColor=white&logoWidth=40&color=blue" alt="Python Versions">
   <img src="https://img.shields.io/badge/license-GNU%20GPL%20v3-blue?style=for-the-badge&logo=gnu&logoColor=white&logoWidth=40&color=blue" alt="License">
 </p>
@@ -295,16 +295,15 @@ hyrise/                  # Main package directory
 │   └── report_config.py # MultiQC report configuration
 ├── visualizers/         # Visualization modules
 │   ├── __init__.py
-│   ├── resistance.py    # Resistance-related visualizations
-│   ├── mutations.py     # Mutation-related visualizations
-│   ├── metadata.py      # Version and metadata visualizations
-│   └── interpretation.py # Interpretation guides
+│   ├── hiv_visualizations.py # HIV-specific visualizations
+│   └── info_and_guides.py # Interpretation guides and metadata
 ├── commands/            # Command modules
 │   ├── __init__.py
 │   ├── container.py     # Container management commands
 │   └── sierra.py        # SierraLocal integration commands
 └── utils/               # Utility functions
     ├── __init__.py
+    ├── common_args.py   # Common argument parsers
     ├── html_utils.py    # HTML generation utilities
     ├── container_utils.py # Container detection and execution
     └── container_builder.py # Container installation
