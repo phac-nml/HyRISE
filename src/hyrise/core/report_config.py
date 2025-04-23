@@ -5,6 +5,7 @@ and integrated command-line interface.
 
 import os
 import sys
+import re
 import shutil
 import argparse
 import subprocess
@@ -13,7 +14,9 @@ import base64
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Tuple, Optional, Union
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
+from rich.console import Console
+from hyrise import __version__
 
 
 class HyRISEReportGenerator:
@@ -22,7 +25,7 @@ class HyRISEReportGenerator:
     def __init__(
         self,
         output_dir: str,
-        version: str = "0.1.0",
+        version: str = __version__,
         sample_name: Optional[str] = None,
         metadata_info: Optional[Dict[str, Any]] = None,
         contact_email: Optional[str] = None,
@@ -200,7 +203,7 @@ class HyRISEReportGenerator:
                 "publish_date": db_publish_date or "Unknown",
             },
             "genes": genes,
-            "validation": data.get("validationResults", []),
+            # "validation": data.get("validationResults", []),
         }
 
     def generate_config(self, use_custom_template=False) -> str:
@@ -237,7 +240,7 @@ class HyRISEReportGenerator:
                     "publish_date": "Unknown",
                 },
                 "genes": {},
-                "validation": [],
+                # "validation": [],
             }
         else:
             metadata_info = self.metadata_info
@@ -299,7 +302,7 @@ class HyRISEReportGenerator:
             "make_data_dir": True,  # Create a data directory for report data
             "zip_data_dir": True,  # Zip the data directory for easy sharing
             "data_dump_file": True,  # Create a data dump file for further analysis
-            "export_plots": True,  # Export plots as standalone files for publications
+            # "export_plots": True,  # Export plots as standalone files for publications
             # Performance options
             "profile_runtime": False,  # Profile runtime for optimization
             # Built-in MultiQC customization options
@@ -509,69 +512,6 @@ class HyRISEReportGenerator:
                     "after": "mutation_type_table",
                 },
             },
-            # Custom plot configuration
-            "custom_plot_config": {
-                "drug_resistance_table_config": {
-                    "title": "HIV Drug Resistance Profile"
-                },
-                "mutations_table_config": {"title": "Significant Resistance Mutations"},
-                "resistance_level_distribution_plot": {
-                    "title": "Distribution of Resistance Levels Across Drug Classes"
-                },
-                "mutation_position_map_plot": {
-                    "title": "Genomic Distribution of Resistance Mutations"
-                },
-                "partial_score_analysis_plot": {
-                    "title": "Mutation Contribution to Resistance Scores"
-                },
-            },
-            # Control which columns are visible in tables by default
-            "table_columns_visible": {
-                "drug_resistance_table": {
-                    "Drug": True,
-                    "Class": True,
-                    "Score": True,
-                    "Interpretation": True,
-                },
-                "significant_mutations": {
-                    "Mutation": True,
-                    "Type": True,
-                    "Position": True,
-                    "Is SDRM": True,
-                },
-            },
-            # Additional table configuration
-            "table_columns_placement": {
-                # Ensure important columns are always visible by placing them first
-                "drug_resistance_table": [
-                    "Drug",
-                    "Class",
-                    "Score",
-                    "Interpretation",
-                    "SIR",
-                ],
-                "mutation_details_table": [
-                    "Mutation",
-                    "Type",
-                    "Position",
-                    "Is SDRM",
-                    "Clinical Implication",
-                ],
-            },
-            "table_columns_name": {
-                # Rename columns for clarity
-                "drug_resistance_table": {
-                    "Resistance Level": "Interpretation",
-                    "SIR": "Clinical Status",
-                },
-                "significant_mutations": {"Is SDRM": "Surveillance DRM"},
-            },
-            # Custom content ordering
-            "custom_content": {
-                "order": [
-                    "version_information",
-                ]
-            },
             # Section comments
             "section_comments": {
                 # ===== PROTEASE (PR) SECTIONS =====
@@ -613,7 +553,7 @@ class HyRISEReportGenerator:
             # Disable version detection
             "disable_version_detection": False,
             # Disable default intro text
-            "intro_text": False,
+            # "intro_text": False,
             # Enhanced color scheme with more professional clinical colors
             "colours": {
                 "plain_content": {
@@ -1038,6 +978,10 @@ class HyRISEReportGenerator:
         """
         Modify the MultiQC HTML report to customize it for HyRISE.
 
+        This function transforms a standard MultiQC report into a HyRISE-branded report
+        while maintaining proper attribution and ensuring professional presentation.
+        The function applies modifications systematically with fallbacks for future MultiQC versions.
+
         Args:
             html_path: Path to the HTML report file
             logo_data_uri: Data URI for the HyRISE logo
@@ -1046,10 +990,9 @@ class HyRISEReportGenerator:
             Tuple of (success, modifications_made)
         """
         try:
-            with open(html_path, "r", encoding="utf-8") as html:
-                soup = BeautifulSoup(html.read(), "html.parser")
+            self.logger.info(f"Starting HTML modifications on {html_path}")
 
-            # Track successful modifications
+            # Track modifications for reporting
             modifications = {
                 "logo": False,
                 "title": False,
@@ -1060,308 +1003,810 @@ class HyRISEReportGenerator:
                 "welcome": False,
                 "citations": False,
                 "navbar_version": False,
+                "meta_tags": False,
+                "lead_paragraph": False,
+                "links": False,
             }
 
-            # 1. Replace logos if we have a logo URI
+            # Read and parse the HTML file
+            try:
+                with open(html_path, "r", encoding="utf-8") as html_file:
+                    html_content = html_file.read()
+
+                # Parse with appropriate parser
+                soup = BeautifulSoup(html_content, "html.parser")
+                self.logger.info("Successfully parsed HTML document")
+            except Exception as e:
+                self.logger.error(f"Failed to read or parse HTML file: {str(e)}")
+                return False, {}
+
+            # Initialize a backup in case restoration is needed
+            try:
+                backup_path = f"{html_path}.backup"
+                shutil.copy2(html_path, backup_path)
+                self.logger.info(f"Created backup at {backup_path}")
+            except Exception as e:
+                self.logger.warning(f"Could not create backup: {str(e)}")
+
+            # 1. MODIFY PAGE TITLE
+            try:
+                title_tag = soup.find("title")
+                if title_tag:
+                    original_title = title_tag.string
+                    if "MultiQC" in original_title:
+                        new_title = original_title.replace("MultiQC", "HyRISE")
+                        title_tag.string = new_title
+                    else:
+                        title_tag.string = (
+                            "HyRISE: HIV Resistance Interpretation & Scoring Engine"
+                        )
+
+                    modifications["title"] = True
+                    self.logger.info(f"Updated page title: {title_tag.string}")
+            except Exception as e:
+                self.logger.error(f"Error updating page title: {str(e)}")
+
+            # 2. REPLACE META TAGS
+            try:
+                meta_tags_modified = False
+                meta_updates = {
+                    "description": "HyRISE: HIV Resistance Interpretation & Scoring Engine report providing comprehensive analysis of HIV drug resistance mutations",
+                    "author": "National Microbiology Laboratory, Public Health Agency of Canada",
+                    "keywords": "HIV, drug resistance, mutation analysis, antiretroviral therapy",
+                }
+
+                for meta in soup.find_all("meta"):
+                    if meta.get("name") in meta_updates:
+                        meta["content"] = meta_updates[meta.get("name")]
+                        meta_tags_modified = True
+                    elif meta.get("property") == "og:description":
+                        meta["content"] = meta_updates["description"]
+                        meta_tags_modified = True
+                    elif meta.get("property") == "og:title" and "MultiQC" in meta.get(
+                        "content", ""
+                    ):
+                        meta["content"] = meta["content"].replace("MultiQC", "HyRISE")
+                        meta_tags_modified = True
+
+                # Add missing meta tags
+                head_tag = soup.find("head")
+                if head_tag:
+                    for name, content in meta_updates.items():
+                        if not soup.find("meta", attrs={"name": name}):
+                            new_meta = soup.new_tag("meta")
+                            new_meta["name"] = name
+                            new_meta["content"] = content
+                            head_tag.append(new_meta)
+                            meta_tags_modified = True
+
+                modifications["meta_tags"] = meta_tags_modified
+                if meta_tags_modified:
+                    self.logger.info(
+                        "Updated meta tags for improved SEO and attribution"
+                    )
+            except Exception as e:
+                self.logger.error(f"Error updating meta tags: {str(e)}")
+
+            # 3. ADD FAVICON
+            try:
+                # Find favicon file with multiple fallbacks
+                favicon_paths = [
+                    Path("src/hyrise/core/assets/favicon.svg"),
+                    Path(__file__).parent / "assets" / "favicon.svg",
+                    Path(__file__).parent.parent / "assets" / "favicon.svg",
+                    Path(os.path.dirname(os.path.abspath(__file__)))
+                    / "assets"
+                    / "favicon.svg",
+                ]
+
+                favicon_path = next((p for p in favicon_paths if p.exists()), None)
+                favicon_data_uri = ""
+
+                if favicon_path:
+                    try:
+                        with open(favicon_path, "rb") as f:
+                            favicon_content = f.read()
+                            encoded_favicon = base64.b64encode(favicon_content).decode(
+                                "utf-8"
+                            )
+                            favicon_data_uri = (
+                                f"data:image/svg+xml;base64,{encoded_favicon}"
+                            )
+                        self.logger.info(f"Loaded favicon from {favicon_path}")
+                    except Exception as e:
+                        self.logger.warning(f"Failed to load favicon file: {str(e)}")
+
+                # Fallback to logo if no favicon found
+                if not favicon_data_uri and logo_data_uri:
+                    favicon_data_uri = logo_data_uri
+                    self.logger.info("Using logo as favicon (fallback)")
+
+                if favicon_data_uri:
+                    head_tag = soup.find("head")
+                    if head_tag:
+                        # Remove existing favicons
+                        for link in head_tag.find_all(
+                            "link", rel=lambda r: r and "icon" in r.lower()
+                        ):
+                            link.decompose()
+
+                        # Add new favicon
+                        new_favicon = soup.new_tag("link")
+                        new_favicon["rel"] = "icon"
+                        new_favicon["type"] = (
+                            "image/svg+xml"
+                            if "svg+xml" in favicon_data_uri
+                            else "image/png"
+                        )
+                        new_favicon["href"] = favicon_data_uri
+                        head_tag.append(new_favicon)
+
+                        modifications["favicon"] = True
+                        self.logger.info("Added custom favicon")
+                else:
+                    self.logger.warning("No favicon source available")
+            except Exception as e:
+                self.logger.error(f"Error setting favicon: {str(e)}")
+
+            # 4. REPLACE LOGOS WITH MULTIPLE SELECTOR STRATEGIES
             if logo_data_uri:
-                # Try the direct approach first - look for all images that might be logos
-                logo_replaced = False
+                try:
+                    logo_replaced = False
 
-                # 1. Find all images with data:image base64 src (typical for embedded logos)
-                for img_tag in soup.find_all(
-                    "img", src=lambda x: x and x.startswith("data:image/")
-                ):
-                    img_tag["src"] = logo_data_uri
-                    logo_replaced = True
-
-                # 2. Try standard selectors as backup
-                if not logo_replaced:
-                    logo_selectors = [
-                        "img#mqc_logo",  # Direct ID selector
-                        ".navbar-brand img",  # Logo in navbar
-                        "a.navbar-brand img",  # Variations
-                        "header img.logo",  # Another variation
-                        'img[alt="MultiQC"]',  # By alt text
+                    # Strategy 1: Use structured selectors with hierarchy
+                    logo_hierarchies = [
+                        ("h1 > a > img", "Header logo in h1"),
+                        (".navbar-brand > img", "Navbar brand logo"),
+                        (".navbar-header > a > img", "Navbar header logo"),
+                        (".header-logo > img", "Header logo class"),
+                        (".logo-container img", "Logo container"),
                     ]
 
-                    for selector in logo_selectors:
-                        try:
-                            logo_imgs = soup.select(selector)
-                            if logo_imgs:
-                                for logo_img in logo_imgs:
-                                    logo_img["src"] = logo_data_uri
+                    for selector, description in logo_hierarchies:
+                        logo_imgs = soup.select(selector)
+                        if logo_imgs:
+                            for img in logo_imgs:
+                                img["src"] = logo_data_uri
+                                if img.get("alt") and "MultiQC" in img["alt"]:
+                                    img["alt"] = img["alt"].replace("MultiQC", "HyRISE")
                                 logo_replaced = True
-                                break
-                        except Exception as e:
-                            self.logger.debug(
-                                f"Error with logo selector '{selector}': {e}"
-                            )
+                                self.logger.info(f"Replaced logo: {description}")
 
-                # 3. If all else fails, try to find any small images in the header or navbar
-                if not logo_replaced:
-                    for img_tag in soup.find_all("img"):
-                        parent = img_tag.parent
-                        while parent and parent.name not in ["nav", "header", "div"]:
-                            if "class" in parent.attrs and any(
-                                c in ["navbar", "header", "nav"]
-                                for c in parent.get("class", [])
+                    # Strategy 2: Find logos by attribute patterns
+                    if not logo_replaced:
+                        for img_tag in soup.find_all("img"):
+                            # Check for logos by source, alt text, or class
+                            img_src = img_tag.get("src", "")
+                            img_alt = img_tag.get("alt", "")
+                            img_class = " ".join(img_tag.get("class", []))
+
+                            if (
+                                "logo" in img_src.lower()
+                                or "MultiQC" in img_alt
+                                or "logo" in img_class.lower()
+                                or img_src.startswith("data:image/")
                             ):
                                 img_tag["src"] = logo_data_uri
+                                if "MultiQC" in img_alt:
+                                    img_tag["alt"] = img_alt.replace(
+                                        "MultiQC", "HyRISE"
+                                    )
                                 logo_replaced = True
-                                break
-                            parent = parent.parent
+                                self.logger.info(f"Replaced logo by attribute pattern")
 
-                modifications["logo"] = logo_replaced
+                    # Strategy 3: Look in specific containers
+                    if not logo_replaced:
+                        containers = [
+                            ".navbar",
+                            ".navbar-header",
+                            "header",
+                            ".header",
+                            "#header",
+                            ".branding",
+                            ".brand",
+                        ]
 
-                # Update favicon
-                favicon = soup.find("link", {"rel": "icon", "type": "image/png"})
-                if favicon:
-                    favicon["href"] = logo_data_uri
-                    modifications["favicon"] = True
+                        for container in containers:
+                            elements = soup.select(container)
+                            for element in elements:
+                                for img in element.find_all("img"):
+                                    img["src"] = logo_data_uri
+                                    logo_replaced = True
+                                    self.logger.info(
+                                        f"Replaced logo in container: {container}"
+                                    )
 
-            # 1.5 Replace version in navbar
-            version_replaced = False
+                    modifications["logo"] = logo_replaced
+                    if not logo_replaced:
+                        self.logger.warning("Could not find logos to replace")
+                except Exception as e:
+                    self.logger.error(f"Error replacing logos: {str(e)}")
 
-            # First attempt: direct selector for the small tag in the navbar
-            version_selectors = [
-                "h1 small.hidden-xs",
-                "nav small.hidden-xs",
-                ".navbar small.hidden-xs",
-                "header small.hidden-xs",
-            ]
+            # 5. UPDATE VERSION INFORMATION
+            try:
+                version_replaced = False
 
-            for selector in version_selectors:
-                version_tags = soup.select(selector)
-                for tag in version_tags:
-                    if tag.text.strip().startswith("v"):  # Likely a version number
-                        tag.string = f"v{self.version}"
-                        version_replaced = True
+                # Strategy 1: Look for version in small tags within h1
+                for h1 in soup.find_all("h1"):
+                    for small in h1.find_all("small"):
+                        text = small.get_text().strip()
+                        if text.startswith("v") or "version" in text.lower():
+                            small.string = f"v{self.version}"
+                            version_replaced = True
+                            self.logger.info(
+                                f"Updated version in header: {small.string}"
+                            )
 
-            # If not found with selectors, try more general approach
-            if not version_replaced:
-                for small_tag in soup.find_all("small", class_="hidden-xs"):
-                    if small_tag.text.strip().startswith("v"):
-                        small_tag.string = f"v{self.version}"
-                        version_replaced = True
+                # Strategy 2: Look for version pattern in any text node
+                if not version_replaced:
+                    version_pattern = re.compile(r"\bv\d+\.\d+(\.\d+)?")
 
-            modifications["navbar_version"] = version_replaced
+                    for text in soup.find_all(string=version_pattern):
+                        if not isinstance(text, Comment):  # Skip comment nodes
+                            parent = text.parent
+                            new_text = version_pattern.sub(f"v{self.version}", text)
+                            text.replace_with(new_text)
+                            version_replaced = True
+                            self.logger.info(
+                                f"Updated version text with pattern: {parent.name}"
+                            )
 
-            # 2. Replace title in document
-            title_tag = soup.find("title")
-            if title_tag:
-                title_tag.string = "HyRISE Report"
-                modifications["title"] = True
+                # Strategy 3: Look for version in footer
+                if not version_replaced:
+                    footer = soup.find("footer") or soup.find(class_="footer")
+                    if footer:
+                        for p in footer.find_all("p"):
+                            if "version" in p.text.lower():
+                                # Replace just the version number, preserving the rest of the text
+                                text = p.get_text()
+                                new_text = re.sub(
+                                    r"\d+\.\d+(\.\d+)?", self.version, text
+                                )
+                                p.string = new_text
+                                version_replaced = True
+                                self.logger.info(f"Updated version in footer")
 
-            # 3. Replace toolbox headers
-            # Try different approaches with fallbacks for robustness
-            for tag in soup.find_all(["h3", "h4"]):
-                if "MultiQC" in tag.text and "Toolbox" in tag.text:
-                    tag.string = tag.text.replace("MultiQC", "HyRISE")
-                    modifications["toolbox"] = True
+                modifications["navbar_version"] = version_replaced
+            except Exception as e:
+                self.logger.error(f"Error updating version information: {str(e)}")
 
-            # 4. Replace footer
-            footers = soup.select(".footer, footer")
-            for footer in footers:
-                # Instead of removing entirely, which could break layout,
-                # replace with simpler HyRISE footer
-                footer.clear()  # Clear all contents
-                footer.append(soup.new_tag("p"))
-                footer.p.string = f"Generated by HyRISE - HIV Resistance Interpretation & Scoring Engine"
-                modifications["footer"] = True
+            # 6. REMOVE LEAD PARAGRAPH ABOUT MULTIQC
+            try:
+                lead_removed = False
+                # Multiple strategies to find and remove the lead paragraph
 
-            # 5. Replace "About" section with custom content
-            about_section = soup.find("div", id="mqc_about")
-            if about_section:
-                # Find and update the header
-                about_header = about_section.find("h4")
-                if about_header:
-                    about_header.string = "About HyRISE"
+                # Strategy 1: Find by class and content
+                lead_paras = soup.find_all("p", class_="lead")
+                for para in lead_paras:
+                    text = para.get_text().lower()
+                    if any(
+                        phrase in text
+                        for phrase in ["multiqc", "aggregate results", "bioinformatics"]
+                    ):
+                        para.decompose()
+                        lead_removed = True
+                        self.logger.info(
+                            "Removed MultiQC lead paragraph by class and content"
+                        )
 
-                # Clear existing paragraphs
-                for p in about_section.find_all("p"):
-                    p.decompose()
+                # Strategy 2: Find by content in any paragraph
+                if not lead_removed:
+                    intro_phrases = [
+                        "multiqc is a",
+                        "multiqc generates",
+                        "modular tool to aggregate",
+                        "bioinformatics analyses",
+                    ]
 
-                # Clear existing blockquotes
-                for blockquote in about_section.find_all("blockquote"):
-                    blockquote.decompose()
+                    for p in soup.find_all("p"):
+                        text = p.get_text().lower()
+                        if any(phrase in text for phrase in intro_phrases):
+                            p.decompose()
+                            lead_removed = True
+                            self.logger.info(
+                                "Removed MultiQC description paragraph by content"
+                            )
 
-                # Add new paragraphs with the correct information
-                # Paragraph 1: Version info
-                p1 = soup.new_tag("p")
-                p1.string = f"This report was generated using HyRISE version {self.version} (HIV Resistance Interpretation & Scoring Engine)"
-                about_section.append(p1)
+                # Strategy 3: Find by location and basic structure
+                if not lead_removed:
+                    # Look for paragraphs in the main content area that mention MultiQC
+                    main_content = soup.find(id="mainContent") or soup.find(
+                        class_="mainpage"
+                    )
+                    if main_content:
+                        for p in main_content.find_all(
+                            "p", limit=3
+                        ):  # Check first few paragraphs
+                            if "MultiQC" in p.get_text():
+                                p.decompose()
+                                lead_removed = True
+                                self.logger.info(
+                                    "Removed MultiQC paragraph from main content"
+                                )
 
-                # Paragraph 2: YouTube link
-                p2 = soup.new_tag("p")
-                p2.string = "You can see a YouTube video describing how to use HyRISE reports here: "
-                a2 = soup.new_tag(
-                    "a", href="https://youtu.be/qPbIlO_KWN0", target="_blank"
-                )
-                a2.string = "https://youtu.be/qPbIlO_KWN0"
-                p2.append(a2)
-                about_section.append(p2)
+                modifications["lead_paragraph"] = lead_removed
+            except Exception as e:
+                self.logger.error(f"Error removing lead paragraph: {str(e)}")
 
-                # Paragraph 3: PHAC info
-                p3 = soup.new_tag("p")
-                p3.string = "HyRISE was developed at the National Laboratory of Microbiology for the Public Health Agency of Canada by the Pathogen Genetics and Genomics group at the Sexually Transmitted Blood-Borne Infections Division."
-                about_section.append(p3)
+            # 7. REPLACE TOOLBOX HEADERS
+            try:
+                toolbox_replaced = False
 
-                # Paragraph 4: GitHub link
-                p4 = soup.new_tag("p")
-                p4.string = "You can find the source code for HyRISE on GitHub: "
-                a4 = soup.new_tag(
-                    "a", href="https://github.com/phac-nml/HyRISE", target="_blank"
-                )
-                a4.string = "https://github.com/phac-nml/HyRISE"
-                p4.append(a4)
-                about_section.append(p4)
+                # Strategy 1: Use class-based selectors
+                toolbox_selectors = [
+                    ".mqc-toolbox h3",
+                    ".mqc-toolbox h4",
+                    "#mqc_toolbox h3",
+                    "#mqc_toolbox h4",
+                    ".mqc_toolbox h3",
+                    ".mqc_toolbox h4",
+                ]
 
-                # Paragraph 5: PyPI link
-                p5 = soup.new_tag("p")
-                p5.string = "HyRISE is available on PyPI: "
-                a5 = soup.new_tag(
-                    "a", href="https://pypi.org/project/hyrise/", target="_blank"
-                )
-                a5.string = "https://pypi.org/project/hyrise/"
-                p5.append(a5)
-                about_section.append(p5)
+                for selector in toolbox_selectors:
+                    headers = soup.select(selector)
+                    for header in headers:
+                        if "MultiQC" in header.get_text():
+                            header.string = header.get_text().replace(
+                                "MultiQC", "HyRISE"
+                            )
+                            toolbox_replaced = True
+                            self.logger.info(
+                                f"Replaced toolbox header with selector: {selector}"
+                            )
 
-                # Paragraph 6: Original MultiQC attribution
-                p6 = soup.new_tag("p")
-                p6.string = "HyRISE is based on MultiQC template. MultiQC is published in Bioinformatics:"
-                about_section.append(p6)
-
-                # Add MultiQC citation block
-                citation = soup.new_tag("blockquote")
-
-                # Citation title
-                strong = soup.new_tag("strong")
-                strong.string = "MultiQC: Summarize analysis results for multiple tools and samples in a single report"
-                citation.append(strong)
-                citation.append(soup.new_tag("br"))
-
-                # Citation authors
-                em = soup.new_tag("em")
-                em.string = (
-                    "Philip Ewels, Måns Magnusson, Sverker Lundin and Max Käller"
-                )
-                citation.append(em)
-                citation.append(soup.new_tag("br"))
-
-                # Citation journal
-                citation.append("Bioinformatics (2016)")
-                citation.append(soup.new_tag("br"))
-
-                # Citation DOI
-                citation.append("doi: ")
-                doi_link = soup.new_tag(
-                    "a",
-                    href="http://dx.doi.org/10.1093/bioinformatics/btw354",
-                    target="_blank",
-                )
-                doi_link.string = "10.1093/bioinformatics/btw354"
-                citation.append(doi_link)
-                citation.append(soup.new_tag("br"))
-
-                # Citation PMID
-                citation.append("PMID: ")
-                pmid_link = soup.new_tag(
-                    "a",
-                    href="http://www.ncbi.nlm.nih.gov/pubmed/27312411",
-                    target="_blank",
-                )
-                pmid_link.string = "27312411"
-                citation.append(pmid_link)
-
-                about_section.append(citation)
-
-                modifications["about_section"] = True
-
-            # 6. Remove citations section if present (handled in the About section now)
-            citation_selectors = [
-                "#mqc_citing",  # Direct ID
-                'h4:contains("Citing MultiQC")',  # By text
-                "blockquote cite",  # Specific citation element
-            ]
-
-            for selector in citation_selectors:
-                try:
-                    elements = soup.select(selector)
-                    for elem in elements:
-                        # Find the parent section if possible
-                        section = elem
-                        while section and section.name != "section":
-                            section = section.parent
-
-                        # Remove the section or just the element if section not found
+                # Strategy 2: Find by content
+                if not toolbox_replaced:
+                    for tag in soup.find_all(["h3", "h4"]):
                         if (
-                            section and section.get("id") != "mqc_about"
-                        ):  # Don't remove if it's our about section
-                            section.decompose()
-                        elif elem.parent and elem.parent.get("id") != "mqc_about":
-                            elem.decompose()
+                            "toolbox" in tag.get_text().lower()
+                            and "MultiQC" in tag.get_text()
+                        ):
+                            tag.string = tag.get_text().replace("MultiQC", "HyRISE")
+                            toolbox_replaced = True
+                            self.logger.info(
+                                f"Replaced toolbox header by content match"
+                            )
 
-                        modifications["citations"] = True
-                except Exception as e:
-                    self.logger.debug(f"Error with citation selector '{selector}': {e}")
+                modifications["toolbox"] = toolbox_replaced
+            except Exception as e:
+                self.logger.error(f"Error updating toolbox headers: {str(e)}")
 
-            # 7. Remove welcome sections or replace
-            welcome_selectors = ["#mqc_welcome", ".mqc-welcome", "section.welcome"]
-            for selector in welcome_selectors:
-                try:
-                    elements = soup.select(selector)
-                    for elem in elements:
-                        # Either replace or remove
-                        if elem.name == "section":
-                            # Create replacement welcome
-                            welcome = soup.new_tag("div")
-                            welcome["class"] = "welcome"
-                            welcome.append(soup.new_tag("h3"))
-                            welcome.h3.string = "Welcome to HyRISE Report"
-                            welcome.append(soup.new_tag("p"))
-                            welcome.p.string = "This report provides a comprehensive analysis of HIV drug resistance mutations."
-                            elem.replace_with(welcome)
-                        else:
-                            elem.decompose()
-                        modifications["welcome"] = True
-                except Exception as e:
-                    self.logger.debug(f"Error with welcome selector '{selector}': {e}")
+            # 8. UPDATE FOOTER
+            try:
+                footer_replaced = False
 
-            # 8. Replace links - but only specific ones, not GitHub links for HyRISE
-            for a_tag in soup.find_all(
-                "a", href=lambda href: href and "multiqc.info" in href
-            ):
-                a_tag["href"] = "https://pypi.org/project/hyrise/"
+                # Strategy 1: Find by class
+                footer = soup.find(class_="footer")
+                if footer:
+                    container = footer.find(class_="container-fluid") or footer
+                    if container:
+                        # Preserve footer structure but replace content
+                        container.clear()
 
-            # Update other MultiQC URLs that shouldn't point to HyRISE's repo
-            for a_tag in soup.find_all("a"):
-                if a_tag.get("href") and "github.com/ewels/HyRISE" in a_tag.get("href"):
-                    a_tag["href"] = "https://github.com/phac-nml/HyRISE"
+                        # Add our custom content with professional styling
+                        p1 = soup.new_tag("p")
+                        p1.string = f"Generated by HyRISE v{self.version} - HIV Resistance Interpretation & Scoring Engine"
+                        container.append(p1)
 
-            # 9. Update meta tags
-            for meta in soup.find_all("meta"):
-                if (
-                    meta.get("name") == "description"
-                    or meta.get("property") == "og:description"
-                ):
-                    meta["content"] = (
-                        "HIV Resistance Interpretation & Scoring Engine report"
+                        p2 = soup.new_tag("p")
+                        p2.string = "Developed by the National Microbiology Laboratory, Public Health Agency of Canada"
+                        container.append(p2)
+
+                        # Add attribution to MultiQC
+                        p3 = soup.new_tag("p", **{"class": "small text-muted"})
+                        p3.string = "Powered by MultiQC, a modular framework for bioinformatics reporting"
+                        container.append(p3)
+
+                        footer_replaced = True
+                        self.logger.info(
+                            "Replaced footer content with professional attribution"
+                        )
+
+                # Strategy 2: Find by tag
+                if not footer_replaced:
+                    footer = soup.find("footer")
+                    if footer:
+                        footer.clear()
+
+                        div = soup.new_tag("div", **{"class": "container-fluid"})
+
+                        p1 = soup.new_tag("p")
+                        p1.string = f"Generated by HyRISE v{self.version} - HIV Resistance Interpretation & Scoring Engine"
+                        div.append(p1)
+
+                        p2 = soup.new_tag("p")
+                        p2.string = "Developed by the National Microbiology Laboratory, Public Health Agency of Canada"
+                        div.append(p2)
+
+                        p3 = soup.new_tag("p", **{"class": "small text-muted"})
+                        p3.string = "Powered by MultiQC, a modular framework for bioinformatics reporting"
+                        div.append(p3)
+
+                        footer.append(div)
+                        footer_replaced = True
+                        self.logger.info("Replaced footer by tag")
+
+                # Strategy 3: Create footer if not found
+                if not footer_replaced:
+                    body = soup.find("body")
+                    if body:
+                        # Check if last child is already a footer
+                        last_child = list(body.children)[-1]
+                        if (
+                            last_child.name != "footer"
+                            and not last_child.get("class") == "footer"
+                        ):
+                            # Create new footer
+                            footer = soup.new_tag("footer", **{"class": "footer"})
+                            div = soup.new_tag("div", **{"class": "container-fluid"})
+
+                            p1 = soup.new_tag("p")
+                            p1.string = f"Generated by HyRISE v{self.version} - HIV Resistance Interpretation & Scoring Engine"
+                            div.append(p1)
+
+                            p2 = soup.new_tag("p")
+                            p2.string = "Developed by the National Microbiology Laboratory, Public Health Agency of Canada"
+                            div.append(p2)
+
+                            p3 = soup.new_tag("p", **{"class": "small text-muted"})
+                            p3.string = "Powered by MultiQC, a modular framework for bioinformatics reporting"
+                            div.append(p3)
+
+                            footer.append(div)
+                            body.append(footer)
+                            footer_replaced = True
+                            self.logger.info("Created new footer")
+
+                modifications["footer"] = footer_replaced
+            except Exception as e:
+                self.logger.error(f"Error updating footer: {str(e)}")
+
+            # 9. UPDATE ABOUT SECTION WITH PROPER ATTRIBUTION
+            try:
+                about_replaced = False
+
+                # Strategy 1: Find by ID
+                about_section = soup.find(id="mqc_about")
+                if about_section:
+                    about_section.clear()
+
+                    # Add header
+                    header = soup.new_tag("h4")
+                    header.string = "About HyRISE"
+                    about_section.append(header)
+
+                    # Add content
+                    p1 = soup.new_tag("p")
+                    p1.string = f"This report was generated using HyRISE v{self.version} (HIV Resistance Interpretation & Scoring Engine)."
+                    about_section.append(p1)
+
+                    p2 = soup.new_tag("p")
+                    p2.string = "HyRISE provides comprehensive analysis of HIV drug resistance mutations, offering detailed visualizations and clinical interpretations to support treatment decisions."
+                    about_section.append(p2)
+
+                    # Add repository links
+                    links_div = soup.new_tag("div", **{"class": "well well-sm"})
+                    links_list = soup.new_tag("ul", **{"class": "list-unstyled"})
+
+                    # GitHub link
+                    li1 = soup.new_tag("li")
+                    icon1 = soup.new_tag("i", **{"class": "fa fa-github"})
+                    li1.append(icon1)
+                    li1.append(" ")
+                    a1 = soup.new_tag(
+                        "a", href="https://github.com/phac-nml/HyRISE", target="_blank"
+                    )
+                    a1.string = "GitHub Repository"
+                    li1.append(a1)
+                    links_list.append(li1)
+
+                    # Add to section
+                    links_div.append(links_list)
+                    about_section.append(links_div)
+
+                    # Attribution to MultiQC (important)
+                    attribution = soup.new_tag("p", **{"class": "small text-muted"})
+                    attribution.string = "HyRISE is built using the MultiQC framework (Ewels P, et al. MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016;32(19):3047-8)."
+                    about_section.append(attribution)
+
+                    about_replaced = True
+                    self.logger.info("Updated About section with proper attribution")
+
+                # Strategy 2: Find by class or content
+                if not about_replaced:
+                    # Look for any section containing "About MultiQC"
+                    for section in soup.find_all("section"):
+                        header = section.find(["h3", "h4"])
+                        if header and "About MultiQC" in header.get_text():
+                            section.clear()
+
+                            h4 = soup.new_tag("h4")
+                            h4.string = "About HyRISE"
+                            section.append(h4)
+
+                            p1 = soup.new_tag("p")
+                            p1.string = f"This report was generated using HyRISE v{self.version} (HIV Resistance Interpretation & Scoring Engine)."
+                            section.append(p1)
+
+                            p2 = soup.new_tag("p")
+                            p2.string = "HyRISE provides comprehensive analysis of HIV drug resistance mutations, offering detailed visualizations and clinical interpretations to support treatment decisions."
+                            section.append(p2)
+
+                            # Attribution to MultiQC
+                            attribution = soup.new_tag(
+                                "p", **{"class": "small text-muted"}
+                            )
+                            attribution.string = "HyRISE is built using the MultiQC framework (Ewels P, et al. MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016;32(19):3047-8)."
+                            section.append(attribution)
+
+                            about_replaced = True
+                            self.logger.info("Updated About section by content match")
+                            break
+
+                modifications["about_section"] = about_replaced
+            except Exception as e:
+                self.logger.error(f"Error updating About section: {str(e)}")
+
+            # 10. UPDATE WELCOME SECTION
+            try:
+                welcome_replaced = False
+
+                # Strategy 1: Find by ID or class
+                welcome_selectors = [
+                    "#mqc_welcome",
+                    ".mqc-welcome",
+                    "section.welcome",
+                    "div.welcome",
+                ]
+
+                for selector in welcome_selectors:
+                    welcome_elems = soup.select(selector)
+                    for elem in welcome_elems:
+                        elem.clear()
+
+                        title = soup.new_tag("h3")
+                        title.string = "HIV Resistance Analysis Report"
+                        elem.append(title)
+
+                        p1 = soup.new_tag("p")
+                        p1.string = "This report provides a comprehensive analysis of HIV drug resistance mutations detected in your sample, with detailed visualizations and clinical interpretations to support treatment decisions."
+                        elem.append(p1)
+
+                        p2 = soup.new_tag("p")
+                        p2.string = "Navigate through the sections using the menu on the left. Key sections include drug resistance profiles, mutation analyses, and clinical implications."
+                        elem.append(p2)
+
+                        welcome_replaced = True
+                        self.logger.info(
+                            f"Updated welcome section with selector: {selector}"
+                        )
+                        break
+
+                # Strategy 2: Find introduction content
+                if not welcome_replaced:
+                    intro_section = None
+                    # Find first main content section
+                    main_content = soup.find(id="mainContent") or soup.find(
+                        class_="mainpage"
                     )
 
-            # Write the modified HTML
-            with open(html_path, "w", encoding="utf-8") as file:
-                file.write(str(soup))
+                    if main_content:
+                        # Look for a section with intro-like header
+                        for section in main_content.find_all("section"):
+                            header = section.find(["h1", "h2", "h3"])
+                            if header and any(
+                                word in header.get_text().lower()
+                                for word in ["welcome", "introduction", "about"]
+                            ):
+                                intro_section = section
+                                break
 
-            # Log what was modified
-            modified_items = [k for k, v in modifications.items() if v]
-            self.logger.info(
-                f"HTML modifications completed. Modified: {', '.join(modified_items)}"
-            )
+                        # If no section found, use first section
+                        if not intro_section and main_content.find("section"):
+                            intro_section = main_content.find_all("section")[0]
 
-            return True, modifications
+                        if intro_section:
+                            intro_section.clear()
+
+                            title = soup.new_tag("h3")
+                            title.string = "HIV Resistance Analysis Report"
+                            intro_section.append(title)
+
+                            p1 = soup.new_tag("p")
+                            p1.string = "This report provides a comprehensive analysis of HIV drug resistance mutations detected in your sample, with detailed visualizations and clinical interpretations to support treatment decisions."
+                            intro_section.append(p1)
+
+                            p2 = soup.new_tag("p")
+                            p2.string = "Navigate through the sections using the menu on the left. Key sections include drug resistance profiles, mutation analyses, and clinical implications."
+                            intro_section.append(p2)
+
+                            welcome_replaced = True
+                            self.logger.info(
+                                "Created new welcome section in main content"
+                            )
+
+                modifications["welcome"] = welcome_replaced
+            except Exception as e:
+                self.logger.error(f"Error updating welcome section: {str(e)}")
+
+            # 11. UPDATE CITATIONS SECTION
+            try:
+                citations_updated = False
+
+                # Strategy 1: Find by ID
+                citations = soup.find(id="mqc_citing")
+                if citations:
+                    # Replace with HyRISE citation
+                    citations.clear()
+
+                    title = soup.new_tag("h4")
+                    title.string = "Citing HyRISE"
+                    citations.append(title)
+
+                    intro = soup.new_tag("p")
+                    intro.string = "If you use HyRISE in your research, please cite:"
+                    citations.append(intro)
+
+                    citation_box = soup.new_tag("div", **{"class": "well"})
+
+                    # HyRISE citation
+                    p1 = soup.new_tag("p")
+                    strong = soup.new_tag("strong")
+                    strong.string = (
+                        "HyRISE: HIV Resistance Interpretation & Scoring Engine"
+                    )
+                    p1.append(strong)
+                    citation_box.append(p1)
+
+                    p2 = soup.new_tag("p")
+                    p2.string = "Osahan G, et al. National Microbiology Laboratory, Public Health Agency of Canada (2025)"
+                    citation_box.append(p2)
+
+                    p3 = soup.new_tag("p")
+                    p3.string = "Available at: "
+                    link = soup.new_tag("a", href="https://github.com/phac-nml/HyRISE")
+                    link.string = "https://github.com/phac-nml/HyRISE"
+                    p3.append(link)
+                    citation_box.append(p3)
+
+                    # MultiQC citation (important for attribution)
+                    p4 = soup.new_tag("p", **{"class": "small text-muted"})
+                    p4.string = "HyRISE is built using the MultiQC framework:"
+                    citation_box.append(p4)
+
+                    p5 = soup.new_tag("p", **{"class": "small text-muted"})
+                    em = soup.new_tag("em")
+                    em.string = "Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016;32(19):3047-8."
+                    p5.append(em)
+                    citation_box.append(p5)
+
+                    citations.append(citation_box)
+                    citations_updated = True
+                    self.logger.info(
+                        "Updated citations section with HyRISE and MultiQC citations"
+                    )
+
+                # Strategy 2: Find by content
+                if not citations_updated:
+                    # Look for any section containing "Citing MultiQC"
+                    for section in soup.find_all("section"):
+                        header = section.find(["h3", "h4"])
+                        if (
+                            header
+                            and "Citing" in header.get_text()
+                            and "MultiQC" in header.get_text()
+                        ):
+                            section.clear()
+
+                            h4 = soup.new_tag("h4")
+                            h4.string = "Citing HyRISE"
+                            section.append(h4)
+
+                            intro = soup.new_tag("p")
+                            intro.string = (
+                                "If you use HyRISE in your research, please cite:"
+                            )
+                            section.append(intro)
+
+                            citation_box = soup.new_tag("div", **{"class": "well"})
+
+                            # HyRISE citation
+                            p1 = soup.new_tag("p")
+                            strong = soup.new_tag("strong")
+                            strong.string = (
+                                "HyRISE: HIV Resistance Interpretation & Scoring Engine"
+                            )
+                            p1.append(strong)
+                            citation_box.append(p1)
+
+                            p2 = soup.new_tag("p")
+                            p2.string = "Osahan G, et al. National Microbiology Laboratory, Public Health Agency of Canada (2025)"
+                            citation_box.append(p2)
+
+                            # MultiQC citation (important for attribution)
+                            p4 = soup.new_tag("p", **{"class": "small text-muted"})
+                            p4.string = "HyRISE is built using the MultiQC framework:"
+                            citation_box.append(p4)
+
+                            p5 = soup.new_tag("p", **{"class": "small text-muted"})
+                            em = soup.new_tag("em")
+                            em.string = "Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016;32(19):3047-8."
+                            p5.append(em)
+                            citation_box.append(p5)
+
+                            section.append(citation_box)
+                            citations_updated = True
+                            self.logger.info(
+                                "Updated citations section by content match"
+                            )
+                            break
+
+                modifications["citations"] = citations_updated
+            except Exception as e:
+                self.logger.error(f"Error updating citations section: {str(e)}")
+
+            # 12. UPDATE LINKS
+            try:
+                links_updated = False
+
+                # Define link replacements
+                link_replacements = {
+                    "http://multiqc.info": "https://github.com/phac-nml/HyRISE",
+                    "https://multiqc.info": "https://github.com/phac-nml/HyRISE",
+                    "https://github.com/MultiQC/MultiQC": "https://github.com/phac-nml/HyRISE",
+                    "https://github.com/ewels/MultiQC": "https://github.com/phac-nml/HyRISE",
+                    "https://seqera.io": "https://www.canada.ca/en/public-health.html",
+                }
+
+                # Update all matching links
+                for a_tag in soup.find_all("a", href=True):
+                    original_href = a_tag["href"]
+
+                    for old_url, new_url in link_replacements.items():
+                        if old_url in original_href:
+                            a_tag["href"] = original_href.replace(old_url, new_url)
+                            links_updated = True
+
+                            # Update link text if it contains MultiQC
+                            if a_tag.string and "MultiQC" in a_tag.string:
+                                a_tag.string = a_tag.string.replace("MultiQC", "HyRISE")
+
+                if links_updated:
+                    self.logger.info("Updated links to point to HyRISE resources")
+
+                modifications["links"] = links_updated
+            except Exception as e:
+                self.logger.error(f"Error updating links: {str(e)}")
+
+            # Write the updated HTML back to the file
+            try:
+                with open(html_path, "w", encoding="utf-8") as file:
+                    file.write(str(soup))
+
+                # Log successful modifications
+                modified_items = [k for k, v in modifications.items() if v]
+                self.logger.info(
+                    f"HTML modifications completed successfully. Modified: {', '.join(modified_items)}"
+                )
+
+                return True, modifications
+            except Exception as e:
+                self.logger.error(f"Error writing modified HTML: {str(e)}")
+                # Try to restore from backup
+                try:
+                    if os.path.exists(f"{html_path}.backup"):
+                        shutil.copy2(f"{html_path}.backup", html_path)
+                        self.logger.info("Restored HTML from backup after write error")
+                except Exception:
+                    self.logger.error("Failed to restore from backup")
+
+                return False, {}
 
         except Exception as e:
-            self.logger.error(f"Error modifying HTML: {str(e)}")
+            self.logger.error(f"Unexpected error in HTML modification: {str(e)}")
+            import traceback
+
+            self.logger.error(traceback.format_exc())
             return False, {}
 
     def post_process_report(
@@ -1369,38 +1814,58 @@ class HyRISEReportGenerator:
     ) -> Tuple[bool, Dict[str, bool]]:
         """
         Post-process the MultiQC report to customize it for HyRISE.
-
-        Args:
-            logo_path: Optional path to a logo file
-
-        Returns:
-            Tuple of (success, modifications_made)
         """
-        # Find the report HTML file
-        html_file = os.path.join(self.report_dir, "hyrise_resistance_report.html")
-        if not os.path.exists(html_file):
-            self.logger.error(f"Report HTML file not found at: {html_file}")
+        # Look for possible report filenames
+        possible_filenames = ["hyrise_resistance_report.html", "multiqc_report.html"]
+
+        # Log all files in report directory for debugging
+        try:
+            report_files = os.listdir(self.report_dir)
+            self.logger.info(f"Files in report directory: {report_files}")
+        except Exception as e:
+            self.logger.error(f"Error listing report directory: {str(e)}")
+
+        # Find the first matching report file
+        html_file = None
+        for filename in possible_filenames:
+            path = os.path.join(self.report_dir, filename)
+            if os.path.exists(path):
+                html_file = path
+                self.logger.info(f"Found report file: {html_file}")
+                break
+
+        if not html_file:
+            self.logger.error(
+                f"Report HTML file not found. Checked: {possible_filenames}"
+            )
             return False, {}
 
-        # Create a backup before modifying
-        backup_file = f"{html_file}.backup"
-        shutil.copy2(html_file, backup_file)
-        self.logger.info(f"Created backup of original report at: {backup_file}")
+        try:
+            # Create a backup before modifying
+            backup_file = f"{html_file}.backup"
+            shutil.copy2(html_file, backup_file)
+            self.logger.info(f"Created backup of original report at: {backup_file}")
 
-        # Get logo data URI
-        logo_data_uri = self.embed_logo(logo_path)
+            # Get logo data URI
+            logo_data_uri = self.embed_logo(logo_path)
 
-        # Modify the HTML
-        success, modifications = self.modify_html(html_file, logo_data_uri)
+            # Modify the HTML
+            success, modifications = self.modify_html(html_file, logo_data_uri)
 
-        if not success:
-            # Restore from backup on failure
-            self.logger.warning("HTML modification failed, restoring from backup")
-            shutil.copy2(backup_file, html_file)
+            if not success:
+                # Restore from backup on failure
+                self.logger.warning("HTML modification failed, restoring from backup")
+                shutil.copy2(backup_file, html_file)
+                return False, {}
+
+            self.logger.info("HTML report successfully customized for HyRISE")
+            return True, modifications
+        except Exception as e:
+            self.logger.error(f"Error in post_process_report: {str(e)}")
+            import traceback
+
+            self.logger.error(traceback.format_exc())
             return False, {}
-
-        self.logger.info("HTML report successfully customized for HyRISE")
-        return True, modifications
 
     def generate_report(
         self,
@@ -1496,7 +1961,7 @@ def main():
     parser.add_argument("-e", "--email", help="Contact email for the report")
     parser.add_argument("-l", "--logo", help="Path to custom logo file (PNG or SVG)")
     parser.add_argument(
-        "-v", "--version", default="0.1.0", help="HyRISE version number"
+        "-v", "--version", default=__version__, help="HyRISE version number"
     )
     parser.add_argument(
         "--skip-multiqc", action="store_true", help="Skip running MultiQC"

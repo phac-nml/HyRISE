@@ -185,18 +185,14 @@ def create_mutation_details_table(data, sample_id, output_dir):
                 # Default sorting by position for logical genomic order
                 "defaultsort": [{"column": "Position", "direction": "asc"}],
                 # Enable table filtering capabilities
-                "filters": True,
                 # Enable conditional formatting with subtle styling
-                "conditional_formatting": True,
                 # Configure a reasonable max number of columns
-                "max_configurable_table_columns": 300,
             },
             "headers": {
                 "Mutation": {
                     "title": "Mutation",
                     "description": "Mutation code",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                 },
                 "Position": {
                     "title": "Position",
@@ -208,13 +204,11 @@ def create_mutation_details_table(data, sample_id, output_dir):
                     "scale": "Blues",
                     "min": min_position,
                     "max": max_position,
-                    "bars": True,
                 },
                 "Type": {
                     "title": "Type",
                     "description": "Mutation type (Major, Accessory, or Other)",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                     # Use subtle background colors for different mutation types
                     "bgcols": MUTATION_TYPE_COLORS,
                 },
@@ -222,7 +216,6 @@ def create_mutation_details_table(data, sample_id, output_dir):
                     "title": "SDRM",
                     "description": "Surveillance Drug Resistance Mutation",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                     # Subtle highlighting for SDRMs
                     "bgcols": {"Yes": "#f5f9f5", "No": ""},  # Very subtle green
                 },
@@ -230,21 +223,18 @@ def create_mutation_details_table(data, sample_id, output_dir):
                     "title": "APOBEC",
                     "description": "APOBEC-mediated G-to-A hypermutation",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                     "bgcols": {"Yes": "#f9f5fc", "No": ""},  # Very subtle purple
                 },
                 "Is Unusual": {
                     "title": "Unusual",
                     "description": "Mutation that is rarely observed in untreated patients",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                     "bgcols": {"Yes": "#f9f7f7", "No": ""},  # Very subtle pink
                 },
                 "Structure": {
                     "title": "Structure",
                     "description": "Type of structural change (substitution, insertion, deletion)",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                     "bgcols": {
                         "Insertion": "#e6f7f5",  # Very subtle teal
                         "Deletion": "#f7e6f5",  # Very subtle purple
@@ -838,7 +828,6 @@ def create_mutation_type_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "Blues",
                     "min": 0,
-                    "bars": True,
                 },
                 "Percentage": {
                     "title": "Percentage",
@@ -848,7 +837,6 @@ def create_mutation_type_summary(data, sample_id, output_dir):
                     "scale": "Blues",
                     "min": 0,
                     "max": 100,
-                    "bars": True,
                 },
                 "Examples": {
                     "title": "Mutations",
@@ -985,24 +973,19 @@ def create_drug_resistance_profile(data, sample_id, output_dir):
                     {"column": "Drug Class", "direction": "asc"},
                 ],
                 # Enable filtering for research flexibility
-                "filters": True,
                 # Enable conditional formatting but with more subtle styling
-                "conditional_formatting": True,
                 # Configure a reasonable max for columns
-                "max_configurable_table_columns": 300,
             },
             "headers": {
                 "Drug": {
                     "title": "Drug",
                     "description": "Antiretroviral drug",
                     "namespace": "Drug Information",
-                    "filterable": True,
                 },
                 "Drug Class": {
                     "title": "Class",
                     "description": "Drug class (e.g., NRTI, NNRTI, PI, INSTI, CAI)",
                     "namespace": "Drug Information",
-                    "filterable": True,
                     # Use very subtle background colors for drug classes
                     "bgcols": {
                         "NRTI": "#f5f9fc",  # Very subtle blue
@@ -1023,7 +1006,6 @@ def create_drug_resistance_profile(data, sample_id, output_dir):
                     "scale": "Blues",
                     "format": "{:,.0f}",  # No decimal places for scores
                     # Bar formatting for clear visualization
-                    "bars": True,
                     "bars_zero_centrepoint": False,
                 },
                 "Weighted Score": {
@@ -1034,7 +1016,6 @@ def create_drug_resistance_profile(data, sample_id, output_dir):
                     "max": 100,
                     "scale": "RdYlGn-rev",
                     "format": "{:,.1f}",
-                    "bars": True,
                     "hidden": True,  # Hidden by default but available for sorting
                 },
                 "Clinical Priority": {
@@ -1051,7 +1032,6 @@ def create_drug_resistance_profile(data, sample_id, output_dir):
                     "title": "SIR",
                     "description": "Susceptible (S), Intermediate (I), or Resistant (R) classification",
                     "namespace": "Resistance Metrics",
-                    "filterable": True,
                     # Subtle background colors for SIR classification
                     "bgcols": {
                         "S": "#eaf5ea",  # Very subtle green
@@ -1070,7 +1050,6 @@ def create_drug_resistance_profile(data, sample_id, output_dir):
                     "title": "Interpretation",
                     "description": "Clinical interpretation of resistance level",
                     "namespace": "Resistance Metrics",
-                    "filterable": True,
                     # Very subtle background colors based on resistance level
                     "bgcols": RESISTANCE_COLORS,
                     # Professional conditional formatting with subtle visual cues
@@ -1314,7 +1293,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     {"column": "Priority Drugs Affected", "direction": "desc"},
                 ],
                 # Enable filtering
-                "filters": True,
             },
             "headers": {
                 "Drug Class": {
@@ -1336,7 +1314,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "Blues",
                     "min": 0,
-                    "bars": True,
                 },
                 "Resistant (%)": {
                     "title": "% Resistant",
@@ -1347,7 +1324,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "scale": "Blues",
                     "min": 0,
                     "max": 100,
-                    "bars": True,
                 },
                 "Avg Weighted Score": {
                     "title": "Weighted Score",
@@ -1357,7 +1333,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "scale": "RdYlGn-rev",
                     "min": 0,
                     "max": 60,
-                    "bars": True,
                 },
                 "Priority Drugs Affected": {
                     "title": "High-Priority",
@@ -1366,7 +1341,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "Reds",
                     "min": 0,
-                    "bars": True,
                 },
                 "Max Score": {
                     "title": "Max Score",
@@ -1381,7 +1355,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "title": "Status",
                     "description": "Overall resistance status for this drug class",
                     "namespace": "Classes",
-                    "filterable": True,
                     "bgcols": {
                         "High-level resistance": "#f5e6e6",  # Very subtle red
                         "High-level resistance (priority drugs affected)": "#f5e6e6",  # Same subtle red
@@ -1398,7 +1371,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "Reds",
                     "min": 0,
-                    "bars": True,
                 },
                 "Intermediate": {
                     "title": "Int",
@@ -1407,7 +1379,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "Oranges",
                     "min": 0,
-                    "bars": True,
                 },
                 "Low-Level": {
                     "title": "Low",
@@ -1416,7 +1387,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "YlOrBr",
                     "min": 0,
-                    "bars": True,
                 },
                 "Potential Low": {
                     "title": "Pot",
@@ -1425,7 +1395,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "Blues",
                     "min": 0,
-                    "bars": True,
                 },
                 "Susceptible": {
                     "title": "Sus",
@@ -1434,7 +1403,6 @@ def create_drug_class_resistance_summary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "Greens",
                     "min": 0,
-                    "bars": True,
                 },
             },
             "data": table_data,
@@ -1630,25 +1598,17 @@ def create_mutation_resistance_contribution(data, sample_id, output_dir):
                 "defaultsort": [
                     {"column": "Weighted Contribution", "direction": "desc"}
                 ],
-                # Enable filtering for research flexibility
-                "filters": True,
-                # Enable conditional formatting but with more subtle styling
-                "conditional_formatting": True,
-                # Configure a reasonable max for columns
-                "max_configurable_table_columns": 300,
             },
             "headers": {
                 "Drug": {
                     "title": "Drug",
                     "description": "Antiretroviral drug",
                     "namespace": "Drug Information",
-                    "filterable": True,
                 },
                 "Drug Class": {
                     "title": "Class",
                     "description": "Drug class category",
                     "namespace": "Drug Information",
-                    "filterable": True,
                     # Use very subtle background colors for drug classes
                     "bgcols": {
                         "NRTI": "#f5f9fc",
@@ -1673,13 +1633,11 @@ def create_mutation_resistance_contribution(data, sample_id, output_dir):
                     "title": "Mutations",
                     "description": "Specific mutation or combination of mutations",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                 },
                 "Mutation Type": {
                     "title": "Type",
                     "description": "Primary type of mutation",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                     # Use very subtle background colors for mutation types
                     "bgcols": MUTATION_TYPE_COLORS,
                 },
@@ -1687,7 +1645,6 @@ def create_mutation_resistance_contribution(data, sample_id, output_dir):
                     "title": "SDRM",
                     "description": "Contains Surveillance Drug Resistance Mutation",
                     "namespace": "Mutation Details",
-                    "filterable": True,
                     # Subtle highlighting for SDRMs
                     "bgcols": {"Yes": "#f5f9f5", "No": ""},
                 },
@@ -1700,7 +1657,6 @@ def create_mutation_resistance_contribution(data, sample_id, output_dir):
                     "max": 60,
                     "format": "{:,.0f}",
                     # Add bars to visualize the score
-                    "bars": True,
                 },
                 "Weighted Contribution": {
                     "title": "Weighted",
@@ -1710,7 +1666,6 @@ def create_mutation_resistance_contribution(data, sample_id, output_dir):
                     "scale": "RdYlGn-rev",
                     "min": 0,
                     "max": 100,
-                    "bars": True,
                 },
                 "Total Score": {
                     "title": "Total Score",
@@ -1726,14 +1681,11 @@ def create_mutation_resistance_contribution(data, sample_id, output_dir):
                     "min": 0,
                     "max": 100,
                     "format": "{:,.1f}%",
-                    # Add bars to visualize the percentage
-                    "bars": True,
                 },
                 "Impact": {
                     "title": "Impact Category",
                     "description": "Categorization of the contribution significance",
                     "namespace": "Resistance Impact",
-                    "filterable": True,
                     # No background colors for Impact column as requested
                     # Using conditional text formatting only for professionalism
                     "cond_formatting_rules": {
@@ -1782,7 +1734,6 @@ def create_mutation_resistance_contribution(data, sample_id, output_dir):
             logger.error(
                 f"Error creating mutation resistance contribution for {gene_name}: {str(e)}"
             )
-
     return created_files
 
 
@@ -1802,7 +1753,6 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
     Returns:
         dict: Mapping of created files by gene
     """
-
     # Collection structure for mutation commentary - organized by mutation
     gene_mutation_data = defaultdict(
         lambda: defaultdict(
@@ -1817,9 +1767,7 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
             }
         )
     )
-
     created_files = {}
-
     # Process all drug resistance data with genes
     for gene_seq in data.get("alignedGeneSequences", []):
         if not gene_seq or not gene_seq.get("gene"):
@@ -1837,7 +1785,6 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
             if gene_seq.get("SDRMs")
             else []
         )
-
         # Process mutations directly from gene data
         for mutation in gene_seq.get("mutations", []):
             if not mutation:
@@ -2006,8 +1953,6 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
                 "save_file": True,
                 "col1_header": "Mutation Type",
                 "sortRows": True,
-                "use_datatables": True,
-                "searchable": True,
                 # Default sorting by mutation type with Major first
                 "defaultsort": [
                     {"column": "Mutation Type", "direction": "asc"},
@@ -2019,7 +1964,6 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
                     "title": "Type",
                     "description": "Mutation classification (Major, Accessory, Other)",
                     "scale": False,
-                    "filterable": True,
                     # Use subtle background colors for mutation types
                     "bgcols": MUTATION_TYPE_COLORS,
                 },
@@ -2027,18 +1971,15 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
                     "title": "Mutation",
                     "description": "Mutation identifier",
                     "scale": False,
-                    "filterable": True,
                 },
                 "SDRM": {
                     "title": "SDRM",
                     "description": "Surveillance Drug Resistance Mutation",
-                    "filterable": True,
                     "bgcols": {"Yes": "#f5f9f5", "No": ""},  # Very subtle green
                 },
                 "APOBEC": {
                     "title": "APOBEC",
                     "description": "APOBEC-mediated G-to-A hypermutation",
-                    "filterable": True,
                     "bgcols": {"Yes": "#f9f5fc", "No": ""},  # Very subtle purple
                     "hidden": True,  # Hide by default to reduce visual clutter
                 },
@@ -2046,7 +1987,6 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
                     "title": "Affected Drugs",
                     "description": "Drugs affected by this mutation with resistance scores",
                     "scale": False,
-                    "filterable": True,
                 },
                 "Max Score": {
                     "title": "Max Impact",
@@ -2054,18 +1994,15 @@ def create_mutation_clinical_commentary(data, sample_id, output_dir):
                     "format": "{:,.0f}",
                     "scale": "RdYlGn-rev",
                     "min": 0,
-                    "bars": True,
                 },
                 "Clinical Implication": {
                     "title": "Clinical Implication",
                     "description": "Detailed commentary on clinical significance",
                     "scale": False,
-                    "width": "50%",
                 },
             },
             "data": table_data,
         }
-
         # Write the table to file
         output_file = os.path.join(
             output_dir, f"mutation_clinical_{gene_name.lower()}_table_mqc.json"

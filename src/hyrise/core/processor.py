@@ -464,20 +464,31 @@ def run_multiqc_with_container(
             success = result.returncode == 0
 
             # Copy report back if successful
+            # Modify this section in run_multiqc_with_container
             if success and os.path.exists(os.path.join(temp_dir, "multiqc_report")):
                 # Create report dir and copy everything
                 copy_report_from_temp(temp_dir, report_dir)
 
-                # Modify HTML if report was generated
-                if os.path.exists(
-                    os.path.join(report_dir, "hyrise_resistance_report.html")
-                ):
-                    report_generator.post_process_report(logo_path)
-                    print(f"MultiQC report generated and customized in {report_dir}")
-            else:
-                print("Error running MultiQC via container")
-                results["error"] = "MultiQC execution in container failed"
+                # Check for both possible filenames
+                report_found = False
+                for filename in [
+                    "hyrise_resistance_report.html",
+                    "multiqc_report.html",
+                ]:
+                    if os.path.exists(os.path.join(report_dir, filename)):
+                        print(f"Found report file: {filename}")
+                        report_found = True
+                        # Post-process the report
+                        report_generator.post_process_report(logo_path)
+                        print(
+                            f"MultiQC report generated and customized in {report_dir}"
+                        )
+                        break
 
+                if not report_found:
+                    print(
+                        "Error: No HTML report file found after copying from container"
+                    )
         except subprocess.CalledProcessError as e:
             print(f"Error in container-based report generation: {e}")
             results["error"] = f"Container execution error: {str(e)}"

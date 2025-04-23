@@ -56,7 +56,17 @@ def add_sierra_subparser(subparsers):
         help="Output JSON filename (default: input filename with .json extension)",
     )
 
-    sierra_parser.add_argument("--xml", help="Path to HIVdb ASI2 XML file")
+    # bundled default XML in your package:
+    xml_default = Path(
+        __file__
+    ).parent.parent.joinpath(  # src/hyrise/commands  # src/hyrise
+        "HIVDB_9.8.xml"
+    )
+    sierra_parser.add_argument(
+        "--xml",
+        default=str(xml_default),
+        help=f"Path to HIVdb ASI2 XML file (default: {xml_default.name})",
+    )
 
     sierra_parser.add_argument("--json", help="Path to JSON HIVdb APOBEC DRM file")
 
@@ -460,8 +470,17 @@ def main():
         "--output",
         help="Output JSON filename (default: input filename with .json extension)",
     )
-
-    parser.add_argument("--xml", help="Path to HIVdb ASI2 XML file")
+    # bundled default XML in your package:
+    xml_default = Path(
+        __file__
+    ).parent.parent.joinpath(  # src/hyrise/commands  # src/hyrise
+        "HIVDB_9.8.xml"
+    )
+    parser.add_argument(
+        "--xml",
+        default=str(xml_default),
+        help=f"Path to HIVdb ASI2 XML file (default: {xml_default.name})",
+    )
     parser.add_argument("--json", help="Path to JSON HIVdb APOBEC DRM file")
     parser.add_argument(
         "--cleanup",

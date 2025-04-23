@@ -52,7 +52,7 @@ dependencies:
   - colorlog
   - click
   - numpy<2.0.0,>=1.24.3
-  - multiqc=1.14
+  - multiqc>=1.28
   - pip:
     - types-setuptools==67.8.0.0
 EOF
@@ -74,13 +74,13 @@ EOF
 
     # Additional Python packages
     pip install --no-cache-dir \
-        matplotlib==3.7.2 \
-        seaborn==0.12.2 \
-        pandas==2.0.3 \
-        plotly==5.15.0 \
-        kaleido==0.2.1 \
-        tabulate==0.9.0 \
-        beautifulsoup4>=4.13.4
+        matplotlib \
+        seaborn \
+        pandas \
+        plotly \
+        kaleido \
+        tabulate \
+        beautifulsoup4
 
     # Create wrapper script for HyRISE functionality
     cat > /usr/local/bin/hyrise << 'EOF'
