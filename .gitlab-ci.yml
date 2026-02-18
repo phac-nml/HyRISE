@@ -92,9 +92,9 @@ installed_wheel_smoke:
 
 docker_build_and_run_smoke:
   stage: docker
-  image: docker:27.3.1
+  image: docker:20.10.12
   services:
-    - name: docker:27.3.1-dind
+    - name: docker:20.10.12-dind
       command: ["--tls=true"]
   variables:
     DOCKER_HOST: "tcp://docker:2376"
@@ -141,9 +141,9 @@ publish_pypi:
 
 publish_container:
   stage: publish
-  image: docker:27.3.1
+  image: docker:20.10.12
   services:
-    - name: docker:27.3.1-dind
+    - name: docker:20.10.12-dind
       command: ["--tls=true"]
   variables:
     DOCKER_HOST: "tcp://docker:2376"
