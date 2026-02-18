@@ -1,9 +1,6 @@
 import os
 import subprocess
-import tempfile
 from types import SimpleNamespace
-from pathlib import Path
-import pytest
 
 import hyrise.commands.sierra as sierra_module
 
@@ -17,6 +14,13 @@ def test_add_sierra_subparser_sets_func():
     args = parser.parse_args(["sierra", "input.fa"])
     assert hasattr(args, "func")
     assert args.func == sierra_module.run_sierra_command
+
+
+def test_bundled_hivdb_xml_default_exists():
+    xml_path = sierra_module._bundled_hivdb_xml_path()
+    assert xml_path.exists()
+    assert xml_path.name.startswith("HIVDB_")
+    assert xml_path.suffix == ".xml"
 
 
 def test_run_sierra_local_missing_fasta(tmp_path):
@@ -56,7 +60,7 @@ def test_run_sierra_local_native_success(monkeypatch, tmp_path):
     monkeypatch.setattr(
         sierra_module,
         "ensure_dependencies",
-        lambda c: {"use_container": False, "sierra_local_available": True},
+        lambda **kwargs: {"use_container": False, "sierra_local_available": True},
     )
     # Capture the output path for closure
     output_abs = str(output)
@@ -81,11 +85,11 @@ def test_run_sierra_local_native_dependency_missing(monkeypatch, tmp_path):
     monkeypatch.setattr(
         sierra_module,
         "ensure_dependencies",
-        lambda c: {"use_container": False, "sierra_local_available": False},
+        lambda **kwargs: {"use_container": False, "sierra_local_available": False},
     )
     results = sierra_module.run_sierra_local([str(fasta)])
     assert not results["success"]
-    assert "SierraLocal not available and container usage disabled" in results["error"]
+    assert "SierraLocal is not available" in results["error"]
 
 
 def test_run_sierra_local_container_success(monkeypatch, tmp_path):
@@ -93,25 +97,25 @@ def test_run_sierra_local_container_success(monkeypatch, tmp_path):
     fasta = tmp_path / "input.fa"
     fasta.write_text(">seq\nATGC")
     output = tmp_path / "out.json"
+    container = tmp_path / "hyrise.sif"
+    container.write_text("image")
     # Stub dependencies
     monkeypatch.setattr(
         sierra_module,
         "ensure_dependencies",
-        lambda c: {
+        lambda **kwargs: {
             "use_container": True,
-            "container_path": "/fake/container.sif",
+            "container_path": str(container),
             "sierra_local_available": True,
+            "runtime_path": "/usr/bin/apptainer",
         },
-    )
-    # Stub find_singularity_container
-    monkeypatch.setattr(
-        sierra_module, "find_singularity_container", lambda: "/usr/bin/singularity"
     )
 
     # Stub subprocess.run to create file in temp directory
     def fake_run(cmd_list, check):
-        # temp_dir is cmd_list[3]
-        temp_dir = cmd_list[3]
+        # temp_dir is the bind path argument following --bind
+        bind_idx = cmd_list.index("--bind")
+        temp_dir = cmd_list[bind_idx + 1]
         output_name = os.path.basename(str(output))
         temp_output = os.path.join(temp_dir, output_name)
         open(temp_output, "w").close()
@@ -147,6 +151,8 @@ def test_run_sierra_command_error_propagation(monkeypatch, caplog):
         report=False,
         process_dir=None,
         container_path=None,
+        container_runtime=None,
+        resource_dir=None,
         verbose=False,
     )
     caplog.set_level("ERROR")
@@ -180,7 +186,97 @@ def test_run_sierra_command_success_without_process(monkeypatch):
         report=False,
         process_dir=None,
         container_path=None,
+        container_runtime=None,
+        resource_dir=None,
         verbose=False,
     )
     result = sierra_module.run_sierra_command(args)
     assert result == 0
+
+
+def test_run_sierra_command_prefers_latest_downloaded_xml(monkeypatch, tmp_path):
+    latest_xml = tmp_path / "HIVDB_10.1.xml"
+    latest_xml.write_text("<xml/>")
+    captured = {}
+
+    def fake_run_sierra_local(*_args, **kwargs):
+        captured["xml"] = kwargs["xml"]
+        return {"success": True, "output_path": "path"}
+
+    monkeypatch.setattr(sierra_module, "run_sierra_local", fake_run_sierra_local)
+    monkeypatch.setattr(
+        sierra_module,
+        "get_latest_resource_path",
+        lambda resource_type, resource_dir=None: (
+            str(latest_xml) if resource_type == "hivdb_xml" else None
+        ),
+    )
+
+    args = SimpleNamespace(
+        fasta=["in.fa"],
+        output=None,
+        xml=str(sierra_module._bundled_hivdb_xml_path()),
+        json=None,
+        cleanup=False,
+        forceupdate=False,
+        alignment="post",
+        container=None,
+        no_container=None,
+        process=False,
+        run_multiqc=False,
+        report=False,
+        process_dir=None,
+        container_path=None,
+        container_runtime=None,
+        resource_dir=str(tmp_path),
+        verbose=False,
+    )
+
+    result = sierra_module.run_sierra_command(args)
+    assert result == 0
+    assert captured["xml"] == str(latest_xml.resolve())
+
+
+def test_run_sierra_command_preserves_explicit_xml(monkeypatch, tmp_path):
+    explicit_xml = tmp_path / "custom.xml"
+    explicit_xml.write_text("<xml/>")
+    latest_xml = tmp_path / "HIVDB_10.1.xml"
+    latest_xml.write_text("<xml/>")
+    captured = {}
+
+    def fake_run_sierra_local(*_args, **kwargs):
+        captured["xml"] = kwargs["xml"]
+        return {"success": True, "output_path": "path"}
+
+    monkeypatch.setattr(sierra_module, "run_sierra_local", fake_run_sierra_local)
+    monkeypatch.setattr(
+        sierra_module,
+        "get_latest_resource_path",
+        lambda resource_type, resource_dir=None: (
+            str(latest_xml) if resource_type == "hivdb_xml" else None
+        ),
+    )
+
+    args = SimpleNamespace(
+        fasta=["in.fa"],
+        output=None,
+        xml=str(explicit_xml),
+        json=None,
+        cleanup=False,
+        forceupdate=False,
+        alignment="post",
+        container=None,
+        no_container=None,
+        process=False,
+        run_multiqc=False,
+        report=False,
+        process_dir=None,
+        container_path=None,
+        container_runtime=None,
+        resource_dir=str(tmp_path),
+        verbose=False,
+    )
+
+    result = sierra_module.run_sierra_command(args)
+    assert result == 0
+    assert captured["xml"] == str(explicit_xml)

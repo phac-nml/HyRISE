@@ -1,203 +1,187 @@
-image: python:3.10
+stages:
+  - lint
+  - build
+  - smoke
+  - docker
+  - publish
 
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
-  PYTHONPATH: "$CI_PROJECT_DIR/src"
-  PIP_DOWNLOAD_CACHE: ".pip-cache"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  OCI_IMAGE: "$CI_REGISTRY_IMAGE/hyrise"
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: "$CI_COMMIT_REF_SLUG"
   paths:
-    - .pip-cache/
-    - venv/
-  policy: pull-push
-  when: always
+    - .cache/pip/
 
-stages:
-  - "🚧 Setup"
-  - "🔍 Lint"
-  - "🧪 Test"
-  - "📦 Build"
-  - "🚀 Deploy"
-
-.setup_template: &setup_definition
-  before_script:
-    - python -m venv venv
-    - source venv/bin/activate
-    - pip install --upgrade pip wheel setuptools
-    - pip install pytest pytest-cov black flake8 mypy coverage
-    - pip install -e .
-    - python setup.py install
-
-🚧 Setup:
-  stage: 🚧 Setup
-  <<: *setup_definition
+lint_and_unit:
+  stage: lint
+  image: python:3.11
   script:
-    - echo "Setup complete"
-  rules:
-    - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
-      when: always
-
-🔍 Lint:
-  stage: 🔍 Lint
-  <<: *setup_definition
-  script:
-    - black --check --extend-exclude "gcl-builds|venv" .
-    - flake8 --max-line-length=100 --ignore=W291,E501,W503,W504,F401,F402,F403,E731,F841,F541,E203,E999 src/ tests/
-    # - mypy --explicit-package-bases --ignore-missing-imports src/ tests/
-  rules:
-    - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
-      when: always
-
-🧪 Test:
-  stage: 🧪 Test
-  <<: *setup_definition
-  script:
-    - coverage erase
-    - PYTHONPATH=src pytest -v --disable-warnings --cov=hyrise --cov-report=term-missing --cov-report=xml --ignore=src/hyrise/multiqc_modules tests/
-    - coverage report -m
-    - coverage xml
-  coverage: /TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/
+    - python -m pip install --upgrade pip
+    - pip install -e ".[dev]"
+    - ruff check --select E9,F63,F7,F82 src tests
+    - pytest -q --cov=hyrise --cov-report=term-missing --cov-report=xml
   artifacts:
+    when: always
+    paths:
+      - coverage.xml
     reports:
       coverage_report:
         coverage_format: cobertura
         path: coverage.xml
-    expire_in: 1 week
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: always
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: always
-    - if: $CI_MERGE_REQUEST_ID
-      when: always
 
-🧪 Test Container:
-  stage: 🧪 Test
-  image: continuumio/miniconda3:latest
-  variables:
-    PYTHONPATH: "$CI_PROJECT_DIR/src"
-  before_script:
-    # Create conda environment as described in README
-    - conda create -n hyrise python=3.10 -y
-    - source $(conda info --base)/etc/profile.d/conda.sh
-    - conda activate hyrise
-    
-    # Install mamba and apptainer
-    - conda install -c conda-forge mamba -y
-    - mamba install -c conda-forge -c bioconda apptainer -y
-    
-    # Install the package
-    - pip install --upgrade pip wheel setuptools
-    - pip install -e .
+build_package:
+  stage: build
+  image: python:3.11
   script:
-    # Test container definition extraction
-    - mkdir -p container_test
-    - hyrise container --extract-def container_test
-    - test -f container_test/hyrise.def || { echo "Definition file extraction failed"; exit 1; }
-    - echo "✅ Container definition file extraction successful"
-    
-    # Test dependency checking
-    - hyrise check-deps --verbose
-    - echo "✅ Dependency check completed"
-    
-    # Try to build the container (may fail in CI environments without proper privileges)
-    - |
-      if hyrise container -o container_test/hyrise.sif --singularity $(which apptainer) --verbose --build-elsewhere; then
-        echo "✅ Container build successful"
-        
-        # Verify the container exists
-        test -f container_test/hyrise.sif || { echo "Container file not found"; exit 1; }
-        
-        # Test basic container functionality
-        apptainer exec container_test/hyrise.sif echo "Container verification successful"
-        echo "✅ Container verification successful"
-      else
-        echo "⚠️ Container build failed, but this may be expected in CI environments"
-        echo "✅ Container definition extraction test passed"
-      fi
-  artifacts:
-    paths:
-      - container_test/
-    expire_in: 1 week
-  allow_failure: true  # Allow this job to fail since container building might not work in all CI environments
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: always
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: always
-    - if: $CI_MERGE_REQUEST_ID
-      when: always
-
-📦 Build Package:
-  <<: *setup_definition
-  stage: 📦 Build
-  script:
-    - pip install build twine
-    - |
-      # For development versions, add .devN suffix to version
-      if [[ "$CI_COMMIT_BRANCH" != "$CI_DEFAULT_BRANCH" && -z "$CI_COMMIT_TAG" ]]; then
-        if [ -f "pyproject.toml" ]; then
-          BASE_VERSION=$(grep -oP '(?<=version = ")[^"]+' pyproject.toml)
-          DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
-          NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
-          sed -i "s/version = \"$BASE_VERSION\"/version = \"$NEW_VERSION\"/" pyproject.toml
-          echo "Updated version to $NEW_VERSION in pyproject.toml"
-        else
-          BASE_VERSION=$(grep -oP '(?<=version=")[^"]+' setup.py)
-          DEV_SUFFIX=".dev$(git rev-list --count HEAD)"
-          NEW_VERSION="$BASE_VERSION$DEV_SUFFIX"
-          sed -i "s/version=\"$BASE_VERSION\"/version=\"$NEW_VERSION\"/" setup.py
-          echo "Updated version to $NEW_VERSION in setup.py"
-        fi
-      fi
-    - rm -rf dist/*
+    - python -m pip install --upgrade pip build twine
+    - rm -rf build dist smoke-out container-assets .docker-smoke-out .apptainer-smoke-out .cache
+    - find . -type d -name "*.egg-info" -prune -exec rm -rf {} +
+    - find . -type d -name "__pycache__" -prune -exec rm -rf {} +
+    - rm -f *.sif
     - python -m build
-    - twine check dist/*
+    - python -m twine check dist/*.whl dist/*.tar.gz
+    - |
+      if git ls-files | grep -E '(^|/)(build|dist)/|\.egg-info/|\.sif$'; then
+        echo "Tracked build artifacts detected. Remove build/, dist/, *.egg-info, *.sif from git history/index."
+        exit 1
+      fi
+    - |
+      if git status --porcelain | grep -E ' (build/|dist/|.*\.egg-info/|.*\.sif$)'; then
+        echo "Build artifacts are appearing in git status. Ensure .gitignore excludes them."
+        exit 1
+      fi
   artifacts:
     paths:
       - dist/
     expire_in: 1 week
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: always
-    - if: $CI_COMMIT_BRANCH
-      when: manual
 
-"🚀 Deploy to Dev":
-  stage: 🚀 Deploy
+installed_wheel_smoke:
+  stage: smoke
+  image: python:3.11
   needs:
-    - 📦 Build Package
-  before_script:
-    - python -m venv venv
-    - source venv/bin/activate
-    - pip install twine
+    - job: build_package
+      artifacts: true
   script:
-    - echo "Deploying development version to PyPI"
-    - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
-  rules:
-    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH
-      when: manual
+    - python -m venv .venv-smoke
+    - . .venv-smoke/bin/activate
+    - python -m pip install --upgrade pip
+    - pip install dist/*.whl
+    - hyrise --help > /dev/null
+    - python -m hyrise --help > /dev/null
+    - python -c "import hyrise; print(hyrise.__version__)"
+    - python -c "from hyrise import *; print(__version__)"
+    - hyrise --version
+    - hyrise container --help > /dev/null
+    - rm -rf container-assets && mkdir -p container-assets
+    - hyrise container --extract-def container-assets
+    - hyrise container --extract-dockerfile container-assets
+    - test -f container-assets/hyrise.def
+    - test -f container-assets/Dockerfile
+    - rm -rf smoke-out && mkdir -p smoke-out
+    - hyrise process -i example_data/public/DEMO_IN_NGS_results.json --out smoke-out
+    - test -n "$(ls smoke-out/*_mqc.json 2>/dev/null)"
+    - test -n "$(ls smoke-out/*_mqc.html 2>/dev/null)"
+  artifacts:
+    when: always
+    paths:
+      - container-assets/
+      - smoke-out/
+    expire_in: 1 week
 
-"🚀 Deploy to Production":
-  stage: 🚀 Deploy
-  needs:
-    - 📦 Build Package
-  before_script:
-    - python -m venv venv
-    - source venv/bin/activate
-    - pip install twine
+docker_build_and_run_smoke:
+  stage: docker
+  image: docker:27.3.1
+  services:
+    - name: docker:27.3.1-dind
+      command: ["--tls=true"]
+  variables:
+    DOCKER_HOST: "tcp://docker:2376"
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   script:
-    - echo "Deploying production version to PyPI"
-    - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
+    - |
+      if ! docker info > /dev/null 2>&1; then
+        echo "Docker daemon unavailable on this runner; skipping docker smoke job."
+        exit 0
+      fi
+    - IMAGE_TAG="$OCI_IMAGE:$CI_COMMIT_SHA"
+    - docker build -f src/hyrise/Dockerfile -t "$IMAGE_TAG" .
+    - rm -rf .docker-smoke-out && mkdir -p .docker-smoke-out && chmod 0777 .docker-smoke-out
+    - docker run --rm --user "$(id -u):$(id -g)" -v "$CI_PROJECT_DIR:/data" "$IMAGE_TAG" --help > /dev/null
+    - docker run --rm --user "$(id -u):$(id -g)" -v "$CI_PROJECT_DIR:/data" "$IMAGE_TAG" process -i /data/example_data/public/DEMO_IN_NGS_results.json --out /data/.docker-smoke-out
+    - test -n "$(ls .docker-smoke-out/*_mqc.json 2>/dev/null)"
+    - test -n "$(ls .docker-smoke-out/*_mqc.html 2>/dev/null)"
   rules:
-    - if: $CI_COMMIT_TAG
+    - if: '$GITLAB_CI == "false"'
+      when: never
+    - when: on_success
+  artifacts:
+    when: always
+    paths:
+      - .docker-smoke-out/
+    expire_in: 1 week
+
+publish_pypi:
+  stage: publish
+  image: python:3.11
+  needs:
+    - job: build_package
+      artifacts: true
+  script:
+    - python -m pip install --upgrade pip twine
+    - test -n "$TWINE_USERNAME" && test -n "$TWINE_PASSWORD"
+    - python -m twine upload dist/*
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+.*$/'
       when: manual
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - when: never
+
+publish_container:
+  stage: publish
+  image: docker:27.3.1
+  services:
+    - name: docker:27.3.1-dind
+      command: ["--tls=true"]
+  variables:
+    DOCKER_HOST: "tcp://docker:2376"
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  script:
+    - |
+      if ! docker info > /dev/null 2>&1; then
+        echo "Docker daemon unavailable on this runner; skipping container publish."
+        exit 0
+      fi
+    - test -n "$CI_REGISTRY" && test -n "$CI_REGISTRY_USER" && test -n "$CI_REGISTRY_PASSWORD"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - IMAGE_SHA="$OCI_IMAGE:$CI_COMMIT_SHA"
+    - docker build -f src/hyrise/Dockerfile -t "$IMAGE_SHA" .
+    - docker push "$IMAGE_SHA"
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
+        docker tag "$IMAGE_SHA" "$OCI_IMAGE:latest"
+        docker push "$OCI_IMAGE:latest"
+      fi
+    - |
+      if [ -n "$CI_COMMIT_TAG" ]; then
+        docker tag "$IMAGE_SHA" "$OCI_IMAGE:$CI_COMMIT_TAG"
+        docker push "$OCI_IMAGE:$CI_COMMIT_TAG"
+      fi
+  rules:
+    - if: '$GITLAB_CI == "false"'
+      when: never
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       when: manual
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+.*$/'
+      when: manual
+    - when: never
 
 workflow:
   rules:
-    - if: $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
-      when: always
-    - when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'

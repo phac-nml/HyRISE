@@ -1,150 +1,88 @@
-# General Python
+# Python bytecode and caches
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.so
+*$py.class
 
-# Virtual environment
+# Virtual environments
+.venv/
+.venv-smoke/
 venv/
-.env/
-.envrc
+env/
+ENV/
 
-# Byte-compiled / cached files
-*.egg-info/
-*.egg
-*.manifest
-*.spec
-*.DS_Store
-
-# Build artifacts
+# Packaging/build artifacts
 build/
 dist/
-*.o
-*.lo
-*.la
-*.a
-*.so
-*.dll
-*.dylib
-*.pyc
-*.pyo
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+*.egg
 
-# C extensions
-*.c
-*.cpp
-
-# Distribution / packaging
-MANIFEST.in
-tmp/
-*.tar.gz
-*.zip
-
-# Logs and databases
-*.log
-*.sqlite
-*.sqlite3
-*.db
-*.pid
-
-# Pytest cache
+# Test, lint, type-check, coverage caches
 .pytest_cache/
-
-# Coverage reports
+.tox/
+.nox/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.pyre/
 .coverage
+.coverage.*
 coverage.xml
 htmlcov/
 
-# Tox
-.tox/
-.tox/**
-
-# Sphinx documentation
-docs/_build/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Editor / IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*.bak
-*.backup
-*.~*
-
-# Compiled files and caches
-*.class
-*.war
-*.jar
-*.iml
-
-# macOS
-.DS_Store
-
-# Windows
-Thumbs.db
-Desktop.ini
-
-# Generated files
-*.generated
+# Runtime and smoke outputs
+*.log
 *.out
-*.bak
-*.orig
-*.rej
+*.pid
+tmp/
+temp/
+*.tmp
+smoke-out/
+container-assets/
+.docker-smoke-out/
+.apptainer-smoke-out/
+hyrise-smoke.sif
+*.sif
+.cache/
+.gitlab-ci-local/
+scripts/__pycache__/
 
-# Egg distribution
-.eggs/
-
-debian/
-*.deb
-*.rpm
-*.snap
-
-# Ignore package manager lock files
-Pipfile.lock
-yarn.lock
-npm-debug.log
-pnpm-lock.yaml
-
-# Node.js
-node_modules/
-
-# CI/CD
-/.github/workflows/
-
-# Docker
-.dockerignore
-Dockerfile*
-*.dockerignore
-
-# Security
+# Environment and secrets
+.env
+.env.*
+.envrc
 *.pem
 *.key
 *.crt
 *.cert
 *.p12
 *.pfx
-
-# Custom repository-specific ignores
-tests/__pycache__/
-tests/**/*.pyc
-tests/**/*.pyo
-
-# misc
-.mypy_cache
-.gitlab-ci-local
-code_quality.sh
-coverage.sh
-example_data
-docs
-site
-Makefile
-mkdocs.yml
 github_deploy_key*
-src/sierralocal
-*.sif
-.tox/
-src/hyrise/multiqc_modules
-cliff.toml
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Notebook metadata
+.ipynb_checkpoints/
+
+# Example data policy:
+# - keep only de-identified public fixtures in VCS
+# - ignore all other local/sensitive example outputs and raw data
+example_data/*
+!example_data/public/
+!example_data/public/**
+
+# Project-specific exclusions requested
+Makefile
+coverage.sh
+code_quality.sh
+.github/
+scripts/live_smoke.sh

@@ -1,0 +1,3966 @@
+[
+  {
+    "inputSequence": {
+      "header": "DEMO_IN_NGS",
+      "SHA512": "1bf39140be2cdc4bc21c9e6fda48804f3f55b9ea1ae2d91170ecc453390e095ec6b40882a7a65d392f62cb286522f082973d995ecdbcc9f573831aaf560b65c8"
+    },
+    "subtypeText": "",
+    "validationResults": [],
+    "alignedGeneSequences": [
+      {
+        "firstAA": 1,
+        "lastAA": 289,
+        "gene": {
+          "name": "IN",
+          "length": null
+        },
+        "mutations": [
+          {
+            "consensus": "E",
+            "position": 10,
+            "AAs": "D",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "E10D"
+          },
+          {
+            "consensus": "I",
+            "position": 72,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I72V"
+          },
+          {
+            "consensus": "L",
+            "position": 74,
+            "AAs": "M",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "L74M"
+          },
+          {
+            "consensus": "F",
+            "position": 121,
+            "AAs": "Y",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Major",
+            "text": "F121Y"
+          },
+          {
+            "consensus": "T",
+            "position": 124,
+            "AAs": "A",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T124A"
+          },
+          {
+            "consensus": "V",
+            "position": 151,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V151I"
+          },
+          {
+            "consensus": "G",
+            "position": 163,
+            "AAs": "R",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": true,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "G163R"
+          },
+          {
+            "consensus": "D",
+            "position": 232,
+            "AAs": "N",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": true,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "D232N"
+          },
+          {
+            "consensus": "D",
+            "position": 256,
+            "AAs": "DN",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": true,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "D256ND"
+          }
+        ],
+        "SDRMs": [
+          {
+            "text": "F121Y"
+          }
+        ]
+      }
+    ],
+    "drugResistance": [
+      {
+        "version": {
+          "text": "9.4",
+          "publishDate": "2022-12-07"
+        },
+        "gene": {
+          "name": "IN"
+        },
+        "drugScores": [
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "BIC",
+              "displayAbbr": "BIC"
+            },
+            "score": 10,
+            "level": 2,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "F121Y",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "F121Y is a rare nonpolymorphic mutation selected primarily by RAL. It is associated with >10-fold reduced susceptibility to RAL but has minimal if any effect on susceptibility to CAB, DTG, and BIC."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "Potential Low-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "CAB",
+              "displayAbbr": "CAB"
+            },
+            "score": 15,
+            "level": 3,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "F121Y",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "F121Y is a rare nonpolymorphic mutation selected primarily by RAL. It is associated with >10-fold reduced susceptibility to RAL but has minimal if any effect on susceptibility to CAB, DTG, and BIC."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              }
+            ],
+            "text": "Low-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "DTG",
+              "displayAbbr": "DTG"
+            },
+            "score": 10,
+            "level": 2,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "F121Y",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "F121Y is a rare nonpolymorphic mutation selected primarily by RAL. It is associated with >10-fold reduced susceptibility to RAL but has minimal if any effect on susceptibility to CAB, DTG, and BIC."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "Potential Low-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "EVG",
+              "displayAbbr": "EVG"
+            },
+            "score": 85,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "F121Y",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "F121Y is a rare nonpolymorphic mutation selected primarily by RAL. It is associated with >10-fold reduced susceptibility to RAL but has minimal if any effect on susceptibility to CAB, DTG, and BIC."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G163R",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G163R/K are nonpolymorphic in all subtypes except subtype F. They are accessory resistance mutations as they usually occur in combination with other INSTI-resistance mutations particularly N155H."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "D232N",
+                    "primaryType": "INSTI",
+                    "comments": [
+                      {
+                        "type": "INSTI",
+                        "text": "D232N is a common nonpolymorphic accessory mutation selected in persons receiving RAL and EVG. Alone, it has little effect on INSTI susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "RAL",
+              "displayAbbr": "RAL"
+            },
+            "score": 85,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "F121Y",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "F121Y is a rare nonpolymorphic mutation selected primarily by RAL. It is associated with >10-fold reduced susceptibility to RAL but has minimal if any effect on susceptibility to CAB, DTG, and BIC."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G163R",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G163R/K are nonpolymorphic in all subtypes except subtype F. They are accessory resistance mutations as they usually occur in combination with other INSTI-resistance mutations particularly N155H."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "D232N",
+                    "primaryType": "INSTI",
+                    "comments": [
+                      {
+                        "type": "INSTI",
+                        "text": "D232N is a common nonpolymorphic accessory mutation selected in persons receiving RAL and EVG. Alone, it has little effect on INSTI susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "inputSequence": {
+      "header": "DEMO_PRRT_NGS",
+      "SHA512": "4591da8769dc4c807a2647056b6ae8de47de0eb71d13a8029d9f927d1e9fdfeaea1781b14d4cf2fafdf86d6095f751fe6bade9cc2c2ff86da64acc5daa005d72"
+    },
+    "subtypeText": "",
+    "validationResults": [],
+    "alignedGeneSequences": [
+      {
+        "firstAA": 1,
+        "lastAA": 99,
+        "gene": {
+          "name": "PR",
+          "length": null
+        },
+        "mutations": [
+          {
+            "consensus": "L",
+            "position": 10,
+            "AAs": "R",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "L10R"
+          },
+          {
+            "consensus": "V",
+            "position": 11,
+            "AAs": "L",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V11L"
+          },
+          {
+            "consensus": "I",
+            "position": 13,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I13V"
+          },
+          {
+            "consensus": "I",
+            "position": 15,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I15V"
+          },
+          {
+            "consensus": "L",
+            "position": 19,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "L19I"
+          },
+          {
+            "consensus": "K",
+            "position": 20,
+            "AAs": "T",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "K20T"
+          },
+          {
+            "consensus": "V",
+            "position": 32,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Major",
+            "text": "V32I"
+          },
+          {
+            "consensus": "L",
+            "position": 33,
+            "AAs": "F",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "L33F"
+          },
+          {
+            "consensus": "E",
+            "position": 35,
+            "AAs": "G",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "E35G"
+          },
+          {
+            "consensus": "M",
+            "position": 36,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "M36I"
+          },
+          {
+            "consensus": "N",
+            "position": 37,
+            "AAs": "T",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "N37T"
+          },
+          {
+            "consensus": "P",
+            "position": 39,
+            "AAs": "PS",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "P39PS"
+          },
+          {
+            "consensus": "R",
+            "position": 41,
+            "AAs": "K",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "R41K"
+          },
+          {
+            "consensus": "I",
+            "position": 47,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Major",
+            "text": "I47V"
+          },
+          {
+            "consensus": "Q",
+            "position": 58,
+            "AAs": "E",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "Q58E"
+          },
+          {
+            "consensus": "D",
+            "position": 60,
+            "AAs": "E",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "D60E"
+          },
+          {
+            "consensus": "I",
+            "position": 62,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I62V"
+          },
+          {
+            "consensus": "L",
+            "position": 63,
+            "AAs": "P",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "L63P"
+          },
+          {
+            "consensus": "K",
+            "position": 70,
+            "AAs": "E",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K70E"
+          },
+          {
+            "consensus": "A",
+            "position": 71,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "A71V"
+          },
+          {
+            "consensus": "G",
+            "position": 73,
+            "AAs": "S",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": true,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "G73S"
+          },
+          {
+            "consensus": "V",
+            "position": 77,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V77I"
+          },
+          {
+            "consensus": "V",
+            "position": 82,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V82I"
+          },
+          {
+            "consensus": "L",
+            "position": 89,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "L89V"
+          },
+          {
+            "consensus": "L",
+            "position": 90,
+            "AAs": "M",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Major",
+            "text": "L90M"
+          },
+          {
+            "consensus": "I",
+            "position": 93,
+            "AAs": "L",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I93L"
+          },
+          {
+            "consensus": "C",
+            "position": 95,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "C95V"
+          }
+        ],
+        "SDRMs": [
+          {
+            "text": "V32I"
+          },
+          {
+            "text": "I47V"
+          },
+          {
+            "text": "G73S"
+          },
+          {
+            "text": "L90M"
+          }
+        ]
+      },
+      {
+        "firstAA": 1,
+        "lastAA": 258,
+        "gene": {
+          "name": "RT",
+          "length": null
+        },
+        "mutations": [
+          {
+            "consensus": "E",
+            "position": 6,
+            "AAs": "K",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "E6K"
+          },
+          {
+            "consensus": "T",
+            "position": 7,
+            "AAs": "P",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T7P"
+          },
+          {
+            "consensus": "V",
+            "position": 35,
+            "AAs": "T",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V35T"
+          },
+          {
+            "consensus": "T",
+            "position": 39,
+            "AAs": "A",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T39A"
+          },
+          {
+            "consensus": "M",
+            "position": 41,
+            "AAs": "L",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NRTI",
+            "text": "M41L"
+          },
+          {
+            "consensus": "V",
+            "position": 60,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V60I"
+          },
+          {
+            "consensus": "D",
+            "position": 67,
+            "AAs": "N",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": true,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NRTI",
+            "text": "D67N"
+          },
+          {
+            "consensus": "T",
+            "position": 69,
+            "AAs": "D",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NRTI",
+            "text": "T69D"
+          },
+          {
+            "consensus": "L",
+            "position": 74,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NRTI",
+            "text": "L74I"
+          },
+          {
+            "consensus": "I",
+            "position": 94,
+            "AAs": "L",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I94L"
+          },
+          {
+            "consensus": "K",
+            "position": 102,
+            "AAs": "L",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": true,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K102L"
+          },
+          {
+            "consensus": "K",
+            "position": 103,
+            "AAs": "R",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K103R"
+          },
+          {
+            "consensus": "K",
+            "position": 122,
+            "AAs": "E",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K122E"
+          },
+          {
+            "consensus": "D",
+            "position": 123,
+            "AAs": "DN",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "D123ND"
+          },
+          {
+            "consensus": "I",
+            "position": 135,
+            "AAs": "T",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I135T"
+          },
+          {
+            "consensus": "E",
+            "position": 138,
+            "AAs": "Q",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "NNRTI",
+            "text": "E138Q"
+          },
+          {
+            "consensus": "I",
+            "position": 142,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I142V"
+          },
+          {
+            "consensus": "S",
+            "position": 162,
+            "AAs": "D",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "S162D"
+          },
+          {
+            "consensus": "D",
+            "position": 177,
+            "AAs": "N",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "D177N"
+          },
+          {
+            "consensus": "V",
+            "position": 179,
+            "AAs": "D",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "NNRTI",
+            "text": "V179D"
+          },
+          {
+            "consensus": "Y",
+            "position": 181,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NNRTI",
+            "text": "Y181I"
+          },
+          {
+            "consensus": "M",
+            "position": 184,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NRTI",
+            "text": "M184V"
+          },
+          {
+            "consensus": "G",
+            "position": 190,
+            "AAs": "A",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NNRTI",
+            "text": "G190A"
+          },
+          {
+            "consensus": "Q",
+            "position": 197,
+            "AAs": "E",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "Q197E"
+          },
+          {
+            "consensus": "T",
+            "position": 200,
+            "AAs": "A",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T200A"
+          },
+          {
+            "consensus": "I",
+            "position": 202,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I202V"
+          },
+          {
+            "consensus": "E",
+            "position": 204,
+            "AAs": "Q",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "E204Q"
+          },
+          {
+            "consensus": "Q",
+            "position": 207,
+            "AAs": "EK",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "Q207KE"
+          },
+          {
+            "consensus": "R",
+            "position": 211,
+            "AAs": "A",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "R211A"
+          },
+          {
+            "consensus": "T",
+            "position": 215,
+            "AAs": "F",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "NRTI",
+            "text": "T215F"
+          },
+          {
+            "consensus": "K",
+            "position": 219,
+            "AAs": "H",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K219H"
+          },
+          {
+            "consensus": "V",
+            "position": 245,
+            "AAs": "K",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V245K"
+          }
+        ],
+        "SDRMs": [
+          {
+            "text": "M41L"
+          },
+          {
+            "text": "D67N"
+          },
+          {
+            "text": "T69D"
+          },
+          {
+            "text": "L74I"
+          },
+          {
+            "text": "Y181I"
+          },
+          {
+            "text": "M184V"
+          },
+          {
+            "text": "G190A"
+          },
+          {
+            "text": "T215F"
+          }
+        ]
+      }
+    ],
+    "drugResistance": [
+      {
+        "version": {
+          "text": "9.4",
+          "publishDate": "2022-12-07"
+        },
+        "gene": {
+          "name": "PR"
+        },
+        "drugScores": [
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "ATV",
+              "displayAbbr": "ATV/r"
+            },
+            "score": 85,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "K20T",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "K20T is a non-polymorphic accessory PI-selected mutation associated with reduced susceptibility to ATV and LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 25.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "DRV",
+              "displayAbbr": "DRV/r"
+            },
+            "score": 50,
+            "level": 4,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V11L",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "V11I/L are relatively non-polymorphic accessory mutation selected in persons receiving DRV. V11L is a nonpolymorphic PI-selected mutation associated with reduced in vitro DRV  susceptibility when it occurs in combination with other PI-resistance mutations."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              }
+            ],
+            "text": "Intermediate Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "FPV",
+              "displayAbbr": "FPV/r"
+            },
+            "score": 145,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "K20T",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "K20T is a non-polymorphic accessory PI-selected mutation associated with reduced susceptibility to ATV and LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 30.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 35.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 20.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V11L",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "V11I/L are relatively non-polymorphic accessory mutation selected in persons receiving DRV. V11L is a nonpolymorphic PI-selected mutation associated with reduced in vitro DRV  susceptibility when it occurs in combination with other PI-resistance mutations."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "IDV",
+              "displayAbbr": "IDV/r"
+            },
+            "score": 115,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "K20T",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "K20T is a non-polymorphic accessory PI-selected mutation associated with reduced susceptibility to ATV and LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 30.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V11L",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "V11I/L are relatively non-polymorphic accessory mutation selected in persons receiving DRV. V11L is a nonpolymorphic PI-selected mutation associated with reduced in vitro DRV  susceptibility when it occurs in combination with other PI-resistance mutations."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "LPV",
+              "displayAbbr": "LPV/r"
+            },
+            "score": 70,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V11L",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "V11I/L are relatively non-polymorphic accessory mutation selected in persons receiving DRV. V11L is a nonpolymorphic PI-selected mutation associated with reduced in vitro DRV  susceptibility when it occurs in combination with other PI-resistance mutations."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "NFV",
+              "displayAbbr": "NFV"
+            },
+            "score": 180,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "K20T",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "K20T is a non-polymorphic accessory PI-selected mutation associated with reduced susceptibility to ATV and LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 20.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Q58E",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "Q58E is a minimally polymorphic accessory mutation selected by each of the PIs except DRV. In combination with other PI-resistance mutations, it may contribute to low-level ATV resistance."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V11L",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "V11I/L are relatively non-polymorphic accessory mutation selected in persons receiving DRV. V11L is a nonpolymorphic PI-selected mutation associated with reduced in vitro DRV  susceptibility when it occurs in combination with other PI-resistance mutations."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L89V",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L89V is a nonpolymorphic accessory mutation weakly selected by each of the PIs. It appears to be minimally associated with reduced PI susceptibility. L89T is an uncommon non-polymorphic PI-selected mutation selected primarily by ATV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "SQV",
+              "displayAbbr": "SQV/r"
+            },
+            "score": 80,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "K20T",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "K20T is a non-polymorphic accessory PI-selected mutation associated with reduced susceptibility to ATV and LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 45.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G73S",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "L90M",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "L90M is a non-polymorphic PI-selected mutation that reduces susceptibility to ATV and to a lesser extent LPV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "PI"
+            },
+            "drug": {
+              "name": "TPV",
+              "displayAbbr": "TPV/r"
+            },
+            "score": 60,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "V32I",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "V32I is a non-polymorphic mutation selected by LPV, ATV, and DRV which is associated with reduced susceptibility to each of these PIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L33F",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "L33F is a relatively non-polymorphic accessory mutation selected by each of the PIs. In combination with other PI-resistance mutations, it is associated with reduced susceptibility to LPV, ATV, and DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "I47V",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "I47V is a non-polymorphic PI-selected mutation associated with reduced susceptibility to LPV and DRV."
+                      }
+                    ]
+                  }
+                ],
+                "score": 30.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Q58E",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "Q58E is a minimally polymorphic accessory mutation selected by each of the PIs except DRV. In combination with other PI-resistance mutations, it may contribute to low-level ATV resistance."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          }
+        ]
+      },
+      {
+        "version": {
+          "text": "9.4",
+          "publishDate": "2022-12-07"
+        },
+        "gene": {
+          "name": "RT"
+        },
+        "drugScores": [
+          {
+            "drugClass": {
+              "name": "NRTI"
+            },
+            "drug": {
+              "name": "ABC",
+              "displayAbbr": "ABC"
+            },
+            "score": 75,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L74I",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "L74V causes intermediate ABC resistance. L74I causes low-level ABC resistance."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NRTI"
+            },
+            "drug": {
+              "name": "AZT",
+              "displayAbbr": "AZT"
+            },
+            "score": 95,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  }
+                ],
+                "score": -10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NRTI"
+            },
+            "drug": {
+              "name": "D4T",
+              "displayAbbr": "D4T"
+            },
+            "score": 85,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "T69D",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T69D is a nonpolymorphic mutation selected by early NRTIs that does not appear to reduce AZT, ABC, or TDF susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  }
+                ],
+                "score": -10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 40.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NRTI"
+            },
+            "drug": {
+              "name": "DDI",
+              "displayAbbr": "DDI"
+            },
+            "score": 145,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "T69D",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T69D is a nonpolymorphic mutation selected by early NRTIs that does not appear to reduce AZT, ABC, or TDF susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 30.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L74I",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "L74V causes intermediate ABC resistance. L74I causes low-level ABC resistance."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NRTI"
+            },
+            "drug": {
+              "name": "FTC",
+              "displayAbbr": "FTC"
+            },
+            "score": 65,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NRTI"
+            },
+            "drug": {
+              "name": "LMV",
+              "displayAbbr": "3TC"
+            },
+            "score": 65,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NRTI"
+            },
+            "drug": {
+              "name": "TDF",
+              "displayAbbr": "TDF"
+            },
+            "score": 30,
+            "level": 4,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "L74I",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "L74V causes intermediate ABC resistance. L74I causes low-level ABC resistance."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M184V",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M184V/I cause high-level in vitro resistance to 3TC and FTC and low/intermediate resistance to ABC (3-fold reduced susceptibility). M184V/I are not contraindications to continued treatment with 3TC or FTC because they increase susceptibility to AZT and TDF and are associated with clinically significant reductions in HIV-1 replication."
+                      }
+                    ]
+                  }
+                ],
+                "score": -10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "M41L",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "M41L is a TAM that usually occurs with T215Y. In combination, M41L plus T215Y confer intermediate / high-level resistance to AZT and d4T and contribute to reduced ddI, ABC and TDF susceptibility."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "D67N",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "D67N is a non-polymorphic TAM associated with low-level resistance to AZT."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "T215F",
+                    "primaryType": "NRTI",
+                    "comments": [
+                      {
+                        "type": "NRTI",
+                        "text": "T215Y/F are TAMs that causes intermediate/high-level resistance to AZT and potentially low-level resistance to ABC and TDF."
+                      }
+                    ]
+                  }
+                ],
+                "score": 5.0
+              }
+            ],
+            "text": "Intermediate Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NNRTI"
+            },
+            "drug": {
+              "name": "DOR",
+              "displayAbbr": "DOR"
+            },
+            "score": 30,
+            "level": 4,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  }
+                ],
+                "score": 20.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "G190A",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "G190A is a non-polymorphic mutation that causes high-level resistance to NVP and intermediate resistance to EFV. It does not significantly reduce susceptibility to RPV, ETR, or DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "Intermediate Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NNRTI"
+            },
+            "drug": {
+              "name": "EFV",
+              "displayAbbr": "EFV"
+            },
+            "score": 115,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "E138Q",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "E138Q/G are non-polymorphic accessory mutations  selected by ETR occasionally NVP and EFV. They cause low-level reductions in susceptibility to NVP, RPV, and ETR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V179D",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "V179D/E are somewhat polymorphic accessory NNRTI-selected mutation. In combination with other NNRTI DRMs, they appear to contribute low-levels of reduced susceptibility to each of the NNRTIs. In particular, the combinations of K103R/V179D and V106I/V179D act synergistically to reduce NVP and EFV susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  }
+                ],
+                "score": 30.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G190A",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "G190A is a non-polymorphic mutation that causes high-level resistance to NVP and intermediate resistance to EFV. It does not significantly reduce susceptibility to RPV, ETR, or DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 45.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "K103R",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "K103R is a polymorphic mutation that alone has no effect on NNRTI susceptibility. However, in combination with V179D, it reduces NVP and EFV susceptibility about 15-fold."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V179D",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "V179D/E are somewhat polymorphic accessory NNRTI-selected mutation. In combination with other NNRTI DRMs, they appear to contribute low-levels of reduced susceptibility to each of the NNRTIs. In particular, the combinations of K103R/V179D and V106I/V179D act synergistically to reduce NVP and EFV susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 20.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NNRTI"
+            },
+            "drug": {
+              "name": "ETR",
+              "displayAbbr": "ETR"
+            },
+            "score": 100,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "E138Q",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "E138Q/G are non-polymorphic accessory mutations  selected by ETR occasionally NVP and EFV. They cause low-level reductions in susceptibility to NVP, RPV, and ETR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V179D",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "V179D/E are somewhat polymorphic accessory NNRTI-selected mutation. In combination with other NNRTI DRMs, they appear to contribute low-levels of reduced susceptibility to each of the NNRTIs. In particular, the combinations of K103R/V179D and V106I/V179D act synergistically to reduce NVP and EFV susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G190A",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "G190A is a non-polymorphic mutation that causes high-level resistance to NVP and intermediate resistance to EFV. It does not significantly reduce susceptibility to RPV, ETR, or DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "G190A",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "G190A is a non-polymorphic mutation that causes high-level resistance to NVP and intermediate resistance to EFV. It does not significantly reduce susceptibility to RPV, ETR, or DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NNRTI"
+            },
+            "drug": {
+              "name": "NVP",
+              "displayAbbr": "NVP"
+            },
+            "score": 160,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "E138Q",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "E138Q/G are non-polymorphic accessory mutations  selected by ETR occasionally NVP and EFV. They cause low-level reductions in susceptibility to NVP, RPV, and ETR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V179D",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "V179D/E are somewhat polymorphic accessory NNRTI-selected mutation. In combination with other NNRTI DRMs, they appear to contribute low-levels of reduced susceptibility to each of the NNRTIs. In particular, the combinations of K103R/V179D and V106I/V179D act synergistically to reduce NVP and EFV susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G190A",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "G190A is a non-polymorphic mutation that causes high-level resistance to NVP and intermediate resistance to EFV. It does not significantly reduce susceptibility to RPV, ETR, or DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "K103R",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "K103R is a polymorphic mutation that alone has no effect on NNRTI susceptibility. However, in combination with V179D, it reduces NVP and EFV susceptibility about 15-fold."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V179D",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "V179D/E are somewhat polymorphic accessory NNRTI-selected mutation. In combination with other NNRTI DRMs, they appear to contribute low-levels of reduced susceptibility to each of the NNRTIs. In particular, the combinations of K103R/V179D and V106I/V179D act synergistically to reduce NVP and EFV susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 20.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "NNRTI"
+            },
+            "drug": {
+              "name": "RPV",
+              "displayAbbr": "RPV"
+            },
+            "score": 125,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "E138Q",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "E138Q/G are non-polymorphic accessory mutations  selected by ETR occasionally NVP and EFV. They cause low-level reductions in susceptibility to NVP, RPV, and ETR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "V179D",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "V179D/E are somewhat polymorphic accessory NNRTI-selected mutation. In combination with other NNRTI DRMs, they appear to contribute low-levels of reduced susceptibility to each of the NNRTIs. In particular, the combinations of K103R/V179D and V106I/V179D act synergistically to reduce NVP and EFV susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "G190A",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "G190A is a non-polymorphic mutation that causes high-level resistance to NVP and intermediate resistance to EFV. It does not significantly reduce susceptibility to RPV, ETR, or DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "K103R",
+                    "primaryType": "Other",
+                    "comments": [
+                      {
+                        "type": "Other",
+                        "text": "K103R is a polymorphic mutation that alone has no effect on NNRTI susceptibility. However, in combination with V179D, it reduces NVP and EFV susceptibility about 15-fold."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "V179D",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "V179D/E are somewhat polymorphic accessory NNRTI-selected mutation. In combination with other NNRTI DRMs, they appear to contribute low-levels of reduced susceptibility to each of the NNRTIs. In particular, the combinations of K103R/V179D and V106I/V179D act synergistically to reduce NVP and EFV susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "Y181I",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "Y181I/V are 2-base pair non-polymorphic mutations selected by NVP and ETR. They cause high-level resistance to NVP, ETR, and RPV but not EFV. Their effects on DOR have not been well-characterized."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "G190A",
+                    "primaryType": "NNRTI",
+                    "comments": [
+                      {
+                        "type": "NNRTI",
+                        "text": "G190A is a non-polymorphic mutation that causes high-level resistance to NVP and intermediate resistance to EFV. It does not significantly reduce susceptibility to RPV, ETR, or DOR."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          }
+        ]
+      }
+    ]
+  }
+]

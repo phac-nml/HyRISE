@@ -15,7 +15,7 @@ def stub_visualizations_and_dependencies(monkeypatch, tmp_path):
     monkeypatch.setattr(
         processor_module,
         "ensure_dependencies",
-        lambda use_container: {
+        lambda *args, **kwargs: {
             "use_container": False,
             "container_path": None,
             "multiqc_available": False,
@@ -74,7 +74,7 @@ def stub_dependencies(monkeypatch):
     monkeypatch.setattr(
         processor_module,
         "ensure_dependencies",
-        lambda use_container, container_path=None: {
+        lambda *args, **kwargs: {
             "use_container": False,
             "multiqc_available": False,
         },
@@ -127,7 +127,7 @@ def test_process_files_basic(tmp_path, monkeypatch):
     monkeypatch.setattr(
         processor_module,
         "ensure_dependencies",
-        lambda use_container, container_path=None: {
+        lambda *args, **kwargs: {
             "use_container": False,
             "multiqc_available": False,
         },
@@ -203,7 +203,7 @@ def test_process_files_with_guide_and_sample_info(tmp_path, monkeypatch):
     monkeypatch.setattr(
         processor_module,
         "ensure_dependencies",
-        lambda use_container, container_path=None: {
+        lambda *args, **kwargs: {
             "use_container": False,
             "multiqc_available": False,
         },
@@ -261,7 +261,7 @@ def test_generate_report_config_only(tmp_path, monkeypatch):
     monkeypatch.setattr(
         processor_module,
         "ensure_dependencies",
-        lambda use_container, container_path=None: {
+        lambda *args, **kwargs: {
             "use_container": False,
             "container_path": None,
             "multiqc_available": False,

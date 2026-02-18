@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import json
 import traceback
+import logging
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Union
 
@@ -35,6 +36,8 @@ from hyrise.visualizers.info_and_guides import (
 )
 from hyrise import __version__
 
+logger = logging.getLogger("hyrise.processor")
+
 
 def process_files(
     json_file: str,
@@ -48,6 +51,7 @@ def process_files(
     logo_path: Optional[str] = None,
     use_container: Optional[bool] = None,
     container_path: Optional[str] = None,
+    container_runtime: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Process Sierra JSON file to create MultiQC visualizations and reports.
@@ -84,7 +88,13 @@ def process_files(
         os.makedirs(output_dir, exist_ok=True)
 
         # Check dependencies and container availability
-        deps = check_dependencies(use_container, container_path, results)
+        deps = check_dependencies(
+            use_container=use_container,
+            container_path=container_path,
+            container_runtime=container_runtime,
+            need_multiqc=generate_report and run_multiqc,
+            results=results,
+        )
 
         # Get sample name - use provided name or extract from filename
         if not sample_name:
@@ -152,12 +162,19 @@ def initialize_results(json_file: str, output_dir: str) -> Dict[str, Any]:
 def check_dependencies(
     use_container: Optional[bool],
     container_path: Optional[str],
+    container_runtime: Optional[str],
+    need_multiqc: bool,
     results: Dict[str, Any],
 ) -> Dict[str, Any]:
     """Check dependencies and container availability."""
     try:
-        # Check dependencies and container availability
-        deps = ensure_dependencies(use_container)
+        required_tools = ["multiqc"] if need_multiqc else []
+        deps = ensure_dependencies(
+            use_container=use_container,
+            required_tools=required_tools,
+            container_path=container_path,
+            container_runtime=container_runtime,
+        )
 
         # Override container path if specified and exists
         if container_path and os.path.exists(container_path):
@@ -422,7 +439,11 @@ def run_multiqc_with_container(
     results: Dict[str, Any],
 ) -> None:
     """Run MultiQC using Singularity container."""
-    print(f"Using Singularity container for MultiQC: {deps['container_path']}")
+    runtime_path = deps.get("runtime_path")
+    if not runtime_path:
+        raise RuntimeError("Container runtime unavailable for report generation")
+
+    print(f"Using container for MultiQC: {deps['container_path']}")
 
     # Get absolute paths for container binding
     output_dir_abs = os.path.abspath(output_dir)
@@ -443,17 +464,20 @@ def run_multiqc_with_container(
             shutil.copy2(config_file, temp_config)
             results["config_file"] = config_file
 
-            # Use shell -c to run commands inside container
-            shell_command = f"cd {temp_dir} && multiqc . -o multiqc_report --config {os.path.basename(temp_config)}"
             container_cmd = [
-                "singularity",
+                runtime_path,
                 "exec",
                 "--bind",
                 temp_dir,
+                "--pwd",
+                temp_dir,
                 deps["container_path"],
-                "sh",  # Use shell to interpret commands
-                "-c",
-                shell_command,
+                "multiqc",
+                ".",
+                "-o",
+                "multiqc_report",
+                "--config",
+                os.path.basename(temp_config),
             ]
 
             # Store the command for reference
@@ -566,7 +590,12 @@ def generate_multiqc_config_only(
         print(cmd)
     elif deps["use_container"] and deps["container_path"]:
         output_dir_abs = os.path.abspath(output_dir)
-        cmd = f"singularity exec --bind {output_dir_abs} {deps['container_path']} sh -c 'cd {output_dir_abs} && multiqc . -o multiqc_report --config {os.path.basename(config_file)}'"
+        runtime = deps.get("runtime_path") or deps.get("runtime_name") or "apptainer"
+        cmd = (
+            f"{runtime} exec --bind {output_dir_abs} --pwd {output_dir_abs} "
+            f"{deps['container_path']} multiqc . -o multiqc_report "
+            f"--config {os.path.basename(config_file)}"
+        )
         results["multiqc_command"] = cmd
         print("You can generate the report using the container with:")
         print(cmd)

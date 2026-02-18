@@ -1,0 +1,11 @@
+include README.md
+include LICENSE
+include AUTHORS.md
+include src/hyrise/hyrise.def
+include src/hyrise/Dockerfile
+include src/hyrise/Dockerfile.runtime
+include src/hyrise/HIVDB_*.xml
+recursive-include src/hyrise/core/assets *.svg *.png
+prune build
+prune dist
+exclude hyrise.sif

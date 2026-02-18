@@ -1,0 +1,58 @@
+# syntax=docker/dockerfile:1.7
+
+FROM python:3.11-slim@sha256:543d6cace00ffc96bc95d332493bb28a4332c6dd614aab5fcbd649ae8a7953d9
+
+LABEL org.opencontainers.image.title="HyRISE" \
+      org.opencontainers.image.description="HIV Resistance Interpretation and Visualization System runtime image" \
+      org.opencontainers.image.source="https://github.com/phac-nml/HyRISE" \
+      org.opencontainers.image.licenses="GPL-3.0-or-later"
+
+ARG SIERRALOCAL_REF=428ebf9e7908cdf5a5aa5ab192c11ddd457aa132
+ARG POSTALIGN_REF=6bcc53044ff6c73d97d3a56b0643fe6ba8bc862f
+ARG HYRISE_PIP_SPEC=hyrise
+ARG MULTIQC_VERSION=1.33
+
+ENV PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+        build-essential \
+        git \
+        ca-certificates \
+        tini \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN --mount=type=bind,source=.,target=/build-context,readonly \
+    python -m pip install --upgrade pip setuptools wheel \
+    && python -m pip install "git+https://github.com/hivdb/post-align.git@${POSTALIGN_REF}" \
+    && python -m pip install "git+https://github.com/PoonLab/sierra-local.git@${SIERRALOCAL_REF}" \
+    && if [ -f /build-context/pyproject.toml ] && [ -d /build-context/src/hyrise ]; then \
+         echo "Installing HyRISE from local build context (/build-context)"; \
+         mkdir -p /tmp/hyrise-src; \
+         cp /build-context/pyproject.toml /tmp/hyrise-src/pyproject.toml; \
+         [ -f /build-context/setup.py ] && cp /build-context/setup.py /tmp/hyrise-src/setup.py || true; \
+         [ -f /build-context/README.md ] && cp /build-context/README.md /tmp/hyrise-src/README.md || true; \
+         [ -f /build-context/LICENSE ] && cp /build-context/LICENSE /tmp/hyrise-src/LICENSE || true; \
+         [ -f /build-context/AUTHORS.md ] && cp /build-context/AUTHORS.md /tmp/hyrise-src/AUTHORS.md || true; \
+         [ -f /build-context/MANIFEST.in ] && cp /build-context/MANIFEST.in /tmp/hyrise-src/MANIFEST.in || true; \
+         cp -a /build-context/src /tmp/hyrise-src/src; \
+         python -m pip install /tmp/hyrise-src; \
+       else \
+         echo "Installing HyRISE from Python package spec: ${HYRISE_PIP_SPEC}"; \
+         python -m pip install "${HYRISE_PIP_SPEC}"; \
+       fi \
+    && python -m pip install "multiqc==${MULTIQC_VERSION}" \
+    && python -m pip check
+
+RUN useradd --create-home --home-dir /home/hyrise --shell /usr/sbin/nologin hyrise \
+    && mkdir -p /data /home/hyrise/.config/hyrise /home/hyrise/.local/share/hyrise \
+    && chown -R hyrise:hyrise /data /home/hyrise
+
+USER hyrise
+WORKDIR /data
+
+ENTRYPOINT ["tini", "--", "hyrise"]
+CMD ["--help"]

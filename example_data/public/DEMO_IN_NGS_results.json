@@ -1,0 +1,949 @@
+[
+  {
+    "inputSequence": {
+      "header": "DEMO_IN_NGS",
+      "SHA512": "897a0635d3fcf09b92967aa8f4374d99f7ebbaaddb5cada7626b95ebd494d7a31bcdfa0f8baecc73554b7785958b313ce6e2b0726a2cff6d9768e77a180fae22"
+    },
+    "subtypeText": "",
+    "validationResults": [],
+    "alignedGeneSequences": [
+      {
+        "firstAA": 1,
+        "lastAA": 289,
+        "gene": {
+          "name": "IN",
+          "length": null
+        },
+        "mutations": [
+          {
+            "consensus": "S",
+            "position": 17,
+            "AAs": "N",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "S17N"
+          },
+          {
+            "consensus": "A",
+            "position": 49,
+            "AAs": "P",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "A49P"
+          },
+          {
+            "consensus": "M",
+            "position": 50,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "M50V"
+          },
+          {
+            "consensus": "I",
+            "position": 60,
+            "AAs": "IM",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I60IM"
+          },
+          {
+            "consensus": "L",
+            "position": 68,
+            "AAs": "Y",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "L68Y"
+          },
+          {
+            "consensus": "L",
+            "position": 74,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "L74I"
+          },
+          {
+            "consensus": "V",
+            "position": 75,
+            "AAs": "AV",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V75AV"
+          },
+          {
+            "consensus": "Y",
+            "position": 83,
+            "AAs": "FY",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "Y83YF"
+          },
+          {
+            "consensus": "T",
+            "position": 97,
+            "AAs": "A",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "T97A"
+          },
+          {
+            "consensus": "L",
+            "position": 101,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "L101I"
+          },
+          {
+            "consensus": "K",
+            "position": 111,
+            "AAs": "R",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K111R"
+          },
+          {
+            "consensus": "T",
+            "position": 112,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T112V"
+          },
+          {
+            "consensus": "T",
+            "position": 115,
+            "AAs": "ST",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T115TS"
+          },
+          {
+            "consensus": "S",
+            "position": 119,
+            "AAs": "R",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "S119R"
+          },
+          {
+            "consensus": "T",
+            "position": 122,
+            "AAs": "A",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T122A"
+          },
+          {
+            "consensus": "T",
+            "position": 125,
+            "AAs": "AT",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T125TA"
+          },
+          {
+            "consensus": "E",
+            "position": 138,
+            "AAs": "K",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": true,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Major",
+            "text": "E138K"
+          },
+          {
+            "consensus": "S",
+            "position": 147,
+            "AAs": "G",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Major",
+            "text": "S147G"
+          },
+          {
+            "consensus": "V",
+            "position": 151,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V151I"
+          },
+          {
+            "consensus": "N",
+            "position": 155,
+            "AAs": "H",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": true,
+            "hasStop": false,
+            "primaryType": "Major",
+            "text": "N155H"
+          },
+          {
+            "consensus": "K",
+            "position": 156,
+            "AAs": "N",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K156N"
+          },
+          {
+            "consensus": "E",
+            "position": 157,
+            "AAs": "Q",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Accessory",
+            "text": "E157Q"
+          },
+          {
+            "consensus": "I",
+            "position": 162,
+            "AAs": "L",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I162L"
+          },
+          {
+            "consensus": "V",
+            "position": 201,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "V201I"
+          },
+          {
+            "consensus": "T",
+            "position": 206,
+            "AAs": "S",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T206S"
+          },
+          {
+            "consensus": "T",
+            "position": 210,
+            "AAs": "I",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T210I"
+          },
+          {
+            "consensus": "K",
+            "position": 211,
+            "AAs": "KQR",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "K211KRQ"
+          },
+          {
+            "consensus": "Q",
+            "position": 216,
+            "AAs": "KQ",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "Q216KQ"
+          },
+          {
+            "consensus": "I",
+            "position": 217,
+            "AAs": "IV",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "I217IV"
+          },
+          {
+            "consensus": "T",
+            "position": 218,
+            "AAs": "S",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "T218S"
+          },
+          {
+            "consensus": "L",
+            "position": 234,
+            "AAs": "V",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "L234V"
+          },
+          {
+            "consensus": "C",
+            "position": 280,
+            "AAs": "S",
+            "isInsertion": false,
+            "isDeletion": false,
+            "isApobecMutation": false,
+            "isApobecDRM": false,
+            "isUnusual": false,
+            "isSDRM": false,
+            "hasStop": false,
+            "primaryType": "Other",
+            "text": "C280S"
+          }
+        ],
+        "SDRMs": [
+          {
+            "text": "E138K"
+          },
+          {
+            "text": "S147G"
+          },
+          {
+            "text": "N155H"
+          }
+        ]
+      }
+    ],
+    "drugResistance": [
+      {
+        "version": {
+          "text": "9.4",
+          "publishDate": "2022-12-07"
+        },
+        "gene": {
+          "name": "IN"
+        },
+        "drugScores": [
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "BIC",
+              "displayAbbr": "BIC"
+            },
+            "score": 40,
+            "level": 4,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "E138K",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "E138K/A/T are common nonpolymorphic accessory resistance mutations selected in patients receiving RAL, EVG, CAB, and DTG. Alone they do not reduce INSTI susceptibility. However, they contribute to reduced susceptibility in combination with other mutations particularly those at position 148."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "Intermediate Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "CAB",
+              "displayAbbr": "CAB"
+            },
+            "score": 70,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "E138K",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "E138K/A/T are common nonpolymorphic accessory resistance mutations selected in patients receiving RAL, EVG, CAB, and DTG. Alone they do not reduce INSTI susceptibility. However, they contribute to reduced susceptibility in combination with other mutations particularly those at position 148."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 25.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 25.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "DTG",
+              "displayAbbr": "DTG"
+            },
+            "score": 40,
+            "level": 4,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "E138K",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "E138K/A/T are common nonpolymorphic accessory resistance mutations selected in patients receiving RAL, EVG, CAB, and DTG. Alone they do not reduce INSTI susceptibility. However, they contribute to reduced susceptibility in combination with other mutations particularly those at position 148."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "Intermediate Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "EVG",
+              "displayAbbr": "EVG"
+            },
+            "score": 165,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "T97A",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "T97A is a polymorphic INSTI-selected mutation that, depending on subtype, occurs in 1% to 5% of viruses from untreated persons. Alone, it has minimal effects on INSTI susceptibility but in combination with other major resistance mutations, it synergistically reduces susceptibility to each of the INSTIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "E138K",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "E138K/A/T are common nonpolymorphic accessory resistance mutations selected in patients receiving RAL, EVG, CAB, and DTG. Alone they do not reduce INSTI susceptibility. However, they contribute to reduced susceptibility in combination with other mutations particularly those at position 148."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "E157Q",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "E157Q is a polymorphic mutation selected in persons receiving RAL and EVG. It appears to have little effect on INSTI susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  },
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          },
+          {
+            "drugClass": {
+              "name": "INSTI"
+            },
+            "drug": {
+              "name": "RAL",
+              "displayAbbr": "RAL"
+            },
+            "score": 105,
+            "level": 5,
+            "partialScores": [
+              {
+                "mutations": [
+                  {
+                    "text": "T97A",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "T97A is a polymorphic INSTI-selected mutation that, depending on subtype, occurs in 1% to 5% of viruses from untreated persons. Alone, it has minimal effects on INSTI susceptibility but in combination with other major resistance mutations, it synergistically reduces susceptibility to each of the INSTIs."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "E138K",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "E138K/A/T are common nonpolymorphic accessory resistance mutations selected in patients receiving RAL, EVG, CAB, and DTG. Alone they do not reduce INSTI susceptibility. However, they contribute to reduced susceptibility in combination with other mutations particularly those at position 148."
+                      }
+                    ]
+                  }
+                ],
+                "score": 15.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "S147G",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "S147G is a nonpolymorphic mutation selected in patients receiving RAL, EVG, and DTG. Alone it reduces EVG susceptibility about 5-fold."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "N155H",
+                    "primaryType": "Major",
+                    "comments": [
+                      {
+                        "type": "Major",
+                        "text": "N155H is a common nonpolymorphic INSTI-resistance mutations. It has been reported in a high proportion of persons developing VF and HIVDR while receiving RAL, EVG, DTG, and CAB. Alone, it reduces RAL and EVG susceptibility about 10 and 30-fold, respectively.  It has minimal effect on susceptibility to DTG, BIC, and CAB."
+                      }
+                    ]
+                  }
+                ],
+                "score": 60.0
+              },
+              {
+                "mutations": [
+                  {
+                    "text": "E157Q",
+                    "primaryType": "Accessory",
+                    "comments": [
+                      {
+                        "type": "Accessory",
+                        "text": "E157Q is a polymorphic mutation selected in persons receiving RAL and EVG. It appears to have little effect on INSTI susceptibility."
+                      }
+                    ]
+                  }
+                ],
+                "score": 10.0
+              }
+            ],
+            "text": "High-Level Resistance"
+          }
+        ]
+      }
+    ]
+  }
+]

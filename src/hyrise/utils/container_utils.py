@@ -1,227 +1,187 @@
 """
-Utilities for container-based execution and dependency checking
+Utilities for container-based execution and dependency checking.
 """
 
-import os
-import sys
-import subprocess
+from __future__ import annotations
+
 import importlib.util
-import pkg_resources
-import site
-from pathlib import Path
 import logging
+import os
+import shutil
+import subprocess
+from pathlib import Path
+from typing import Iterable, Optional, Sequence, Tuple
 
-from .container_builder import find_singularity_binary, verify_container
+from hyrise.config import get_default_data_dir
+from .container_builder import verify_container
 
-# Set up logging
 logger = logging.getLogger("hyrise-container")
 
 
-def check_dependency_installed(dependency_name):
-    """
-    Check if a Python package is installed in the current environment
-
-    Args:
-        dependency_name (str): Name of the dependency to check
-
-    Returns:
-        bool: True if installed, False otherwise
-    """
+def check_dependency_installed(dependency_name: str) -> bool:
+    """Check if a Python package is installed."""
     try:
         spec = importlib.util.find_spec(dependency_name)
         return spec is not None
     except (ImportError, ModuleNotFoundError):
-        # Try using pkg_resources as a fallback
-        try:
-            pkg_resources.get_distribution(dependency_name)
-            return True
-        except pkg_resources.DistributionNotFound:
-            return False
-
-
-def check_command_available(command):
-    """
-    Check if a command is available in the system PATH
-
-    Args:
-        command (str): Command to check
-
-    Returns:
-        bool: True if available, False otherwise
-    """
-    try:
-        subprocess.run(
-            f"which {command}",
-            shell=True,
-            check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        return True
-    except subprocess.CalledProcessError:
         return False
 
 
-def find_singularity_container():
+def check_command_available(command: str) -> bool:
+    """Check if a command is available in PATH."""
+    return shutil.which(command) is not None
+
+
+def detect_container_runtime(
+    preferred_runtime: Optional[str] = None,
+) -> Tuple[Optional[str], Optional[str]]:
     """
-    Find the hyrise.sif container in the package installation directory
+    Resolve container runtime path.
 
-    Returns:
-        str: Path to the Singularity container or None if not found
+    Runtime preference order:
+    1) explicit preferred runtime (`apptainer` or `singularity`)
+    2) `apptainer`
+    3) `singularity`
     """
-    # First, check if the container is in the current directory
-    if os.path.exists("hyrise.sif"):
-        return os.path.abspath("hyrise.sif")
+    candidates = []
+    if preferred_runtime:
+        candidates.append(preferred_runtime)
+    for runtime in ("apptainer", "singularity"):
+        if runtime not in candidates:
+            candidates.append(runtime)
 
-    # Check in the same directory as this script
-    current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sif_path = os.path.join(current_dir, "hyrise.sif")
-    if os.path.exists(sif_path):
-        return sif_path
+    for runtime in candidates:
+        runtime_path = shutil.which(runtime)
+        if runtime_path:
+            return runtime, runtime_path
+    return None, None
 
-    # Check in the package installation directory
-    try:
-        # Try to find package path using importlib
-        spec = importlib.util.find_spec("hyrise")
-        if spec and spec.origin:
-            pkg_dir = os.path.dirname(os.path.dirname(spec.origin))
-            container_path = os.path.join(pkg_dir, "hyrise", "hyrise.sif")
-            if os.path.exists(container_path):
-                return container_path
-    except Exception:
-        pass
 
-    # Try using pkg_resources
-    try:
-        # Get all site-packages directories
-        site_packages = site.getsitepackages()
-        for site_dir in site_packages:
-            # Look for egg or regular package
-            for pattern in ["hyrise-*.egg/hyrise/hyrise.sif", "hyrise/hyrise.sif"]:
-                # Use glob to find matching paths
-                potential_paths = list(Path(site_dir).glob(pattern))
-                if potential_paths:
-                    return str(potential_paths[0])
-    except Exception:
-        pass
-
-    # As a last resort, try to find in conda environment
-    if "CONDA_PREFIX" in os.environ:
-        conda_prefix = os.environ["CONDA_PREFIX"]
-        conda_path = os.path.join(
-            conda_prefix,
-            "lib",
-            f"python{sys.version_info.major}.{sys.version_info.minor}",
-            "site-packages",
-            "hyrise",
-            "hyrise.sif",
+def find_singularity_container(
+    search_paths: Optional[Iterable[str]] = None,
+) -> Optional[str]:
+    """
+    Find a HyRISE container file from a deterministic path list.
+    """
+    if search_paths is None:
+        search_paths = (
+            str((Path.cwd() / "hyrise.sif").resolve()),
+            str((get_default_data_dir() / "hyrise.sif").resolve()),
         )
-        if os.path.exists(conda_path):
-            return conda_path
 
+    for path in search_paths:
+        if not path:
+            continue
+        resolved = Path(path).expanduser().resolve()
+        if resolved.exists():
+            return str(resolved)
     return None
 
 
-def check_singularity_available():
+def check_singularity_available(preferred_runtime: Optional[str] = None) -> bool:
+    """Check whether a supported container runtime is available."""
+    _, runtime_path = detect_container_runtime(preferred_runtime=preferred_runtime)
+    return runtime_path is not None
+
+
+def run_with_singularity(
+    container_path: str,
+    command: Sequence[str] | str,
+    bind_paths: Optional[Sequence[str]] = None,
+    runtime_path: Optional[str] = None,
+) -> subprocess.CompletedProcess:
     """
-    Check if Singularity is installed and available
-
-    Returns:
-        bool: True if available, False otherwise
+    Run a command using an Apptainer/Singularity container.
     """
-    return find_singularity_binary() is not None
-
-
-def run_with_singularity(container_path, command, bind_paths=None):
-    """
-    Run a command using Singularity container
-
-    Args:
-        container_path (str): Path to the Singularity container file
-        command (str): Command to run inside the container
-        bind_paths (list, optional): List of paths to bind-mount into container
-
-    Returns:
-        subprocess.CompletedProcess: Result of the command execution
-
-    Raises:
-        subprocess.CalledProcessError: If the command fails
-        ValueError: If Singularity or container not found
-    """
-    singularity_path = find_singularity_binary()
-    if not singularity_path:
-        raise ValueError("Singularity is not installed or not in PATH")
+    if runtime_path is None:
+        _, runtime_path = detect_container_runtime()
+    if not runtime_path:
+        raise ValueError("No supported container runtime found (apptainer/singularity)")
 
     if not os.path.exists(container_path):
-        raise ValueError(f"Singularity container not found at {container_path}")
+        raise ValueError(f"Container not found at {container_path}")
 
-    # Check if container is valid
-    if not verify_container(container_path, singularity_path):
+    if not verify_container(container_path, runtime_path):
         logger.warning(
-            "Container verification failed but will attempt to use it anyway"
+            "Container verification failed but will attempt to run it anyway"
         )
 
-    # Build bind options
-    bind_opts = []
-    if bind_paths:
-        for path in bind_paths:
-            # Ensure path exists
-            if os.path.exists(path):
-                bind_opts.append(f"--bind {path}")
+    argv_command = command.split() if isinstance(command, str) else list(command)
+    if not argv_command:
+        raise ValueError("Container command cannot be empty")
 
-    # By default bind current directory
-    if not bind_opts:
-        bind_opts.append(f"--bind {os.getcwd()}")
+    bind_targets = [
+        Path(p).expanduser().resolve() for p in (bind_paths or [os.getcwd()])
+    ]
+    bind_args = []
+    for target in bind_targets:
+        if target.exists():
+            bind_args.extend(["--bind", str(target)])
 
-    # Build the full singularity command
-    singularity_cmd = (
-        f"{singularity_path} exec {' '.join(bind_opts)} {container_path} {command}"
-    )
-
-    # Run the command
-    return subprocess.run(singularity_cmd, shell=True, check=True)
+    cmd = [runtime_path, "exec", *bind_args, container_path, *argv_command]
+    return subprocess.run(cmd, check=True)
 
 
-def ensure_dependencies(use_container=None):
+def ensure_dependencies(
+    use_container: Optional[bool] = None,
+    required_tools: Optional[Iterable[str]] = None,
+    container_path: Optional[str] = None,
+    container_runtime: Optional[str] = None,
+    container_search_paths: Optional[Iterable[str]] = None,
+) -> dict:
     """
-    Check for required dependencies and determine if container should be used
+    Check dependencies and determine whether container execution should be used.
 
     Args:
-        use_container (bool, optional): Force container usage on/off, or auto-detect if None
-
-    Returns:
-        dict: Information about dependencies and container availability
+        use_container: Explicit execution mode override.
+        required_tools: Required tools for the current action.
+            Defaults to ``("multiqc", "sierralocal")``.
+        container_path: Explicit container path override.
+        container_runtime: Preferred runtime binary name.
+        container_search_paths: Additional search paths for container discovery.
     """
-    results = {
-        "multiqc_available": check_command_available("multiqc"),
-        "sierra_local_available": check_command_available("sierralocal"),
-        "singularity_available": check_singularity_available(),
-        "container_path": find_singularity_container(),
-        "use_container": False,
-        "missing_dependencies": [],
-    }
+    runtime_name, runtime_path = detect_container_runtime(
+        preferred_runtime=container_runtime
+    )
 
-    # Check for missing dependencies
-    if not results["multiqc_available"]:
-        results["missing_dependencies"].append("multiqc")
+    resolved_container_path = None
+    if container_path:
+        candidate = Path(container_path).expanduser().resolve()
+        if candidate.exists():
+            resolved_container_path = str(candidate)
+    if resolved_container_path is None:
+        resolved_container_path = find_singularity_container(container_search_paths)
 
-    if not results["sierra_local_available"]:
-        results["missing_dependencies"].append("sierralocal")
+    required = (
+        tuple(required_tools)
+        if required_tools is not None
+        else ("multiqc", "sierralocal")
+    )
+    multiqc_available = check_command_available("multiqc")
+    sierra_local_available = check_command_available("sierralocal")
 
-    # Determine if container should be used
+    missing_dependencies = []
+    if "multiqc" in required and not multiqc_available:
+        missing_dependencies.append("multiqc")
+    if "sierralocal" in required and not sierra_local_available:
+        missing_dependencies.append("sierralocal")
+
     if use_container is True:
-        # User explicitly requested container
-        results["use_container"] = True
+        resolved_use_container = True
     elif use_container is False:
-        # User explicitly disabled container
-        results["use_container"] = False
+        resolved_use_container = False
     else:
-        # Auto-detect based on missing dependencies
-        if (
-            results["missing_dependencies"]
-            and results["singularity_available"]
-            and results["container_path"]
-        ):
-            results["use_container"] = True
+        resolved_use_container = bool(
+            missing_dependencies and runtime_path and resolved_container_path
+        )
 
-    return results
+    return {
+        "multiqc_available": multiqc_available,
+        "sierra_local_available": sierra_local_available,
+        "singularity_available": runtime_path is not None,
+        "runtime_name": runtime_name,
+        "runtime_path": runtime_path,
+        "container_path": resolved_container_path,
+        "use_container": resolved_use_container,
+        "missing_dependencies": missing_dependencies,
+    }

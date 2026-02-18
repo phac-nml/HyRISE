@@ -955,13 +955,22 @@ class HyRISEReportGenerator:
         # Ensure report directory exists
         os.makedirs(self.report_dir, exist_ok=True)
 
-        # Create the MultiQC command
-        cmd = f"multiqc {self.output_dir} -o {self.report_dir} --config {self.config_path}"
-        self.logger.info(f"Running MultiQC: {cmd}")
+        cmd = [
+            "multiqc",
+            self.output_dir,
+            "-o",
+            self.report_dir,
+            "--config",
+            self.config_path,
+        ]
+        self.logger.info(f"Running MultiQC: {' '.join(cmd)}")
 
         try:
             result = subprocess.run(
-                cmd, shell=True, check=True, capture_output=True, text=True
+                cmd,
+                check=True,
+                capture_output=True,
+                text=True,
             )
             self.logger.info("MultiQC completed successfully")
             return True, result.stdout

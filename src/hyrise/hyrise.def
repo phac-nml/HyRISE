@@ -1,146 +1,96 @@
 Bootstrap: docker
-From: condaforge/mambaforge:23.3.1-1
+From: python:3.11-slim@sha256:543d6cace00ffc96bc95d332493bb28a4332c6dd614aab5fcbd649ae8a7953d9
 
 %labels
-    Maintainer "Gurasis Osahan <gurasis.osahan@phac-aspc.gc.ca>"
-    Description "HIV Resistance Interpretation & Scoring Engine"
-    Version "1.0.0"
-    Source "https://github.com/phac-nml/hyrise"
+    Maintainer "PHAC NML"
+    Description "Self-contained HyRISE runtime build (no prebuilt OCI image dependency)"
+    Source "https://github.com/phac-nml/HyRISE"
+
+%arguments
+    HYRISE_PIP_SPEC=hyrise
+    POSTALIGN_REF=6bcc53044ff6c73d97d3a56b0643fe6ba8bc862f
+    SIERRALOCAL_REF=428ebf9e7908cdf5a5aa5ab192c11ddd457aa132
+    MULTIQC_VERSION=1.33
+
+%help
+    This definition builds a HyRISE runtime directly from Python packages and
+    pinned upstream tools, instead of inheriting from docker://ghcr.io/phac-nml/hyrise:latest.
+
+    Build command:
+      apptainer build hyrise.sif src/hyrise/hyrise.def
+
+    Build behavior:
+      - If this definition is built from a HyRISE source checkout, local source
+        is copied and installed (no PyPI required for HyRISE itself).
+      - Otherwise, HyRISE is installed from HYRISE_PIP_SPEC (default: 'hyrise').
+
+    Optional override (for private indexes or custom specs):
+      apptainer build --build-arg HYRISE_PIP_SPEC='hyrise==0.2.0' hyrise.sif src/hyrise/hyrise.def
+
+%setup
+    set -eu
+
+    ROOTFS="${APPTAINER_ROOTFS:-${SINGULARITY_ROOTFS:-}}"
+    BUILDDEF="${APPTAINER_BUILDDEF:-${SINGULARITY_DEFFILE:-}}"
+
+    if [ -z "${ROOTFS}" ] || [ -z "${BUILDDEF}" ]; then
+        exit 0
+    fi
+
+    DEF_DIR="$(dirname "${BUILDDEF}")"
+    REPO_ROOT="$(cd "${DEF_DIR}/../.." 2>/dev/null && pwd || true)"
+
+    if [ -n "${REPO_ROOT}" ] && [ -f "${REPO_ROOT}/pyproject.toml" ] && [ -d "${REPO_ROOT}/src/hyrise" ]; then
+        mkdir -p "${ROOTFS}/opt/hyrise-src"
+        cp -a "${REPO_ROOT}/pyproject.toml" "${ROOTFS}/opt/hyrise-src/pyproject.toml"
+        [ -f "${REPO_ROOT}/setup.py" ] && cp -a "${REPO_ROOT}/setup.py" "${ROOTFS}/opt/hyrise-src/setup.py"
+        [ -f "${REPO_ROOT}/README.md" ] && cp -a "${REPO_ROOT}/README.md" "${ROOTFS}/opt/hyrise-src/README.md"
+        [ -f "${REPO_ROOT}/LICENSE" ] && cp -a "${REPO_ROOT}/LICENSE" "${ROOTFS}/opt/hyrise-src/LICENSE"
+        [ -f "${REPO_ROOT}/AUTHORS.md" ] && cp -a "${REPO_ROOT}/AUTHORS.md" "${ROOTFS}/opt/hyrise-src/AUTHORS.md"
+        [ -f "${REPO_ROOT}/MANIFEST.in" ] && cp -a "${REPO_ROOT}/MANIFEST.in" "${ROOTFS}/opt/hyrise-src/MANIFEST.in"
+        cp -a "${REPO_ROOT}/src" "${ROOTFS}/opt/hyrise-src/src"
+    fi
 
 %environment
+    export PIP_NO_CACHE_DIR=1
+    export PIP_DISABLE_PIP_VERSION_CHECK=1
     export PYTHONDONTWRITEBYTECODE=1
     export PYTHONUNBUFFERED=1
-    export MAMBA_ROOT_PREFIX=/opt/conda
-    export PATH=$PATH:/opt/conda/bin
 
 %post
-    # System Dependencies
+    set -eux
+
+    export DEBIAN_FRONTEND=noninteractive
     apt-get update
-    apt-get install -y --no-install-recommends \
+    apt-get install --yes --no-install-recommends \
         build-essential \
         git \
         ca-certificates \
-        wget \
-        minimap2 \
-        procps \
-        curl \
-        unzip
-    apt-get clean
+        tini
     rm -rf /var/lib/apt/lists/*
 
-    # Create working directory
-    mkdir -p /opt
-    cd /opt
+    python -m pip install --upgrade pip setuptools wheel
 
-    # Create environment.yml file inline
-    cat > /opt/environment.yml << 'EOF'
-name: base
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - python=3.10
-  - pip
-  - cython=0.29.32
-  - more-itertools=9.1.0
-  - orjson=3.9.1
-  - requests
-  - pyyaml
-  - jinja2
-  - markdown
-  - colorlog
-  - click
-  - numpy<2.0.0,>=1.24.3
-  - multiqc>=1.28
-  - pip:
-    - types-setuptools==67.8.0.0
-EOF
+    python -m pip install "git+https://github.com/hivdb/post-align.git@{{ POSTALIGN_REF }}"
+    python -m pip install "git+https://github.com/PoonLab/sierra-local.git@{{ SIERRALOCAL_REF }}"
+    if [ -f /opt/hyrise-src/pyproject.toml ] && [ -d /opt/hyrise-src/src/hyrise ]; then
+        echo "Installing HyRISE from copied local source at /opt/hyrise-src"
+        python -m pip install /opt/hyrise-src
+    else
+        echo "Installing HyRISE from Python package spec: {{ HYRISE_PIP_SPEC }}"
+        python -m pip install "{{ HYRISE_PIP_SPEC }}"
+    fi
+    python -m pip install "multiqc=={{ MULTIQC_VERSION }}"
+    python -m pip check
 
-    # Setup Conda environment
-    mamba env update -n base -f /opt/environment.yml
-    mamba clean --all -f -y
-
-    # Install Post-Align (specific commit as recommended)
-    pip install --no-cache-dir \
-        git+https://github.com/hivdb/post-align@8e2ee118261987208c17add6cef5c1270e325a4c
-
-    # Install Sierra-Local from GitHub
-    git clone --depth 1 https://github.com/PoonLab/sierra-local.git
-    cd sierra-local
-    python setup.py install
-    cd /opt
-    rm -rf sierra-local/.git
-
-    # Additional Python packages
-    pip install --no-cache-dir \
-        matplotlib \
-        seaborn \
-        pandas \
-        plotly \
-        kaleido \
-        tabulate \
-        beautifulsoup4
-
-    # Create wrapper script for HyRISE functionality
-    cat > /usr/local/bin/hyrise << 'EOF'
-#!/bin/bash
-set -e
-
-# Basic wrapper for HyRISE functionality
-if [[ "$1" == "multiqc" ]]; then
-    # Run MultiQC with all arguments after "multiqc"
-    shift
-    exec multiqc "$@"
-elif [[ "$1" == "help" || "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "HyRISE - HIV Resistance Interpretation & Scoring Engine"
-    echo ""
-    echo "Available commands:"
-    echo "  sierralocal [args]  - Run Sierra-Local with provided arguments"
-    echo "  multiqc [args]      - Run MultiQC with provided arguments"
-    echo "  help                - Display this help message"
-    echo ""
-    echo "For tool-specific help:"
-    echo "  sierralocal --help"
-    echo "  multiqc --help"
-else
-    # Default to Sierra-Local
-    exec sierralocal "$@"
-fi
-EOF
-    chmod +x /usr/local/bin/hyrise
-
-    # Create data directory that will be the default working directory
-    mkdir -p /data
+    mkdir -p /data /root/.config/hyrise /root/.local/share/hyrise
 
 %runscript
-    exec /usr/local/bin/hyrise "$@"
+    exec /usr/bin/tini -- hyrise "$@"
 
 %startscript
-    exec /usr/local/bin/hyrise "$@"
-
-%help
-    HyRISE - HIV Resistance Interpretation & Scoring Engine
-    
-    A comprehensive container for HIV drug resistance prediction and reporting 
-    with integrated visualization capabilities through MultiQC.
-    
-    Features:
-      - Sierra-Local for HIV-1 drug resistance prediction
-      - MultiQC for comprehensive visualization reporting
-      - Support for visualization tools and dependencies
-    
-    Usage:
-      1. Analysis only:
-         singularity run hyrise.sif RT.fa
-      
-      2. Run MultiQC:
-         singularity run hyrise.sif multiqc .
-      
-      3. Display help:
-         singularity run hyrise.sif help
+    exec /usr/bin/tini -- hyrise "$@"
 
 %test
-    # Test that main tools are installed correctly
-    sierralocal --version
-    multiqc --version
+    hyrise --help
+    python -m hyrise --help

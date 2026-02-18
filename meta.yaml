@@ -1,5 +1,5 @@
 {% set name = "hyrise" %}
-{% set version = "0.1.1" %}
+{% set version = "0.2.0" %}
 
 package:
   name: {{ name|lower }}
@@ -8,85 +8,47 @@ package:
 source:
   path: .
 
-channels:
-  - conda-forge
-  - bioconda
-  - gosahan
-  - defaults
-
 build:
   number: 0
-  script: python -m pip install --no-deps --ignore-installed .
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
   host:
-    - python >=3.9,<3.11
-    - pip >=24.3.1
-    - setuptools >=75.6.0
-    - wheel >=0.45.1
-    - build >=0.10.0
-    - poetry-core >=1.9.1
+    - python >=3.9,<3.13
+    - pip
+    - setuptools >=69
+    - wheel
   run:
-    - python >=3.9,<3.11
-    - pip >=24.3.1
-    - setuptools >=75.6.0
-    - wheel >=0.45.1
-    - build >=0.10.0
-    - poetry-core >=1.9.1
-    - bcftools >=1.21
-    - samtools >=1.21
-    - bs4 >=4.12.3
-    - bio >=1.7.1
-    - mamba >=1.5.8
-    - pysam >=0.22.1
-    - scipy >=1.14.1
-    - psutil >=6.1.0
-    - alive-progress >=3.1.5
-    - typing-extensions >=4.12.2
-    - Cython >=3.0.11
-    - pyabpoa >=1.5.3
-    - GPUtil >=1.4.0
-    - cutadapt >=4.9
-    - multiqc >=1.25.2
-    - minimap2 >=2.28
-    - mafft >=7.526
-    - ivar >=1.4.3
+    - python >=3.9,<3.13
+    - beautifulsoup4 >=4.12
+    - pyyaml >=6.0
+    - questionary >=2.0
+    - requests >=2.31
+    - rich >=13.7
+    - tomli >=2.0  # [py<311]
 
 test:
-  imports:
-    - numpy
-    - pandas
-    - pysam
-    - openpyxl
-    - scipy
-    - matplotlib
-    - plotly
+  requires:
+    - pip
   commands:
-    - python -V
-    - hyrise --version
     - hyrise --help
-
-data_files:
-  - lib/python3.10/site-packages/hyrise: config.json
+    - python -m hyrise --help
+    - hyrise --version
+    - pip check
 
 about:
-  home: https://github.com/phac-nml/
-  summary: A comprehensive bioinformatics pipeline for Oxford Nanopore Technologies. The tool offers Dorado-based basecalling with duplex options, amplicon read assembly and polishing, primer trimming, and quality control. Designed for efficient parallel processing and enhanced by interactive input and output configuration, HyRISE maximizes computational resources while providing flexible control to users.
-  description: A comprehensive bioinformatics pipeline for Oxford Nanopore Technologies. The tool offers Dorado-based basecalling with duplex options, amplicon read assembly and polishing, primer trimming, and quality control. 
-  source-url: https://github.com/phac-nml/HyRISE
-  license: Apache-2.0
-  license_family: Apache
+  home: https://github.com/phac-nml/HyRISE
+  summary: HIV Resistance Interpretation and Visualization System
+  description: |
+    HyRISE is a bioinformatics CLI for HIV resistance interpretation and report generation.
+    It processes Sierra JSON outputs, supports SierraLocal workflows, and can run with
+    container-based execution on HPC environments.
+  license: GPL-3.0-or-later
   license_file: LICENSE
-  license_url: https://github.com/phac-nml/HyRISE/src/branch/main/LICENSE
-  description_url: https://github.com/phac-nml/HyRISE/src/branch/main/README.md
-  doc_source_url: https://github.com/phac-nml/HyRISE/src/branch/main/README.md
+  doc_url: https://github.com/phac-nml/HyRISE
   dev_url: https://github.com/phac-nml/HyRISE
 
 extra:
   recipe-maintainers:
     - gosahan
-  keywords:
-    - bioinformatics
-    - NGS
-    - BAM
-    - sequencing

@@ -18,7 +18,7 @@ def add_container_arguments(parser):
     container_exclusive.add_argument(
         "--container",
         action="store_true",
-        help="Force using Singularity container for execution",
+        help="Force using an Apptainer/Singularity container for execution",
     )
 
     container_exclusive.add_argument(
@@ -27,9 +27,26 @@ def add_container_arguments(parser):
         help="Force native execution, do not use container even if dependencies are missing",
     )
 
-    parser.add_argument(
+    container_group.add_argument(
         "--container-path",
-        help="Custom path to Singularity container (default: auto-detect)",
+        help="Custom path to the container image (default: auto-detect)",
+    )
+
+    container_group.add_argument(
+        "--container-runtime",
+        choices=["apptainer", "singularity"],
+        help=(
+            "Preferred container runtime binary (default: auto-detect, preferring "
+            "apptainer over singularity)"
+        ),
+    )
+
+
+def add_config_argument(parser):
+    """Add a global config path argument to a parser."""
+    parser.add_argument(
+        "--config",
+        help="Path to HyRISE config TOML file (default: ~/.config/hyrise/config.toml)",
     )
 
 
@@ -83,3 +100,18 @@ def add_visualization_arguments(parser):
     )
 
     parser.add_argument("-l", "--logo", help="Path to custom logo file (PNG or SVG)")
+
+
+def add_interactive_arguments(parser):
+    """
+    Add interactive mode arguments to a parser.
+
+    Args:
+        parser: ArgumentParser or argument group object
+    """
+    parser.add_argument(
+        "-I",
+        "--interactive",
+        action="store_true",
+        help="Run in interactive mode with guided prompts",
+    )

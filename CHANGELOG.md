@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.0 - 2026-02-18
+
+### Added
+
+- Added de-identified public fixtures under `example_data/public/` for documentation and smoke testing (`DEMO_IN_NGS*`, `DEMO_PRRT_NGS*`, `DEMO_COMBO_NGS*`).
+- Added import/API stability tests for installed-package behavior (`import hyrise`, `__version__`, curated top-level exports).
+- Added public fixture privacy guard tests to prevent reintroducing identifying sample tokens.
+
+### Changed
+
+- Made `questionary` a default runtime dependency so interactive mode works with plain `pip install hyrise`.
+- Updated MultiQC requirement to `>=1.33` and updated container build definitions to use `1.33`.
+- Updated package version to `0.2.0`.
+- Replaced bundled HIVdb XML from `HIVDB_9.8.xml` to `HIVDB_10.1.xml`.
+- Updated Sierra default XML handling to select the latest bundled `HIVDB_*.xml` instead of a hardcoded XML filename.
+- Updated package data rules to include `HIVDB_*.xml` (sdist/wheel future-proofing).
+- Updated README for CLI-first usage, de-identified example commands, explicit Python API guidance, and container workflows for pip-installed users.
+- Updated CI smoke job to validate installed-wheel imports (`import hyrise`, `from hyrise import *`) and packaged container asset extraction.
+
+### Fixed
+
+- Fixed HIVdb XML version resolution to use numeric version comparison (`10.1` > `9.9`) rather than lexical filename ordering.
+- Removed hardcoded `HIVDB_9.8.xml` references across CLI help/defaults.
+- Improved local GitLab pipeline behavior by skipping dind-only jobs in `gitlab-ci-local` emulation where service DNS/health checks are unreliable.
+
 ## 0.1.0 - 2025-04-22
 
 ### Features

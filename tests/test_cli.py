@@ -52,6 +52,7 @@ def make_args(**kwargs):
         "sample_info": None,
         "contact_email": None,
         "logo": None,
+        "container_runtime": None,
     }
     defaults.update(kwargs)
     return SimpleNamespace(**defaults)
@@ -85,12 +86,14 @@ def test_run_process_sets_report_when_multiqc(monkeypatch):
         logo_path,
         use_container,
         container_path,
+        container_runtime,
     ):
         called.update(locals())
         return {
             "report_dir": "myreport",
             "files_generated": ["a", "b", "c"],
             "container_used": False,
+            "success": True,
         }
 
     monkeypatch.setattr(cli, "process_files", fake_process)
@@ -135,10 +138,11 @@ def test_run_process_exception(monkeypatch, caplog):
                 "singularity_available": True,
                 "container_path": "/some/path",
                 "missing_dependencies": ["multiqc", "sierra-local"],
+                "runtime_name": "apptainer",
             },
             [
                 "Missing dependencies: multiqc, sierra-local",
-                "Missing dependencies can be handled using the Singularity container.",
+                "Missing dependencies can be handled using the container runtime.",
                 "Use the --container flag to enable container execution.",
             ],
         ),
@@ -149,18 +153,19 @@ def test_run_process_exception(monkeypatch, caplog):
                 "singularity_available": False,
                 "container_path": None,
                 "missing_dependencies": ["multiqc"],
+                "runtime_name": None,
             },
             [
                 "Missing dependencies: multiqc",
-                "Please install missing dependencies or provide a Singularity container.",
-                "You can build a container with: hyrise container",
+                "Please install missing dependencies or provide a container image.",
+                "Pull a prebuilt image with: hyrise container --pull -o hyrise.sif",
             ],
         ),
     ],
 )
 def test_run_check_deps_various(monkeypatch, caplog, deps, expect_phrases):
     caplog.set_level(logging.INFO)
-    monkeypatch.setattr(cli, "ensure_dependencies", lambda: deps)
+    monkeypatch.setattr(cli, "ensure_dependencies", lambda **kwargs: deps)
     code = cli.run_check_deps_command(SimpleNamespace())
     assert code == 0
     text = caplog.text

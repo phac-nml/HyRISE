@@ -9,7 +9,6 @@ We gratefully acknowledge the individuals, teams, institutions, and open-source 
 - **Public Health Agency of Canada (PHAC)** — For institutional support and research funding  
 - **National Microbiology Laboratory (NML)** — For providing infrastructure and genomics research capabilities  
 - **Stanford HIV Drug Resistance Database** — For drug resistance knowledge base and algorithms
-- **Center for AIDS Prevention Studies (UCSF)** — For collaboration on HIV resistance interpretation methodologies
 
 ---
 
@@ -31,7 +30,6 @@ HyRISE is built on the shoulders of the open-source community. We gratefully ack
 Our methodology and design were informed by prior research and community best practices:
 
 - Liu, T.F., Shafer, R.W. (2006). *Web Resources for HIV type 1 Genotypic-Resistance Test Interpretation*. **Clinical Infectious Diseases**, 42(11), 1608-1618. [https://doi.org/10.1086/503914](https://doi.org/10.1086/503914)
-- Wensing, A.M., et al. (2019). *2019 update of the drug resistance mutations in HIV-1*. **Topics in Antiviral Medicine**, 27(3), 111-121.
 
 ---
 

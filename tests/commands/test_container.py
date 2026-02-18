@@ -79,6 +79,39 @@ def test_extract_def_failure(monkeypatch):
     assert result == 1
 
 
+def test_extract_dockerfile_success(monkeypatch):
+    monkeypatch.setattr(
+        container_module, "get_dockerfile_path", lambda: "/path/to/Dockerfile.runtime"
+    )
+    monkeypatch.setattr(
+        container_module,
+        "copy_file_to_directory",
+        lambda dest, src, output_name=None: "/dest/Dockerfile",
+    )
+    args = SimpleNamespace(
+        extract_dockerfile="some/dir",
+        extract_def=None,
+        def_file=None,
+        verbose=False,
+        interactive=False,
+    )
+    result = container_module.run_container_command(args)
+    assert result == 0
+
+
+def test_extract_dockerfile_missing_resource(monkeypatch):
+    monkeypatch.setattr(container_module, "get_dockerfile_path", lambda: None)
+    args = SimpleNamespace(
+        extract_dockerfile="some/dir",
+        extract_def=None,
+        def_file=None,
+        verbose=False,
+        interactive=False,
+    )
+    result = container_module.run_container_command(args)
+    assert result == 1
+
+
 def test_build_elsewhere_success_and_verify(monkeypatch):
     # Simulate successful build elsewhere and verification
     monkeypatch.setattr(

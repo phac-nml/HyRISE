@@ -93,9 +93,7 @@ def test_run_multiqc_success(monkeypatch, tmp_path):
         returncode = 0
         stdout = "ok"
 
-    monkeypatch.setattr(
-        subprocess, "run", lambda cmd, shell, check, capture_output, text: DummyResult()
-    )
+    monkeypatch.setattr(subprocess, "run", lambda *args, **kwargs: DummyResult())
     success, out = gen.run_multiqc()
     assert success is True
     assert out == "ok"
@@ -108,7 +106,7 @@ def test_run_multiqc_failure(monkeypatch, tmp_path):
     gen.report_dir = str(tmp_path / "multiqc_report")
 
     # Stub subprocess.run to raise
-    def fake_run(cmd, shell, check, capture_output, text):
+    def fake_run(cmd, *args, **kwargs):
         raise subprocess.CalledProcessError(1, cmd, stderr="err")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
