@@ -3,7 +3,7 @@ stages:
   - "📦 Build"
   - "🧪 Smoke"
   - "🐳 Docker"
-  - "🚀 Deploy To Production"
+  - "🚀 Deploy"
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -14,7 +14,7 @@ cache:
   paths:
     - .cache/pip/
 
-lint_and_unit:
+"🔍 Lint And Unit":
   stage: "🔍 Lint"
   image: python:3.11
   script:
@@ -31,7 +31,7 @@ lint_and_unit:
         coverage_format: cobertura
         path: coverage.xml
 
-build_package:
+"📦 Build Package":
   stage: "📦 Build"
   image: python:3.11
   script:
@@ -57,11 +57,11 @@ build_package:
       - dist/
     expire_in: 1 week
 
-installed_wheel_smoke:
+"🧪 Installed Wheel Smoke":
   stage: "🧪 Smoke"
   image: python:3.11
   needs:
-    - job: build_package
+    - job: "📦 Build Package"
       artifacts: true
   script:
     - python -m venv .venv-smoke
@@ -90,7 +90,7 @@ installed_wheel_smoke:
       - smoke-out/
     expire_in: 1 week
 
-docker_build_and_run_smoke:
+"🐳 Docker Build And Run Smoke":
   stage: "🐳 Docker"
   image: docker:20.10.12
   services:
@@ -124,23 +124,42 @@ docker_build_and_run_smoke:
       - .docker-smoke-out/
     expire_in: 1 week
 
-publish_pypi:
-  stage: "🚀 Deploy To Production"
+"🚀 Deploy PyPI Dev":
+  stage: "🚀 Deploy"
   image: python:3.11
   needs:
-    - job: build_package
+    - job: "📦 Build Package"
       artifacts: true
   script:
-    - python -m pip install --upgrade pip twine
-    - test -n "$TWINE_USERNAME" && test -n "$TWINE_PASSWORD"
-    - python -m twine upload dist/*
+    - pip install twine
+    - echo "Deploying development version to PyPI"
+    - test -n "$PYPI_USERNAME" && test -n "$PYPI_API_TOKEN"
+    - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+.*$/'
+    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH'
       when: manual
     - when: never
 
-publish_container:
-  stage: "🚀 Deploy To Production"
+"🚀 Deploy PyPI Production":
+  stage: "🚀 Deploy"
+  image: python:3.11
+  needs:
+    - job: "📦 Build Package"
+      artifacts: true
+  script:
+    - pip install twine
+    - echo "Deploying production version to PyPI"
+    - test -n "$PYPI_USERNAME" && test -n "$PYPI_API_TOKEN"
+    - twine upload dist/* -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} --skip-existing
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+.*$/'
+      when: manual
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: manual
+    - when: never
+
+"🐳 Deploy Container":
+  stage: "🚀 Deploy"
   image: docker:20.10.12
   services:
     - name: docker:20.10.12-dind
