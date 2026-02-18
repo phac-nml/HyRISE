@@ -23,7 +23,7 @@ HyRISE (HIV Resistance Interpretation & Scoring Engine) is a command-line tool f
 
 It supports two primary workflows:
 
-1. `process`: convert Sierra JSON results into MultiQC custom content (`*_mqc.json`, `*_mqc.html`), with optional report generation.
+1. `process`: convert Sierra JSON results into MultiQC custom content (`*_mqc.json`, `*_mqc.html`), with built-in report generation support.
 2. `sierra`: run SierraLocal on FASTA input and optionally chain directly into `process`.
 
 The CLI is deterministic by default (no implicit interactive mode), with optional guided mode via `--interactive`.
@@ -34,12 +34,6 @@ The CLI is deterministic by default (no implicit interactive mode), with optiona
 
 ```bash
 pip install hyrise
-```
-
-Optional report dependency:
-
-```bash
-pip install "hyrise[report]"
 ```
 
 ### From Source
@@ -82,6 +76,39 @@ hyrise process \
 ```bash
 hyrise sierra example_data/public/DEMO_IN_NGS.fasta --process --process-dir out
 ```
+
+## Process Report Flags
+
+- `--report` (`-r`): generate report configuration assets.
+- `--run-multiqc`: run MultiQC and generate the final report.
+- `--run-multiqc` automatically enables `--report`.
+
+Example (full report generation):
+
+```bash
+hyrise process -i example_data/public/DEMO_IN_NGS_results.json --out out --run-multiqc
+```
+
+## Process Command Options
+
+`hyrise process` supports the following inputs and flags:
+
+- `-i, --input`: single Sierra JSON input file.
+- positional `inputs`: one or more Sierra JSON input files.
+- `-o, --output-dir, --output_dir, --out`: output directory (required).
+- `-s, --sample_name`: override sample name in outputs/report.
+- `-r, --report`: generate report configuration assets.
+- `--run-multiqc`: run MultiQC and generate final report (`--report` is implied).
+- `--guide`: include interpretation guide content.
+- `--sample-info`: include sample information section.
+- `-e, --email`: contact email for report header.
+- `-l, --logo`: custom logo path (PNG/SVG).
+- `--container`: force container execution.
+- `--no-container`: force native execution.
+- `--container-path`: explicit `.sif` path.
+- `--container-runtime {apptainer,singularity}`: choose runtime explicitly.
+- `--config`: custom HyRISE TOML config path.
+- `-I, --interactive`: guided interactive prompt mode.
 
 ## Command Summary
 
@@ -129,7 +156,7 @@ print(hyrise.__version__)
 
 - `*_mqc.json`
 - `*_mqc.html`
-- optional MultiQC report output when `--run-multiqc` is enabled
+- MultiQC report output when `--run-multiqc` is enabled (`--run-multiqc` implies `--report`)
 
 ## Container Workflows
 
@@ -235,10 +262,10 @@ hyrise resources --update-hivdb
 
 ### Missing `multiqc`
 
-Install optional report dependency:
+`multiqc` is installed with `hyrise` by default. If it is missing, reinstall HyRISE in a clean environment:
 
 ```bash
-pip install "hyrise[report]"
+pip install --upgrade --force-reinstall hyrise
 ```
 
 ### Container runtime not found
@@ -267,7 +294,7 @@ For BibTeX:
   title        = {HyRISE: HIV Resistance Interpretation \& Scoring Engine — A pipeline for HIV drug resistance analysis and visualization},
   year         = {2026},
   publisher    = {Public Health Agency of Canada},
-  version      = {0.2.0},
+  version      = {0.2.1},
   url          = {https://github.com/phac-nml/hyrise},
   organization = {National Microbiology Laboratory, Public Health Agency of Canada},
 }

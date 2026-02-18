@@ -1,7 +1,9 @@
 import subprocess
+from pathlib import Path
 
 import pytest
 
+import hyrise.utils.container_builder as cb
 import hyrise.utils.container_utils as cu
 
 
@@ -111,3 +113,19 @@ def test_ensure_dependencies_scopes_required_tools(tmp_path, monkeypatch):
     assert deps["sierra_local_available"] is True
     assert deps["missing_dependencies"] == ["multiqc"]
     assert deps["use_container"] is True
+
+
+def test_packaged_definition_uses_apptainer_compatible_from_reference():
+    def_path = cb.get_def_file_path()
+    assert def_path, "Expected packaged hyrise.def to be discoverable"
+
+    from_line = ""
+    for line in Path(def_path).read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("From:"):
+            from_line = stripped
+            break
+
+    assert from_line, "Expected a From: line in hyrise.def"
+    assert "@sha256:" in from_line
+    assert ":3.11-slim@sha256:" not in from_line

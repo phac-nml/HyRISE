@@ -170,7 +170,7 @@ class TestHtmlModification:
         """Create a report generator instance with mocked logger."""
         generator = HyRISEReportGenerator(
             output_dir="/tmp/test_output",
-            version="0.2.0",
+            version="0.2.1",
             sample_name="Test Sample",
         )
         # Override the logger with our mock

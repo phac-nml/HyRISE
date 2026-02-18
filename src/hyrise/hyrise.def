@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: python:3.11-slim@sha256:543d6cace00ffc96bc95d332493bb28a4332c6dd614aab5fcbd649ae8a7953d9
+From: python@sha256:543d6cace00ffc96bc95d332493bb28a4332c6dd614aab5fcbd649ae8a7953d9
 
 %labels
     Maintainer "PHAC NML"
@@ -25,7 +25,7 @@ From: python:3.11-slim@sha256:543d6cace00ffc96bc95d332493bb28a4332c6dd614aab5fcb
       - Otherwise, HyRISE is installed from HYRISE_PIP_SPEC (default: 'hyrise').
 
     Optional override (for private indexes or custom specs):
-      apptainer build --build-arg HYRISE_PIP_SPEC='hyrise==0.2.0' hyrise.sif src/hyrise/hyrise.def
+      apptainer build --build-arg HYRISE_PIP_SPEC='hyrise==0.2.1' hyrise.sif src/hyrise/hyrise.def
 
 %setup
     set -eu
@@ -38,7 +38,17 @@ From: python:3.11-slim@sha256:543d6cace00ffc96bc95d332493bb28a4332c6dd614aab5fcb
     fi
 
     DEF_DIR="$(dirname "${BUILDDEF}")"
-    REPO_ROOT="$(cd "${DEF_DIR}/../.." 2>/dev/null && pwd || true)"
+
+    # Try common locations so extracted defs (e.g. ./container_build/hyrise.def)
+    # still detect a local source checkout when building from repository root.
+    REPO_ROOT=""
+    for candidate in "${DEF_DIR}" "${DEF_DIR}/.." "${DEF_DIR}/../.." "$(pwd)"; do
+        RESOLVED="$(cd "${candidate}" 2>/dev/null && pwd || true)"
+        if [ -n "${RESOLVED}" ] && [ -f "${RESOLVED}/pyproject.toml" ] && [ -d "${RESOLVED}/src/hyrise" ]; then
+            REPO_ROOT="${RESOLVED}"
+            break
+        fi
+    done
 
     if [ -n "${REPO_ROOT}" ] && [ -f "${REPO_ROOT}/pyproject.toml" ] && [ -d "${REPO_ROOT}/src/hyrise" ]; then
         mkdir -p "${ROOTFS}/opt/hyrise-src"

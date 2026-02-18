@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.1 - 2026-02-18
+
+### Changed
+
+- Updated package version to `0.2.1`.
+- Moved `multiqc>=1.33` to core runtime dependencies so `pip install hyrise` includes report-generation support by default.
+- Updated Apptainer definition base image reference in `src/hyrise/hyrise.def` from `tag@digest` to digest-only (`python@sha256:...`) to avoid build failures with `invalid image source` on `apptainer build`.
+- Updated `hyrise.def` `%setup` source checkout detection so extracted definitions (for example `container_build/hyrise.def`) can still install local HyRISE source when built from repository root.
+
+### Added
+
+- Added regression coverage in `tests/utils/test_container_utils.py` to validate packaged `hyrise.def` keeps an Apptainer-compatible `From:` reference format.
+
 ## 0.2.0 - 2026-02-18
 
 ### Added

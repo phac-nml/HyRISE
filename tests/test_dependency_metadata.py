@@ -66,13 +66,13 @@ def test_questionary_is_core_dependency():
     assert "questionary" in dependency_names
 
 
-def test_multiqc_report_extra_is_updated():
+def test_multiqc_is_core_dependency():
     project = _read_project_data()
-    report_requirements = project["optional-dependencies"]["report"]
-    assert any(
-        requirement.lower().startswith("multiqc>=1.33")
-        for requirement in report_requirements
-    )
+    dependency_names = {
+        _normalize_requirement_name(requirement)
+        for requirement in project["dependencies"]
+    }
+    assert "multiqc" in dependency_names
 
 
 def test_third_party_imports_have_declared_dependencies():

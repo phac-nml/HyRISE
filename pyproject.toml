@@ -26,6 +26,7 @@ classifiers = [
 ]
 dependencies = [
   "beautifulsoup4>=4.12",
+  "multiqc>=1.33",
   "PyYAML>=6.0",
   "questionary>=2.0",
   "requests>=2.31",
@@ -35,7 +36,6 @@ dependencies = [
 
 [project.optional-dependencies]
 interactive = ["questionary>=2.0"]
-report = ["multiqc>=1.33"]
 dev = [
   "build>=1.2",
   "coverage[toml]>=7.4",
