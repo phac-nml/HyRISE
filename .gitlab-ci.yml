@@ -1,9 +1,9 @@
 stages:
-  - lint
-  - build
-  - smoke
-  - docker
-  - publish
+  - "🔍 Lint"
+  - "📦 Build"
+  - "🧪 Smoke"
+  - "🐳 Docker"
+  - "🚀 Deploy To Production"
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -15,7 +15,7 @@ cache:
     - .cache/pip/
 
 lint_and_unit:
-  stage: lint
+  stage: "🔍 Lint"
   image: python:3.11
   script:
     - python -m pip install --upgrade pip
@@ -32,7 +32,7 @@ lint_and_unit:
         path: coverage.xml
 
 build_package:
-  stage: build
+  stage: "📦 Build"
   image: python:3.11
   script:
     - python -m pip install --upgrade pip build twine
@@ -58,7 +58,7 @@ build_package:
     expire_in: 1 week
 
 installed_wheel_smoke:
-  stage: smoke
+  stage: "🧪 Smoke"
   image: python:3.11
   needs:
     - job: build_package
@@ -91,7 +91,7 @@ installed_wheel_smoke:
     expire_in: 1 week
 
 docker_build_and_run_smoke:
-  stage: docker
+  stage: "🐳 Docker"
   image: docker:20.10.12
   services:
     - name: docker:20.10.12-dind
@@ -125,7 +125,7 @@ docker_build_and_run_smoke:
     expire_in: 1 week
 
 publish_pypi:
-  stage: publish
+  stage: "🚀 Deploy To Production"
   image: python:3.11
   needs:
     - job: build_package
@@ -140,7 +140,7 @@ publish_pypi:
     - when: never
 
 publish_container:
-  stage: publish
+  stage: "🚀 Deploy To Production"
   image: docker:20.10.12
   services:
     - name: docker:20.10.12-dind
