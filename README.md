@@ -1,13 +1,7 @@
 # HyRISE - HIV Resistance Interpretation & Scoring Engine
 
 <p align="center">
-  <picture>
-    <!-- Try local repo path first -->
-    <source srcset="src/hyrise/core/assets/hyrise_logo.svg" type="image/svg+xml">
-    <!-- Fallback to raw GitHub URL -->
-    <img src="https://raw.githubusercontent.com/phac-nml/HyRISE/refs/heads/master/src/hyrise/core/assets/hyrise_logo.svg"
-         alt="HyRISE Logo" width="300" />
-  </picture>
+  <img src="https://raw.githubusercontent.com/phac-nml/HyRISE/refs/heads/master/src/hyrise/core/assets/hyrise_logo.svg" alt="HyRISE Logo" width="300" />
 </p>
 
 
@@ -16,11 +10,36 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge&logo=gitlab&logoColor=white&logoWidth=40&color=green" alt="Build Status">
-  <img src="https://img.shields.io/badge/coverage-58.6%25-orange?style=for-the-badge&logo=codecov&logoColor=white&logoWidth=40&color=orange" alt="Coverage">
-  <img src="https://img.shields.io/badge/python-3.9+-blue?style=for-the-badge&logo=python&logoColor=white&logoWidth=40&color=blue" alt="Python Versions">
-  <img src="https://img.shields.io/pypi/dm/hyrise?style=for-the-badge&logo=pypi&logoColor=white&logoWidth=30&color=orange" alt="PyPI Downloads">
-  <img src="https://img.shields.io/badge/license-GNU%20GPL%20v3-blue?style=for-the-badge&logo=gnu&logoColor=white&logoWidth=40&color=blue" alt="License">
+  <a href="https://github.com/phac-nml/HyRISE/actions" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge&logo=githubactions&logoColor=white&logoWidth=40&color=green" alt="Build Status">
+  </a>
+  <a href="https://pypi.org/project/hyrise/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/pypi/v/hyrise?style=for-the-badge&logo=pypi&logoColor=white&logoWidth=30&color=blue" alt="PyPI Version">
+  </a>
+  <a href="https://github.com/phac-nml/HyRISE" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/coverage-58.6%25-orange?style=for-the-badge&logo=codecov&logoColor=white&logoWidth=40&color=orange" alt="Coverage">
+  </a>
+  <a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/pypi/pyversions/hyrise?style=for-the-badge&logo=python&logoColor=white&logoWidth=40&color=blue" alt="Python Versions">
+  </a>
+  <a href="https://github.com/phac-nml/HyRISE" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/docker-supported-2496ED?style=for-the-badge&logo=docker&logoColor=white&logoWidth=40" alt="Docker Support">
+  </a>
+  <a href="https://github.com/phac-nml/HyRISE" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/apptainer-supported-1F6FEB?style=for-the-badge&logo=apptainer&logoColor=white&logoWidth=40" alt="Apptainer Support">
+  </a>
+  <a href="https://pypi.org/project/hyrise/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/pypi/dm/hyrise?style=for-the-badge&logo=pypi&logoColor=white&logoWidth=30&color=orange" alt="PyPI Downloads">
+  </a>
+  <a href="https://pypi.org/project/hyrise/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/pypi/l/hyrise?style=for-the-badge&logo=gnu&logoColor=white&logoWidth=40&color=blue" alt="License">
+  </a>
+</p>
+
+## Report Preview
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/phac-nml/HyRISE/refs/heads/master/example_data/public/report_example/hyrise_resistance_report.gif" alt="HyRISE Report Preview" height="auto" width="1000"/>
 </p>
 
 ## Overview
