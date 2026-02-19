@@ -85,5 +85,4 @@ Makefile
 coverage.sh
 code_quality.sh
 .github/
-.gitlab-ci.yml
 scripts/live_smoke.sh

@@ -377,6 +377,8 @@ def generate_multiqc_report(
         # Store report directory for results
         report_dir = os.path.join(output_dir, "multiqc_report")
         results["report_dir"] = report_dir
+        if run_multiqc:
+            reset_report_dir(report_dir)
 
         if run_multiqc:
             if deps["use_container"] and deps["container_path"]:
@@ -403,6 +405,13 @@ def generate_multiqc_report(
     except Exception as e:
         print(f"Error generating MultiQC report: {str(e)}")
         results["error"] = f"Error generating report: {str(e)}"
+
+
+def reset_report_dir(report_dir: str) -> None:
+    """Remove existing report output and recreate a clean directory."""
+    if os.path.isdir(report_dir):
+        shutil.rmtree(report_dir)
+    os.makedirs(report_dir, exist_ok=True)
 
 
 def merge_metadata(all_metadata: List[Dict[str, Any]]) -> Dict[str, Any]:

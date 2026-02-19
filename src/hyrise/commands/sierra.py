@@ -64,6 +64,40 @@ except ImportError:
 logger = logging.getLogger("hyrise-sierra")
 
 
+def _default_sierra_output_name(fasta_files) -> str:
+    """Return default SierraLocal JSON filename based on first FASTA."""
+    base_name = os.path.splitext(os.path.basename(fasta_files[0]))[0]
+    return f"{base_name}_NGS_results.json"
+
+
+def _resolve_output_json_path(output, fasta_files) -> str:
+    """
+    Resolve user-provided output into a concrete JSON filepath.
+
+    Rules:
+    - empty output: default filename in current directory
+    - existing directory or trailing slash: write default filename inside directory
+    - explicit file path without suffix: append `.json`
+    """
+    default_name = _default_sierra_output_name(fasta_files)
+    if not output:
+        return os.path.abspath(default_name)
+
+    output_str = str(output)
+    output_path = Path(output_str).expanduser()
+
+    if output_path.exists() and output_path.is_dir():
+        return str((output_path / default_name).resolve())
+
+    if output_str.endswith(os.sep) or (os.altsep and output_str.endswith(os.altsep)):
+        return str((output_path / default_name).resolve())
+
+    if output_path.suffix == "":
+        output_path = output_path.with_suffix(".json")
+
+    return str(output_path.resolve())
+
+
 def _bundled_hivdb_xml_path() -> Path:
     """Return the latest bundled HIVdb XML path shipped with HyRISE."""
     package_root = Path(__file__).resolve().parent.parent
@@ -127,7 +161,10 @@ def add_sierra_subparser(subparsers):
     sierra_parser.add_argument(
         "-o",
         "--output",
-        help="Output JSON filename (default: input filename with .json extension)",
+        help=(
+            "Output JSON path. Accepts a filename or directory "
+            "(default: <input>_NGS_results.json)."
+        ),
     )
 
     # bundled default XML in your package:
@@ -283,13 +320,11 @@ def run_sierra_local(
             logger.warning(f"Error updating resources: {str(e)}")
             logger.warning("Continuing with existing resources")
 
-    # Determine output path
-    if not output:
-        # Use first FASTA file name as base
-        base_name = os.path.splitext(os.path.basename(fasta_files[0]))[0]
-        output = f"{base_name}_NGS_results.json"
-
-    output_abs = os.path.abspath(output)
+    # Determine normalized output path
+    output_abs = _resolve_output_json_path(output, fasta_files_abs)
+    output_parent = os.path.dirname(output_abs)
+    if output_parent:
+        os.makedirs(output_parent, exist_ok=True)
 
     # Check dependencies and container
     deps = ensure_dependencies(
@@ -795,10 +830,15 @@ def run_sierra_command(args):
     resolved_xml = _prefer_latest_downloaded_hivdb_xml(
         args.xml, resource_dir=getattr(args, "resource_dir", None)
     )
+    resolved_output = args.output
+    if args.process and not args.output and args.process_dir:
+        # Keep Sierra JSON next to the processing output when process-dir is explicit.
+        default_name = _default_sierra_output_name(args.fasta)
+        resolved_output = str(Path(args.process_dir) / default_name)
 
     sierra_results = run_sierra_local(
         args.fasta,
-        output=args.output,
+        output=resolved_output,
         xml=resolved_xml,
         json_file=args.json,
         cleanup=args.cleanup,
@@ -896,7 +936,10 @@ def main():
     parser.add_argument(
         "-o",
         "--output",
-        help="Output JSON filename (default: input filename with .json extension)",
+        help=(
+            "Output JSON path. Accepts a filename or directory "
+            "(default: <input>_NGS_results.json)."
+        ),
     )
     # bundled default XML in your package:
     xml_default = _bundled_hivdb_xml_path()

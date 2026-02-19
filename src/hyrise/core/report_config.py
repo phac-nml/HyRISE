@@ -290,9 +290,9 @@ class HyRISEReportGenerator:
             # Report title and subtitle
             "title": "HyRISE: Resistance Interpretation & Scoring Engine",
             "subtitle": "HIV Drug Resistance Sequencing Analysis Report",
-            "report_comment": "A comprehensive analysis of HIV drug resistance mutations based on sequencing data. "
-            "This report leverages Sierra-Local with HyRISE visualization and provides detailed insights "
-            "into drug resistance patterns, mutation profiles, and treatment implications.",
+            "report_comment": "Interpretation of HIV drug resistance mutations derived from sequencing data. "
+            "This report combines Sierra-Local outputs with HyRISE visualizations to summarize resistance patterns, "
+            "mutation profiles, and potential treatment impact.",
             # Output file configuration
             "output_fn_name": "hyrise_resistance_report.html",  # Custom filename for better identification
             "data_dir_name": "hyrise_data",  # Custom data directory name
@@ -515,40 +515,40 @@ class HyRISEReportGenerator:
             # Section comments
             "section_comments": {
                 # ===== PROTEASE (PR) SECTIONS =====
-                "drug_class_overview_pr_table": "Overview of **protease inhibitor (PI) drug class resistance**, highlighting percentages of affected drugs and resistance severity distribution. This section quantifies resistance across the PI class with priority drug indicators.",
-                "drug_resistance_pr_table": "Detailed analysis of **resistance to specific protease inhibitors** with quantitative scoring, clinical interpretations, and weighted scores based on drug importance. Essential for optimizing PI-based regimen selection.",
-                "mutation_clinical_pr_table": "Clinical implications of **protease mutations** organized by importance (Major, Accessory, Other), showing specific impacts on drug efficacy with evidence-based commentary extracted from Stanford HIV database.",
-                "mutation_summary_pr_table": "Statistical breakdown of **mutation types in protease** with counts, percentages, and representative examples. Includes SDRM and APOBEC-mediated mutation categorization with clinical context.",
-                "mutation_details_pr_table": "Comprehensive catalog of all detected **protease mutations** with position information, mutation characteristics, and special classifications (SDRM, APOBEC, unusual variants) in a filterable format.",
-                "mutation_contribution_pr_table": "Quantitative analysis showing how individual **protease mutations contribute** to resistance scores for each PI, identifying key resistance drivers and their relative impact percentages.",
-                "mutation_position_map_pr": "Interactive visualization mapping **mutations along the protease gene sequence** with color-coding by type, special border indicators for SDRMs, and detailed tooltips for each mutation position.",
+                "drug_class_overview_pr_table": "Summary of **protease inhibitor (PI) class resistance**, including the proportion of affected drugs and resistance-level distribution across the class.",
+                "drug_resistance_pr_table": "Drug-level **protease inhibitor resistance** with quantitative scores, weighted clinical impact, and interpretation to support PI regimen selection.",
+                "mutation_clinical_pr_table": "Clinical interpretation of **protease mutations** grouped by importance (Major, Accessory, Other), with evidence-based notes from the Stanford HIV Drug Resistance Database.",
+                "mutation_summary_pr_table": "Distribution of **protease mutation types** with counts, percentages, and representative examples, including SDRM and APOBEC-associated categories.",
+                "mutation_details_pr_table": "Filterable table of detected **protease mutations** with positions, attributes, and special labels (SDRM, APOBEC, unusual variants).",
+                "mutation_contribution_pr_table": "Per-mutation contribution of **protease variants** to resistance scores for each PI, highlighting dominant resistance drivers.",
+                "mutation_position_map_pr": "Interactive map of **protease mutation positions** across the gene, with type-based coloring, SDRM highlighting, and per-position tooltips.",
                 # ===== REVERSE TRANSCRIPTASE (RT) SECTIONS =====
-                "drug_class_overview_rt_table": "Overview of **RT inhibitor resistance patterns** across both NRTI and NNRTI drug classes, with resistance metrics for backbone therapy evaluation and priority drug indicators.",
-                "drug_resistance_rt_table": "Comprehensive analysis of **RT inhibitor susceptibility** with detailed scoring for NRTIs and NNRTIs, highlighting both standard and weighted resistance scores based on clinical importance.",
-                "mutation_clinical_rt_table": "Clinical significance of **RT mutations** showing their impact on drug efficacy and viral fitness, organized by mutation category with linked drug-specific effects and Stanford database commentary.",
-                "mutation_summary_rt_table": "Statistical summary of **RT mutation types** with distribution of Major, Accessory, and polymorphic mutations, including special categories for TAMs, NNRTI-specific, and APOBEC-mediated mutations.",
-                "mutation_details_rt_table": "Detailed inventory of all **reverse transcriptase mutations** with position information, mutation properties, and special classifications in a searchable, filterable format designed for research use.",
-                "mutation_contribution_rt_table": "Mutation-specific analysis showing **how RT mutations contribute** to resistance against individual NRTI and NNRTI drugs, quantifying percentage contributions to total resistance scores.",
-                "mutation_position_map_rt": "Interactive genomic visualization of **mutation locations across the RT gene**, revealing mutation hotspots and clinically significant regions with detailed position-specific information.",
+                "drug_class_overview_rt_table": "Summary of **RT inhibitor resistance** across NRTI and NNRTI classes, with class-level metrics and priority drug indicators.",
+                "drug_resistance_rt_table": "Drug-level **RT susceptibility profile** with standard and weighted scores for NRTIs and NNRTIs, aligned to clinical importance.",
+                "mutation_clinical_rt_table": "Clinical interpretation of **RT mutations**, including effects on drug activity and viral fitness, with linked drug-specific context.",
+                "mutation_summary_rt_table": "Distribution of **RT mutation types** (Major, Accessory, polymorphic), including TAMs, NNRTI-associated, and APOBEC-associated patterns.",
+                "mutation_details_rt_table": "Searchable inventory of **reverse transcriptase mutations** with genomic position, mutation properties, and special classifications.",
+                "mutation_contribution_rt_table": "Per-mutation contribution of **RT variants** to resistance scores for individual NRTI and NNRTI agents.",
+                "mutation_position_map_rt": "Interactive map of **RT mutation positions** to highlight recurrent sites and clinically relevant regions.",
                 # ===== INTEGRASE (IN) SECTIONS =====
-                "drug_class_overview_in_table": "Overview of **integrase inhibitor resistance patterns** with metrics assessing impact on both first-generation (RAL, EVG) and second-generation (DTG, BIC, CAB) integrase inhibitors.",
-                "drug_resistance_in_table": "Analysis of **INSTI drug resistance** with detailed scoring and interpretation, providing essential metrics for evaluating efficacy of individual integrase inhibitors with clinical priority weighting.",
-                "mutation_clinical_in_table": "Clinical implications of **integrase mutations** demonstrating effects on drug binding and enzyme function, with drug-specific impact analysis and pathway resistance patterns.",
-                "mutation_summary_in_table": "Statistical breakdown of **integrase mutation types** by clinical importance, showing distribution of major pathway mutations (Y143, Q148, N155) and accessory resistance mutations.",
-                "mutation_details_in_table": "Comprehensive catalog of all **integrase mutations** with position information, resistance characteristics, and special classifications organized for efficient clinical interpretation.",
-                "mutation_contribution_in_table": "Quantitative assessment of **how specific integrase mutations** contribute to INSTI resistance, highlighting primary and accessory resistance pathways with their relative contributions.",
-                "mutation_position_map_in": "Interactive mapping of **mutations along the integrase gene sequence**, visualizing the distribution of resistance-associated positions with functional domain context and tooltips.",
+                "drug_class_overview_in_table": "Summary of **integrase inhibitor resistance** across first-generation (RAL, EVG) and second-generation (DTG, BIC, CAB) INSTIs.",
+                "drug_resistance_in_table": "Drug-level **INSTI resistance profile** with quantitative scoring, interpretation, and clinically weighted comparison.",
+                "mutation_clinical_in_table": "Clinical interpretation of **integrase mutations**, covering effects on target binding, enzyme function, and resistance pathways.",
+                "mutation_summary_in_table": "Distribution of **integrase mutation types** by clinical relevance, including major pathway and accessory mutations.",
+                "mutation_details_in_table": "Filterable catalog of **integrase mutations** with positions, resistance attributes, and special labels.",
+                "mutation_contribution_in_table": "Per-mutation contribution of **integrase variants** to INSTI resistance scores, including primary and accessory pathways.",
+                "mutation_position_map_in": "Interactive map of **integrase mutation positions** with functional-domain context and position-level details.",
                 # ===== CAPSID (CA) SECTIONS =====
-                "drug_class_overview_ca_table": "Overview of **capsid inhibitor resistance patterns**, examining susceptibility to this emerging drug class targeting HIV capsid assembly, with metrics focused on lenacapavir (LEN) and future capsid inhibitors.",
-                "drug_resistance_ca_table": "Analysis of **resistance to capsid-targeting drugs** with quantitative scoring and clinical interpretation, important for evaluating these newer long-acting treatment options.",
-                "mutation_clinical_ca_table": "Clinical significance of **capsid mutations** showing impact on drug binding sites and capsid protein function, with detailed commentary on structural and functional consequences.",
-                "mutation_summary_ca_table": "Statistical overview of **capsid mutation types** categorized by impact on drug resistance and viral fitness, showing distribution across capsid functional domains.",
-                "mutation_details_ca_table": "Comprehensive inventory of all detected **capsid mutations** with position information, structural implications, and relationship to known resistance pathways in a research-grade format.",
-                "mutation_contribution_ca_table": "Quantitative analysis of **how specific capsid mutations** contribute to resistance against individual capsid inhibitor drugs, with percentage contributions to total resistance scores.",
-                "mutation_position_map_ca": "Interactive visualization of **mutation positions along the capsid gene sequence**, highlighting key structural and functional domains with protein structure context where available.",
+                "drug_class_overview_ca_table": "Summary of **capsid inhibitor resistance**, focused on lenacapavir (LEN) and related emerging capsid-targeting agents.",
+                "drug_resistance_ca_table": "Drug-level **capsid inhibitor resistance** with quantitative scoring and interpretation for long-acting treatment assessment.",
+                "mutation_clinical_ca_table": "Clinical interpretation of **capsid mutations**, including effects on binding sites, protein function, and resistance phenotype.",
+                "mutation_summary_ca_table": "Distribution of **capsid mutation types** by resistance impact and viral-fitness relevance across functional domains.",
+                "mutation_details_ca_table": "Searchable table of detected **capsid mutations** with positions, structural context, and known resistance associations.",
+                "mutation_contribution_ca_table": "Per-mutation contribution of **capsid variants** to resistance scores for individual capsid inhibitors.",
+                "mutation_position_map_ca": "Interactive map of **capsid mutation positions** with structural-domain context where available.",
                 # ===== GENERAL SECTIONS =====
-                "version_information": "Provides **analysis metadata** including Stanford HIV database version, algorithm parameters, sequence quality metrics, and processing details for reproducibility and reference.",
-                "resistance_interpretation_section": "Comprehensive guide to **interpreting drug resistance scores** and levels throughout this report, explaining clinical significance of resistance categories with evidence-based interpretation guidelines.",
+                "version_information": "Reference **analysis metadata** including Stanford HIVdb version, algorithm settings, sequence metrics, and processing details for reproducibility.",
+                "resistance_interpretation_section": "Reference guide for **interpreting drug resistance levels and scores** used throughout this report, including the clinical meaning of each category.",
             },
             # Disable version detection
             "disable_version_detection": False,
@@ -1059,7 +1059,7 @@ class HyRISEReportGenerator:
             try:
                 meta_tags_modified = False
                 meta_updates = {
-                    "description": "HyRISE: HIV Resistance Interpretation & Scoring Engine report providing comprehensive analysis of HIV drug resistance mutations",
+                    "description": "HyRISE: HIV Resistance Interpretation & Scoring Engine report summarizing HIV drug resistance mutations and clinical interpretation",
                     "author": "National Microbiology Laboratory, Public Health Agency of Canada",
                     "keywords": "HIV, drug resistance, mutation analysis, antiretroviral therapy",
                 }
@@ -1161,6 +1161,27 @@ class HyRISEReportGenerator:
             if logo_data_uri:
                 try:
                     logo_replaced = False
+
+                    # Strategy 0: Replace inline SVG-based MultiQC logos.
+                    for svg_logo in soup.select(
+                        "svg.multiqc-logo, .side-nav-logo svg, .multiqc-logo-wrapper svg"
+                    ):
+                        replacement_img = soup.new_tag("img")
+                        replacement_img["src"] = logo_data_uri
+                        replacement_img["alt"] = "HyRISE"
+                        replacement_img["class"] = ["custom_logo", "custom_logo_light"]
+                        # Match sizing to the container type:
+                        # - side nav logos should remain compact
+                        # - page-title/logo-wrapper should render at full report-logo size
+                        if svg_logo.find_parent(class_="side-nav-logo"):
+                            replacement_img["style"] = "max-height:36px; width:auto;"
+                        elif svg_logo.find_parent(class_="multiqc-logo-wrapper"):
+                            replacement_img["style"] = (
+                                "width:320px; max-width:100%; height:auto;"
+                            )
+                        svg_logo.replace_with(replacement_img)
+                        logo_replaced = True
+                        self.logger.info("Replaced inline SVG logo with custom logo image")
 
                     # Strategy 1: Use structured selectors with hierarchy
                     logo_hierarchies = [
@@ -1490,7 +1511,7 @@ class HyRISEReportGenerator:
                     about_section.append(p1)
 
                     p2 = soup.new_tag("p")
-                    p2.string = "HyRISE provides comprehensive analysis of HIV drug resistance mutations, offering detailed visualizations and clinical interpretations to support treatment decisions."
+                    p2.string = "HyRISE analyzes HIV drug resistance mutations and presents interactive visualizations with clinically oriented interpretation to support treatment planning."
                     about_section.append(p2)
 
                     # Add repository links
@@ -1538,7 +1559,7 @@ class HyRISEReportGenerator:
                             section.append(p1)
 
                             p2 = soup.new_tag("p")
-                            p2.string = "HyRISE provides comprehensive analysis of HIV drug resistance mutations, offering detailed visualizations and clinical interpretations to support treatment decisions."
+                            p2.string = "HyRISE analyzes HIV drug resistance mutations and presents interactive visualizations with clinically oriented interpretation to support treatment planning."
                             section.append(p2)
 
                             # Attribution to MultiQC
@@ -1578,7 +1599,7 @@ class HyRISEReportGenerator:
                         elem.append(title)
 
                         p1 = soup.new_tag("p")
-                        p1.string = "This report provides a comprehensive analysis of HIV drug resistance mutations detected in your sample, with detailed visualizations and clinical interpretations to support treatment decisions."
+                        p1.string = "This report summarizes HIV drug resistance mutations detected in your sample, with interactive visualizations and clinical context for interpretation."
                         elem.append(p1)
 
                         p2 = soup.new_tag("p")
@@ -1622,7 +1643,7 @@ class HyRISEReportGenerator:
                             intro_section.append(title)
 
                             p1 = soup.new_tag("p")
-                            p1.string = "This report provides a comprehensive analysis of HIV drug resistance mutations detected in your sample, with detailed visualizations and clinical interpretations to support treatment decisions."
+                            p1.string = "This report summarizes HIV drug resistance mutations detected in your sample, with interactive visualizations and clinical context for interpretation."
                             intro_section.append(p1)
 
                             p2 = soup.new_tag("p")
@@ -1786,6 +1807,30 @@ class HyRISEReportGenerator:
                 modifications["links"] = links_updated
             except Exception as e:
                 self.logger.error(f"Error updating links: {str(e)}")
+
+            # 13. MAKE ONLY LOGO CLICKABLE (NOT ENTIRE TITLE BAR)
+            try:
+                for logo_wrapper in soup.select(".multiqc-logo-wrapper"):
+                    href = "https://github.com/phac-nml/HyRISE"
+                    parent_anchor = logo_wrapper.parent
+                    if (
+                        parent_anchor
+                        and parent_anchor.name == "a"
+                        and parent_anchor.get("href") == href
+                    ):
+                        # Unwrap anchor so container itself is no longer fully clickable.
+                        parent_anchor.unwrap()
+
+                    # Wrap only the logo element.
+                    logo_elem = logo_wrapper.select_one(
+                        "img.custom_logo, img, svg.multiqc-logo, svg"
+                    )
+                    if logo_elem and logo_elem.parent.name != "a":
+                        logo_link = soup.new_tag("a", href=href, target="_blank")
+                        logo_link["rel"] = "noopener noreferrer"
+                        logo_elem.wrap(logo_link)
+            except Exception as e:
+                self.logger.error(f"Error scoping logo click target: {str(e)}")
 
             # Write the updated HTML back to the file
             try:

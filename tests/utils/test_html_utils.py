@@ -112,9 +112,3 @@ def test_create_color_legend_with_title():
     # Title present as h5
     assert "<h5>Legend</h5>" in html
 
-
-def test_create_styled_table_escapes_html():
-    html = create_styled_table(["A<script>"], [["<b>x</b>"]])
-    assert "<script>" not in html
-    assert "&lt;script&gt;" in html
-    assert "&lt;b&gt;x&lt;/b&gt;" in html

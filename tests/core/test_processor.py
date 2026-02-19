@@ -310,3 +310,54 @@ def test_generate_report_config_only(tmp_path, monkeypatch):
     assert results["report_dir"] == os.path.join(str(output_dir), "multiqc_report")
     # multiqc_command stays None because multiqc_available is False
     assert results["multiqc_command"] is None
+
+
+def test_generate_multiqc_report_resets_existing_report_dir(tmp_path, monkeypatch):
+    output_dir = tmp_path / "out"
+    report_dir = output_dir / "multiqc_report"
+    report_dir.mkdir(parents=True)
+    stale_file = report_dir / "hyrise_resistance_report_1.html"
+    stale_file.write_text("stale")
+
+    class FakeGen:
+        def __init__(
+            self, output_dir, version, sample_name, metadata_info, contact_email
+        ):
+            self.output_dir = output_dir
+            self.report_dir = os.path.join(output_dir, "multiqc_report")
+            self.config_path = os.path.join(output_dir, "multiqc_config.yml")
+
+        def generate_report(self, **kwargs):
+            # Existing stale files should be removed before this point.
+            assert not os.path.exists(stale_file)
+            os.makedirs(self.report_dir, exist_ok=True)
+            final_report = os.path.join(self.report_dir, "hyrise_resistance_report.html")
+            with open(final_report, "w") as f:
+                f.write("<html></html>")
+            return {"report_path": final_report, "errors": []}
+
+    monkeypatch.setattr(processor_module, "HyRISEReportGenerator", FakeGen)
+
+    deps = {"use_container": False, "container_path": None, "multiqc_available": True}
+    results = {
+        "files_generated": [],
+        "report_dir": None,
+        "config_file": None,
+        "multiqc_command": None,
+        "error": None,
+    }
+
+    processor_module.generate_multiqc_report(
+        json_file=str(tmp_path / "input.json"),
+        output_dir=str(output_dir),
+        sample_name="S1",
+        all_metadata=[{}],
+        contact_email=None,
+        logo_path=None,
+        run_multiqc=True,
+        deps=deps,
+        results=results,
+    )
+
+    assert not stale_file.exists()
+    assert os.path.exists(os.path.join(str(report_dir), "hyrise_resistance_report.html"))

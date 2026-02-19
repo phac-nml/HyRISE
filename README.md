@@ -5,7 +5,7 @@
     <!-- Try local repo path first -->
     <source srcset="src/hyrise/core/assets/hyrise_logo.svg" type="image/svg+xml">
     <!-- Fallback to raw GitHub URL -->
-    <img src="https://raw.githubusercontent.com/phac-nml/HyRISE/main/src/hyrise/core/assets/hyrise_logo.svg"
+    <img src="https://raw.githubusercontent.com/phac-nml/HyRISE/refs/heads/master/src/hyrise/core/assets/hyrise_logo.svg"
          alt="HyRISE Logo" width="300" />
   </picture>
 </p>

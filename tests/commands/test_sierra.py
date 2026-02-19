@@ -3,6 +3,7 @@ import subprocess
 from types import SimpleNamespace
 
 import hyrise.commands.sierra as sierra_module
+import hyrise.core.processor as processor_module
 
 
 def test_add_sierra_subparser_sets_func():
@@ -126,6 +127,69 @@ def test_run_sierra_local_container_success(monkeypatch, tmp_path):
     assert results["success"]
     assert results["container_used"]
     assert results["output_path"] == str(output)
+
+
+def test_run_sierra_local_native_output_directory(monkeypatch, tmp_path):
+    fasta = tmp_path / "input.fa"
+    fasta.write_text(">seq\nATGC")
+    output_dir = tmp_path / "outdir"
+    output_dir.mkdir()
+    expected_output = output_dir / "input_NGS_results.json"
+
+    monkeypatch.setattr(
+        sierra_module,
+        "ensure_dependencies",
+        lambda **kwargs: {"use_container": False, "sierra_local_available": True},
+    )
+
+    def fake_run(cmd_parts, check):
+        out_idx = cmd_parts.index("-o")
+        out_path = cmd_parts[out_idx + 1]
+        open(out_path, "w").close()
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    results = sierra_module.run_sierra_local([str(fasta)], output=str(output_dir))
+    assert results["success"]
+    assert results["output_path"] == str(expected_output.resolve())
+    assert expected_output.exists()
+
+
+def test_run_sierra_local_container_output_directory(monkeypatch, tmp_path):
+    fasta = tmp_path / "input.fa"
+    fasta.write_text(">seq\nATGC")
+    output_dir = tmp_path / "outdir"
+    output_dir.mkdir()
+    expected_output = output_dir / "input_NGS_results.json"
+    container = tmp_path / "hyrise.sif"
+    container.write_text("image")
+
+    monkeypatch.setattr(
+        sierra_module,
+        "ensure_dependencies",
+        lambda **kwargs: {
+            "use_container": True,
+            "container_path": str(container),
+            "sierra_local_available": True,
+            "runtime_path": "/usr/bin/apptainer",
+        },
+    )
+
+    def fake_run(cmd_list, check):
+        bind_idx = cmd_list.index("--bind")
+        temp_dir = cmd_list[bind_idx + 1]
+        out_idx = cmd_list.index("-o")
+        output_name = cmd_list[out_idx + 1]
+        temp_output = os.path.join(temp_dir, output_name)
+        open(temp_output, "w").close()
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    results = sierra_module.run_sierra_local([str(fasta)], output=str(output_dir))
+    assert results["success"]
+    assert results["container_used"]
+    assert results["output_path"] == str(expected_output.resolve())
+    assert expected_output.exists()
 
 
 def test_run_sierra_command_error_propagation(monkeypatch, caplog):
@@ -280,3 +344,48 @@ def test_run_sierra_command_preserves_explicit_xml(monkeypatch, tmp_path):
     result = sierra_module.run_sierra_command(args)
     assert result == 0
     assert captured["xml"] == str(explicit_xml)
+
+
+def test_run_sierra_command_defaults_json_into_process_dir(monkeypatch, tmp_path):
+    captured = {}
+
+    def fake_run_sierra_local(*_args, **kwargs):
+        captured["output_arg"] = kwargs["output"]
+        return {"success": True, "output_path": kwargs["output"]}
+
+    monkeypatch.setattr(sierra_module, "run_sierra_local", fake_run_sierra_local)
+    monkeypatch.setattr(
+        sierra_module, "_prefer_latest_downloaded_hivdb_xml", lambda xml, **_: xml
+    )
+    monkeypatch.setattr(
+        processor_module, "process_files", lambda *args, **kwargs: {"files_generated": []}
+    )
+
+    process_dir = tmp_path / "report_example"
+    args = SimpleNamespace(
+        fasta=[str(tmp_path / "DEMO_COMBO_NGS.fasta")],
+        output=None,
+        xml=None,
+        json=None,
+        cleanup=False,
+        forceupdate=False,
+        alignment="post",
+        container=None,
+        no_container=None,
+        process=True,
+        run_multiqc=False,
+        report=False,
+        process_dir=str(process_dir),
+        guide=False,
+        sample_info=False,
+        contact_email=None,
+        logo=None,
+        container_path=None,
+        container_runtime=None,
+        resource_dir=None,
+        verbose=False,
+    )
+
+    result = sierra_module.run_sierra_command(args)
+    assert result == 0
+    assert captured["output_arg"] == str(process_dir / "DEMO_COMBO_NGS_NGS_results.json")

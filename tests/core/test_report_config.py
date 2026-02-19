@@ -405,6 +405,10 @@ class TestHtmlModification:
 
         soup = BeautifulSoup(modified_html, "html.parser")
         assert "HyRISE" in soup.title.string
+        if logo_data_uri and modifications["logo"]:
+            assert any(
+                img.get("src") == logo_data_uri for img in soup.find_all("img")
+            )
 
     def test_complex_html_structure(
         self, report_generator, complex_html_path, logo_data_uri
@@ -435,7 +439,7 @@ class TestHtmlModification:
                 assert "HIV Resistance Analysis Report" in welcome.get_text()
                 # Check for the presence of expected content
                 assert (
-                    "comprehensive analysis of HIV drug resistance mutations"
+                    "summarizes HIV drug resistance mutations detected in your sample"
                     in welcome.get_text()
                 )
 
@@ -510,6 +514,65 @@ class TestHtmlModification:
 
         # Other modifications should still happen
         assert any(modifications.values())
+
+    def test_svg_logo_replacement_for_modern_multiqc_structure(
+        self, report_generator, test_dir, logo_data_uri
+    ):
+        html_content = """
+        <!DOCTYPE html>
+        <html>
+        <head><title>MultiQC Report</title></head>
+        <body>
+          <h1 class="side-nav-logo">
+            <svg class="multiqc-logo" viewBox="0 0 10 10"><path d="M0 0h10v10z"/></svg>
+          </h1>
+        </body>
+        </html>
+        """
+        html_path = test_dir / "svg_logo_multiqc.html"
+        html_path.write_text(html_content)
+
+        success, modifications = report_generator.modify_html(str(html_path), logo_data_uri)
+        assert success is True
+        assert modifications["logo"] is True
+
+        soup = BeautifulSoup(html_path.read_text(), "html.parser")
+        assert soup.select_one("svg.multiqc-logo") is None
+        injected = soup.select_one("h1.side-nav-logo img")
+        assert injected is not None
+        assert injected.get("src") == logo_data_uri
+
+    def test_logo_wrapper_anchor_scoped_to_logo_only(
+        self, report_generator, test_dir, logo_data_uri
+    ):
+        html_content = """
+        <!DOCTYPE html>
+        <html>
+        <head><title>MultiQC Report</title></head>
+        <body>
+          <a href="https://github.com/phac-nml/HyRISE" target="_blank">
+            <div class="multiqc-logo-wrapper">
+              <img src="old-logo.svg" alt="MultiQC logo"/>
+              <span class="title-text">HyRISE Report</span>
+            </div>
+          </a>
+        </body>
+        </html>
+        """
+        html_path = test_dir / "logo_wrapper_anchor_scope.html"
+        html_path.write_text(html_content)
+
+        success, _ = report_generator.modify_html(str(html_path), logo_data_uri)
+        assert success is True
+
+        soup = BeautifulSoup(html_path.read_text(), "html.parser")
+        wrapper = soup.select_one(".multiqc-logo-wrapper")
+        assert wrapper is not None
+        assert wrapper.parent.name != "a"
+        logo_link = wrapper.find("a")
+        assert logo_link is not None
+        assert logo_link.find("img") is not None
+        assert wrapper.select_one(".title-text").find_parent("a") is None
 
     # def test_with_favicon(self, report_generator, sample_html_path, mock_favicon_path, logo_data_uri):
     #     """Test modification with favicon path accessible."""
