@@ -3,6 +3,21 @@
 HTML generation utilities for HyRISE package
 """
 
+import html
+import json
+import re
+
+
+def _esc(value):
+    """Escape arbitrary values for safe HTML text insertion."""
+    return html.escape(str(value), quote=True)
+
+
+def _safe_dom_id(value):
+    """Normalize IDs used in HTML/JS contexts."""
+    normalized = re.sub(r"[^A-Za-z0-9_\-:.]", "_", str(value))
+    return normalized or "chart"
+
 
 def create_html_header(id_name, section_name, description):
     """
@@ -17,9 +32,9 @@ def create_html_header(id_name, section_name, description):
         str: HTML header comment block
     """
     return f"""<!--
-id: '{id_name}'
-section_name: '{section_name}'
-description: '{description}'
+id: '{_esc(id_name)}'
+section_name: '{_esc(section_name)}'
+description: '{_esc(description)}'
 -->
 <div class='mqc-custom-content'>
 """
@@ -47,12 +62,12 @@ def create_styled_table(headers, rows, table_class="table table-bordered table-h
     Returns:
         str: HTML table
     """
-    html = f"<table class='{table_class}'>\n"
+    html = f"<table class='{_esc(table_class)}'>\n"
 
     # Add header row
     html += "<thead><tr>\n"
     for header in headers:
-        html += f"<th>{header}</th>\n"
+        html += f"<th>{_esc(header)}</th>\n"
     html += "</tr></thead>\n"
 
     # Add data rows
@@ -60,7 +75,7 @@ def create_styled_table(headers, rows, table_class="table table-bordered table-h
     for row in rows:
         html += "<tr>\n"
         for cell in row:
-            html += f"<td>{cell}</td>\n"
+            html += f"<td>{_esc(cell)}</td>\n"
         html += "</tr>\n"
     html += "</tbody>\n"
 
@@ -124,10 +139,10 @@ def create_bar(label, value, max_value, color="#337ab7"):
     width_percent = (value / max_value * 100) if max_value > 0 else 0
 
     html = "<div class='bar-container'>\n"
-    html += f"  <div class='bar-label'>{label}</div>\n"
+    html += f"  <div class='bar-label'>{_esc(label)}</div>\n"
     html += "  <div class='bar-wrapper'>\n"
-    html += f"    <div class='bar' style='width: {width_percent}%; background-color: {color};'>\n"
-    html += f"      <div class='bar-value'>{value}</div>\n"
+    html += f"    <div class='bar' style='width: {width_percent}%; background-color: {_esc(color)};'>\n"
+    html += f"      <div class='bar-value'>{_esc(value)}</div>\n"
     html += "    </div>\n"
     html += "  </div>\n"
     html += "</div>\n"
@@ -152,23 +167,29 @@ def create_pie_chart_js(chart_id, data, labels, colors, title=None):
     if not data or len(data) != len(labels):
         return "<p>Invalid data for pie chart</p>"
 
+    safe_chart_id = _safe_dom_id(chart_id)
+    labels_js = json.dumps(labels).replace("</", "<\\/")
+    data_js = json.dumps(data)
+    colors_js = json.dumps(colors)
+    title_js = json.dumps("" if title is None else str(title)).replace("</", "<\\/")
+
     # Create HTML structure
     html = f"""
     <div>
-        <canvas id="{chart_id}" width="400" height="300"></canvas>
+        <canvas id="{safe_chart_id}" width="400" height="300"></canvas>
     </div>
     <script>
     (function() {{
         // Create chart when the page loads
         window.addEventListener('load', function() {{
-            var ctx = document.getElementById('{chart_id}').getContext('2d');
+            var ctx = document.getElementById('{safe_chart_id}').getContext('2d');
             var chart = new Chart(ctx, {{
                 type: 'pie',
                 data: {{
-                    labels: {str(labels)},
+                    labels: {labels_js},
                     datasets: [{{
-                        data: {str(data)},
-                        backgroundColor: {str(colors)},
+                        data: {data_js},
+                        backgroundColor: {colors_js},
                         borderColor: 'white',
                         borderWidth: 1
                     }}]
@@ -177,7 +198,7 @@ def create_pie_chart_js(chart_id, data, labels, colors, title=None):
                     responsive: true,
                     title: {{
                         display: {str(title is not None).lower()},
-                        text: '{title or ""}'
+                        text: {title_js}
                     }},
                     legend: {{
                         display: true,
@@ -207,15 +228,15 @@ def create_color_legend(color_map, title=None):
     html = "<div class='color-legend' style='margin: 15px 0;'>\n"
 
     if title:
-        html += f"<h5>{title}</h5>\n"
+        html += f"<h5>{_esc(title)}</h5>\n"
 
     html += "<div style='display: flex; flex-wrap: wrap;'>\n"
 
     for label, color in color_map.items():
         html += f"""
         <div style="display: flex; align-items: center; margin-right: 20px; margin-bottom: 5px;">
-            <div style="width: 15px; height: 15px; background-color: {color}; margin-right: 5px;"></div>
-            <span>{label}</span>
+            <div style="width: 15px; height: 15px; background-color: {_esc(color)}; margin-right: 5px;"></div>
+            <span>{_esc(label)}</span>
         </div>
         """
 

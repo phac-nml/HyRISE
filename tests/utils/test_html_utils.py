@@ -81,8 +81,8 @@ def test_create_pie_chart_js_valid_no_title():
     # Contains canvas id
     assert 'id="chart1"' in html
     # Contains labels and data arrays
-    assert str(labels) in html
-    assert str(data) in html
+    assert '["A", "B"]' in html
+    assert "[5, 10]" in html
     # title display false
     assert "display: false" in html
 
@@ -111,3 +111,10 @@ def test_create_color_legend_with_title():
     html = create_color_legend(cmap, title="Legend")
     # Title present as h5
     assert "<h5>Legend</h5>" in html
+
+
+def test_create_styled_table_escapes_html():
+    html = create_styled_table(["A<script>"], [["<b>x</b>"]])
+    assert "<script>" not in html
+    assert "&lt;script&gt;" in html
+    assert "&lt;b&gt;x&lt;/b&gt;" in html

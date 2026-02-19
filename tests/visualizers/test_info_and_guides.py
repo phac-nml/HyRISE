@@ -63,6 +63,23 @@ def test_create_sample_analysis_info(tmp_path, dummy_info_data):
     assert any(r.startswith("S1_GENE1") for r in gene["data"])
 
 
+def test_create_sample_analysis_info_escapes_validation_html(tmp_path, dummy_info_data):
+    out = tmp_path / "out"
+    out.mkdir()
+    dummy_info_data["validationResults"] = [
+        {"level": "<img>", "message": "<script>alert(1)</script>"}
+    ]
+    create_sample_analysis_info(
+        dummy_info_data,
+        sample_id="S1",
+        formatted_date="2025-04-21 12:00:00",
+        output_dir=str(out),
+    )
+    html = (out / "sequence_validation_mqc.html").read_text()
+    assert "<script>alert(1)</script>" not in html
+    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html
+
+
 def test_create_interpretation_guides(tmp_path):
     out = tmp_path / "out"
     out.mkdir()

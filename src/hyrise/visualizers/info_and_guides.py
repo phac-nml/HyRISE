@@ -9,6 +9,7 @@ unified section of the MultiQC report.
 
 import os
 import json
+import html
 from collections import defaultdict
 from hyrise import __version__
 from hyrise.utils.html_utils import (
@@ -121,7 +122,12 @@ def create_sample_analysis_info(data, sample_id, formatted_date, output_dir):
             elif level == "CRITICAL":
                 alert_class = "danger"
 
-            html_content += f"<li class='text-{alert_class}'><strong>{level}:</strong> {message}</li>\n"
+            safe_level = html.escape(str(level), quote=True)
+            safe_message = html.escape(str(message), quote=True)
+            html_content += (
+                f"<li class='text-{alert_class}'><strong>{safe_level}:</strong> "
+                f"{safe_message}</li>\n"
+            )
 
         html_content += "</ul>\n"
         html_content += "</div>\n"

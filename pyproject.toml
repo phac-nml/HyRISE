@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hyrise"
 dynamic = ["version", "readme"]
-description = "HIV Resistance Interpretation and Visualization System"
+description = "HIV Resistance Interpretation & Scoring Engine"
 authors = [
   { name = "Gurasis Osahan", email = "gurasis.osahan@phac-aspc.gc.ca" }
 ]

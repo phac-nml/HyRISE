@@ -21,6 +21,34 @@ logger = logging.getLogger("hyrise-resources")
 _HIVDB_XML_RE = re.compile(r"^HIVDB_(\d+(?:\.\d+)*)\.xml$")
 
 
+def _safe_filename(filename: str) -> str:
+    """
+    Validate and normalize a leaf filename.
+
+    Rejects absolute paths, traversal segments, and directory separators.
+    """
+    candidate = Path(str(filename).strip())
+    if not candidate.name or candidate.name in {".", ".."}:
+        raise ValueError("Invalid filename")
+    if candidate.name != str(filename).strip():
+        raise ValueError(f"Unsafe filename: {filename}")
+    return candidate.name
+
+
+def _safe_resource_path(resource_dir: Path, filename: str) -> Path:
+    """
+    Build a normalized path under ``resource_dir`` and ensure it cannot escape.
+    """
+    safe_name = _safe_filename(filename)
+    root = resource_dir.resolve()
+    target = (root / safe_name).resolve()
+    try:
+        target.relative_to(root)
+    except ValueError as exc:
+        raise ValueError(f"Unsafe resource path for filename: {filename}") from exc
+    return target
+
+
 def _hivdb_version_tuple(path: Path):
     """
     Parse `HIVDB_<version>.xml` into a comparable version tuple.
@@ -84,7 +112,11 @@ def download_file(url, filename, resource_dir=None, config=None):
     else:
         resource_dir = get_resource_dir(resource_dir=resource_dir, config=config)
 
-    filepath = resource_dir / filename
+    try:
+        filepath = _safe_resource_path(resource_dir, filename)
+    except ValueError as e:
+        logger.error(str(e))
+        return None
 
     try:
         logger.info(f"Downloading {filename} from {url}")
@@ -117,7 +149,11 @@ def update_hivdb_xml(resource_dir=None, config=None):
         url = "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/algorithms/HIVDB_latest.xml"
         response = requests.get(url)
         response.raise_for_status()
-        latest_filename = response.text.strip()
+        latest_filename = _safe_filename(response.text.strip())
+        if not _HIVDB_XML_RE.match(latest_filename):
+            raise ValueError(
+                f"Unexpected HIVDB latest filename format: {latest_filename}"
+            )
 
         # Now download the actual file
         download_url = f"https://raw.githubusercontent.com/hivdb/hivfacts/main/data/algorithms/{latest_filename}"

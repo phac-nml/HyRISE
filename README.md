@@ -1,7 +1,13 @@
 # HyRISE - HIV Resistance Interpretation & Scoring Engine
 
 <p align="center">
-  <img src="src/hyrise/core/assets/hyrise_logo.svg" alt="HyRISE Logo" width="300" height="auto"/>
+  <picture>
+    <!-- Try local repo path first -->
+    <source srcset="src/hyrise/core/assets/hyrise_logo.svg" type="image/svg+xml">
+    <!-- Fallback to raw GitHub URL -->
+    <img src="https://raw.githubusercontent.com/phac-nml/HyRISE/main/src/hyrise/core/assets/hyrise_logo.svg"
+         alt="HyRISE Logo" width="300" />
+  </picture>
 </p>
 
 
